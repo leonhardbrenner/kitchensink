@@ -1,3 +1,7 @@
+import com.authzee.kotlinguice4.getInstance
+import com.google.inject.AbstractModule
+import com.google.inject.Guice
+import com.google.inject.Injector
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -12,9 +16,20 @@ import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.*
 import com.mongodb.ConnectionString
 import org.litote.kmongo.reactivestreams.KMongo
+import javax.inject.Inject
 
 
-class ShoppingListService {
+class ShoppingListService @Inject constructor(val database: CoroutineDatabase) {
+    val collection
+    get() = database.getCollection<ShoppingListItem>()
+
+    //TODO - feels wrong to put suspend in the
+    suspend fun get() = collection.find().toList()
+    suspend fun post(item: ShoppingListItem) = collection.insertOne(item)
+    suspend fun deleteOne(id: Int) = collection.deleteOne(ShoppingListItem::id eq id)
+}
+
+class ApplicationModule : AbstractModule() {
     //TODO -  this should be loaded via dependency injection
     companion object {
         val connectionString: ConnectionString? = System.getenv("MONGODB_URI")?.let {
@@ -23,17 +38,15 @@ class ShoppingListService {
 
         val client = if (connectionString != null) KMongo.createClient(connectionString).coroutine else KMongo.createClient().coroutine
         val database = client.getDatabase(connectionString?.database ?: "test")
-        val collection = database.getCollection<ShoppingListItem>()
     }
-    //TODO - feels wrong to put suspend in the
-    suspend fun get() = collection.find().toList()
-    suspend fun post(item: ShoppingListItem) = collection.insertOne(item)
-    suspend fun deleteOne(id: Int) = collection.deleteOne(ShoppingListItem::id eq id)
+    override fun configure() {
+        bind(CoroutineDatabase::class.java).toInstance(database)
+    }
 }
 
-
 fun main() {
-    val shoppingListService = ShoppingListService()
+    val injector: Injector = Guice.createInjector(ApplicationModule())
+    val shoppingListService = injector.getInstance<ShoppingListService>()
     val port = System.getenv("PORT")?.toInt() ?: 9090
     embeddedServer(Netty, port) {
         install(ContentNegotiation) {
