@@ -12,22 +12,12 @@ import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import org.litote.kmongo.*
 import org.litote.kmongo.coroutine.*
 import com.mongodb.ConnectionString
 import org.litote.kmongo.reactivestreams.KMongo
-import javax.inject.Inject
+import services.JohnnySeedsService
+import services.ShoppingListService
 
-
-class ShoppingListService @Inject constructor(val database: CoroutineDatabase) {
-    val collection
-    get() = database.getCollection<ShoppingListItem>()
-
-    //TODO - feels wrong to put suspend in the
-    suspend fun get() = collection.find().toList()
-    suspend fun post(item: ShoppingListItem) = collection.insertOne(item)
-    suspend fun deleteOne(id: Int) = collection.deleteOne(ShoppingListItem::id eq id)
-}
 
 class ApplicationModule : AbstractModule() {
     //TODO -  this should be loaded via dependency injection
