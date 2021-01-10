@@ -71,7 +71,6 @@ class UnreachableException: Exception("You can't be reached.")
 
 class BillingModule : AbstractModule() {
     override fun configure() {
-        //Look at ExecvisionModule and ProfileModule in particular configureAppSpecific which you will see does the binding.
         bind(TransactionLog::class.java).to(DatabaseTransactionLog::class.java)
         bind(CreditCardProcessor::class.java).to(PaypalCreditCardProcessor::class.java)
         bind(BillingService::class.java).to(RealBillingService::class.java)
