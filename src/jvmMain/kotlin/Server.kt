@@ -21,16 +21,15 @@ import services.ShoppingListService
 
 class ApplicationModule : AbstractModule() {
     //TODO -  this should be loaded via dependency injection
-    companion object {
+    fun database(): CoroutineDatabase {
         val connectionString: ConnectionString? = System.getenv("MONGODB_URI")?.let {
             ConnectionString("$it?retryWrites=false")
         }
-
         val client = if (connectionString != null) KMongo.createClient(connectionString).coroutine else KMongo.createClient().coroutine
-        val database = client.getDatabase(connectionString?.database ?: "test")
+        return client.getDatabase(connectionString?.database ?: "test")
     }
     override fun configure() {
-        bind(CoroutineDatabase::class.java).toInstance(database)
+        bind(CoroutineDatabase::class.java).toInstance(database())
     }
 }
 
