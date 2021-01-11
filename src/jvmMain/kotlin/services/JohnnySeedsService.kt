@@ -3,6 +3,8 @@ package services
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
 
 class JohnnySeedsService {
@@ -13,9 +15,18 @@ class JohnnySeedsService {
 
     class DetailedSeed {
         fun deserialize(str: String): List<JohnnySeeds.DetailedSeed> = kMapper.readValue(str)
-        fun fetchAll() = deserialize(
-            File(ClassLoader.getSystemResource("johnnyseeds/detailed-seeds.json").file).readText()
-        )
+        fun fetchAll() = transaction {
+            Seeds.selectAll().map {
+                JohnnySeeds.DetailedSeed(
+                    it[Seeds.name],
+                    it[Seeds.maturity],
+                    it[Seeds.secondName],
+                    it[Seeds.description],
+                    it[Seeds.image],
+                    it[Seeds.link]
+                )
+            }
+        }
     }
 
     class Category {

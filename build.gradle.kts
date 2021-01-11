@@ -8,6 +8,9 @@ plugins {
     kotlin("multiplatform") version "1.4.0"
     application //to run JVM part
     kotlin("plugin.serialization") version "1.4.0"
+    //Not sure I enjoyed using this the last time it make me use ugly sql. Must be something
+    //more kotliny
+    //id( "org.flywaydb.flyway") version "5.2.4"
 }
 
 group = "org.example"
@@ -54,22 +57,8 @@ kotlin {
                 implementation("io.ktor:ktor-websockets:$ktorVersion")
                 implementation("org.litote.kmongo:kmongo-coroutine-serialization:4.1.1")
                 implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.11.0")
-                //implementation("dev.misfitlabs.kotlinguice4:kotlin-guice:1.4.1")
                 implementation("com.google.inject:guice:4.2.2")
                 implementation("com.authzee.kotlinguice4:kotlin-guice:1.3.0")
-                /**
-                <exclusions>
-                    <!--  These are deprecated. Newer versions included with kotlin runtime. -->
-                    <exclusion>
-                        <groupId>org.jetbrains.kotlin</groupId>
-                        <artifactId>kotlin-stdlib-jre7</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.jetbrains.kotlin</groupId>
-                        <artifactId>kotlin-stdlib-jre8</artifactId>
-                    </exclusion>
-                </exclusions>
-                 */
                 //TODO - investigate if this actually works
                 implementation("io.mockk:mockk:1.10.4")
 
@@ -86,6 +75,7 @@ kotlin {
                 implementation("org.jetbrains.exposed:exposed:0.12.1")
                 implementation("com.zaxxer:HikariCP:2.7.8")
                 implementation("org.postgresql:postgresql:42.2.2")
+                //implementation("org.flywaydb:flyway-core:5.2.4")
             }
         }
 
@@ -130,6 +120,14 @@ kotlin {
 
     }
 }
+
+//flyway {
+//    url = System.getenv("DB_URL")
+//    user = System.getenv("DB_USER")
+//    password = System.getenv("DB_PASSWORD")
+//    baselineOnMigrate=true
+//    locations = arrayOf("filesystem:resources/db/migration")
+//}
 
 application {
     mainClassName = "ServerKt"

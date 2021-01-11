@@ -29,6 +29,7 @@ class ApplicationModule : AbstractModule() {
         return client.getDatabase(connectionString?.database ?: "test")
     }
     override fun configure() {
+        DatabaseFactory.init()
         bind(CoroutineDatabase::class.java).toInstance(database())
     }
 }
