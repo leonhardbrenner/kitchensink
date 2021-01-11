@@ -83,6 +83,9 @@ kotlin {
                 // for logging (StdOutSqlLogger), see
                 // http://www.slf4j.org/codes.html#StaticLoggerBinder
                 implementation("org.slf4j:slf4j-nop:1.7.30")
+                implementation("org.jetbrains.exposed:exposed:0.12.1")
+                implementation("com.zaxxer:HikariCP:2.7.8")
+                implementation("org.postgresql:postgresql:42.2.2")
             }
         }
 
