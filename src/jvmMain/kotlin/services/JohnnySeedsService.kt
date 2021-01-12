@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import model.db.JohnnySeedsDb
+import model.db.JohnnySeedsDb.Categories.create
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -16,36 +17,36 @@ class JohnnySeedsService {
     }
 
     class DetailedSeed {
-        fun detailedSeed(it: ResultRow) = JohnnySeeds.DetailedSeed(
-            it[JohnnySeedsDb.DetailedSeeds.name],
-            it[JohnnySeedsDb.DetailedSeeds.maturity],
-            it[JohnnySeedsDb.DetailedSeeds.secondName],
-            it[JohnnySeedsDb.DetailedSeeds.description],
-            it[JohnnySeedsDb.DetailedSeeds.image],
-            it[JohnnySeedsDb.DetailedSeeds.link]
-        )
         fun fromFile(): List<JohnnySeeds.DetailedSeed> = kMapper.readValue(
             File(ClassLoader.getSystemResource("johnnyseeds/detailed-seeds.json").file).readText()
         )
         fun fetchAll(): List<JohnnySeeds.DetailedSeed> = transaction {
             JohnnySeedsDb.DetailedSeeds.selectAll().map {
-                detailedSeed(it)
+                JohnnySeedsDb.DetailedSeeds.create(it)
             }
         }
     }
 
     class Category {
-        fun deserialize(str: String) = kMapper.readValue<List<JohnnySeeds.Category>>(str)
-        fun fetchAll() = deserialize(
-            File(ClassLoader.getSystemResource("johnnyseeds/categories.json").file).readText()
+        fun fromFile(): List<JohnnySeeds.Category> = kMapper.readValue(
+                File(ClassLoader.getSystemResource("johnnyseeds/categories.json").file).readText()
         )
+        fun fetchAll(): List<JohnnySeeds.Category> = transaction {
+            JohnnySeedsDb.Categories.selectAll().map {
+                JohnnySeedsDb.Categories.create(it)
+            }
+        }
     }
 
     class BasicSeed {
-        fun deserialize(str: String) = kMapper.readValue<List<JohnnySeeds.BasicSeed>>(str)
-        fun fetchAll() = deserialize(
-            File(ClassLoader.getSystemResource("johnnyseeds/basic-seeds.json").file).readText()
+        fun fromFile(): List<JohnnySeeds.DetailedSeed> = kMapper.readValue(
+                File(ClassLoader.getSystemResource("johnnyseeds/basic-seeds.json").file).readText()
         )
+        fun fetchAll(): List<JohnnySeeds.DetailedSeed> = transaction {
+            JohnnySeedsDb.DetailedSeeds.selectAll().map {
+                JohnnySeedsDb.DetailedSeeds.create(it)
+            }
+        }
     }
 
     class SeedFacts {

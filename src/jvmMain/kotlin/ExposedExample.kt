@@ -1,6 +1,6 @@
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import model.db.JohnnySeedsDb.Seed
+import model.db.JohnnySeedsDb.DetailedSeed
 
 //https://www.thebookofjoel.com/kotlin-ktor-exposed-postgres
 fun main(args: Array<String>) {
@@ -15,7 +15,7 @@ fun main(args: Array<String>) {
 
         //'select *' SQL: SELECT Cities.id, Cities.name FROM Cities
         println("Seeds:")
-        Seed.all().forEach { seed ->
+        DetailedSeed.all().forEach { seed ->
             println("\t${seed.name} - ${seed.maturity}")
         }
     }

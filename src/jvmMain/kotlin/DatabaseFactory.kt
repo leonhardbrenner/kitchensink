@@ -5,16 +5,12 @@ import io.ktor.config.HoconApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import model.db.JohnnySeedsDb
-import model.db.JohnnySeedsDb.DetailedSeeds.maturity
-import model.db.JohnnySeedsDb.DetailedSeeds.name
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import services.JohnnySeedsService
-import model.db.JohnnySeedsDb.DetailedSeeds
-import model.db.JohnnySeedsDb.Seed
 
 object DatabaseFactory {
 
@@ -33,19 +29,19 @@ object DatabaseFactory {
             // print sql to std-out
             addLogger(StdOutSqlLogger)
 
-            SchemaUtils.drop(DetailedSeeds)
-            SchemaUtils.create (DetailedSeeds)
-            JohnnySeedsService.DetailedSeed().fromFile().forEach { seed ->
+            SchemaUtils.drop(JohnnySeedsDb.DetailedSeeds)
+            SchemaUtils.create (JohnnySeedsDb.DetailedSeeds)
+            JohnnySeedsService.DetailedSeed().fromFile().forEach {
                 // insert new city. SQL: INSERT INTO Cities (name) VALUES ('St. Petersburg')
-                val stPete = JohnnySeedsDb.Seed.new {
-                    name = seed.name
-                    maturity = seed.maturity
-                    secondName = seed.secondary_name
-                    description = seed.description
-                    image = seed.image
-                    link = seed.link
+                val stPete = JohnnySeedsDb.DetailedSeed.new {
+                    name = it.name
+                    maturity = it.maturity
+                    secondName = it.secondary_name
+                    description = it.description
+                    image = it.image
+                    link = it.link
                 }
-                println("Creating ${seed.name}")
+                println("Creating ${it.name}")
                 //TODO - see if there is any advantage to this I prefer using Seed.new.
                 //// insert new city. SQL: INSERT INTO Cities (name) VALUES ('Philly')
                 //val phillyId = Seeds.insert {
@@ -53,6 +49,25 @@ object DatabaseFactory {
                 //    it[name] = "Philly"
                 //} get Seeds.id
             }
+
+            SchemaUtils.drop(JohnnySeedsDb.Categories)
+            SchemaUtils.create (JohnnySeedsDb.Categories)
+            JohnnySeedsService.Category().fromFile().forEach {
+                // insert new city. SQL: INSERT INTO Cities (name) VALUES ('St. Petersburg')
+                val stPete = JohnnySeedsDb.Category.new {
+                    name = it.name
+                    image = it.image
+                    link = it.link
+                }
+                println("Creating ${it.name}")
+                //TODO - see if there is any advantage to this I prefer using Seed.new.
+                //// insert new city. SQL: INSERT INTO Cities (name) VALUES ('Philly')
+                //val phillyId = Seeds.insert {
+                //    it[name] = ""
+                //    it[name] = "Philly"
+                //} get Seeds.id
+            }
+
             commit()
         }
     }
