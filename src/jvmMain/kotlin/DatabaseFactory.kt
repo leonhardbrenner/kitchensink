@@ -4,13 +4,17 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.config.HoconApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import model.db.JohnnySeedsDb
+import model.db.JohnnySeedsDb.DetailedSeeds.maturity
+import model.db.JohnnySeedsDb.DetailedSeeds.name
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.StdOutSqlLogger
 import org.jetbrains.exposed.sql.addLogger
 import org.jetbrains.exposed.sql.transactions.transaction
 import services.JohnnySeedsService
-import java.io.File
+import model.db.JohnnySeedsDb.DetailedSeeds
+import model.db.JohnnySeedsDb.Seed
 
 object DatabaseFactory {
 
@@ -29,16 +33,17 @@ object DatabaseFactory {
             // print sql to std-out
             addLogger(StdOutSqlLogger)
 
-            SchemaUtils.drop(Seeds)
-            SchemaUtils.create (Seeds)
-            JohnnySeedsService.DetailedSeed().deserialize(
-                File(ClassLoader.getSystemResource("johnnyseeds/detailed-seeds.json").file).readText()
-            ).forEach { seed ->
+            SchemaUtils.drop(DetailedSeeds)
+            SchemaUtils.create (DetailedSeeds)
+            JohnnySeedsService.DetailedSeed().fromFile().forEach { seed ->
                 // insert new city. SQL: INSERT INTO Cities (name) VALUES ('St. Petersburg')
-                val stPete = Seed.new {
+                val stPete = JohnnySeedsDb.Seed.new {
                     name = seed.name
                     maturity = seed.maturity
                     secondName = seed.secondary_name
+                    description = seed.description
+                    image = seed.image
+                    link = seed.link
                 }
                 println("Creating ${seed.name}")
                 //TODO - see if there is any advantage to this I prefer using Seed.new.
