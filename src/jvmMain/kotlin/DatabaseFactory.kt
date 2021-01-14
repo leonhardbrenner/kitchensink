@@ -7,10 +7,7 @@ import io.ktor.config.HoconApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import model.db.JohnnySeedsDb
-import org.jetbrains.exposed.sql.Database
-import org.jetbrains.exposed.sql.SchemaUtils
-import org.jetbrains.exposed.sql.StdOutSqlLogger
-import org.jetbrains.exposed.sql.addLogger
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import services.JohnnySeedsService
 
@@ -35,63 +32,65 @@ object DatabaseFactory {
             SchemaUtils.drop(JohnnySeedsDb.DetailedSeed.Table)
             SchemaUtils.create (JohnnySeedsDb.DetailedSeed.Table)
             val seeds = JohnnySeedsService(kMapper).DetailedSeed().fromFile()
-            seeds.forEach {
-                // insert new city. SQL: INSERT INTO Cities (name) VALUES ('St. Petersburg')
-                val stPete = JohnnySeedsDb.DetailedSeed.Entity.new {
+            seeds.forEach { row ->
+                JohnnySeedsDb.DetailedSeed.Entity.new {
+                    name = row.name
+                    maturity = row.maturity
+                    secondName = row.secondary_name
+                    description = row.description
+                    image = row.image
+                    link = row.link
+                }
+                //TODO - see if there is any advantage to this I prefer using Seed.new.
+                //JohnnySeedsDb.DetailedSeed.Table.insert { record ->
+                //    record[name] =row.name
+                //    record[maturity] = row.maturity
+                //    record[secondName] = row.secondary_name
+                //    record[description] = row.description
+                //    record[image] = row.image
+                //    record[link] = row.link
+                //}
+                println("Creating ${row.name}")
+            }
+
+            SchemaUtils.drop(JohnnySeedsDb.Category.Table)
+            SchemaUtils.create (JohnnySeedsDb.Category.Table)
+            val categories = JohnnySeedsService(kMapper).Category().fromFile()
+            categories.forEach {
+                JohnnySeedsDb.Category.Entity.new {
                     name = it.name
-                    maturity = it.maturity
-                    secondName = it.secondary_name
+                    image = it.image
+                    link = it.link
+                }
+                println("Creating ${it.name}")
+            }
+
+            SchemaUtils.drop(JohnnySeedsDb.BasicSeed.Table)
+            SchemaUtils.create (JohnnySeedsDb.BasicSeed.Table)
+            val basicSeeds = JohnnySeedsService(kMapper).BasicSeed()
+            basicSeeds.fromFile().forEach {
+                JohnnySeedsDb.BasicSeed.Entity.new {
+                    name = it.name
+                    secondary_name = it.secondary_name
                     description = it.description
                     image = it.image
                     link = it.link
                 }
                 println("Creating ${it.name}")
-                //TODO - see if there is any advantage to this I prefer using Seed.new.
-                //// insert new city. SQL: INSERT INTO Cities (name) VALUES ('Philly')
-                //val phillyId = Seeds.insert {
-                //    it[name] = ""
-                //    it[name] = "Philly"
-                //} get Seeds.id
             }
 
-            //SchemaUtils.drop(JohnnySeedsDb.Category.Table)
-            //SchemaUtils.create (JohnnySeedsDb.Category.Table)
-            //JohnnySeedsService.Category().fromFile().forEach {
-            //    // insert new city. SQL: INSERT INTO Cities (name) VALUES ('St. Petersburg')
-            //    val stPete = JohnnySeedsDb.Category.Entity.new {
-            //        name = it.name
-            //        image = it.image!!
-            //        link = it.link!!
-            //    }
-            //    println("Creating ${it.name}")
-            //}
-            //
-            //SchemaUtils.drop(JohnnySeedsDb.BasicSeed.Table)
-            //SchemaUtils.create (JohnnySeedsDb.BasicSeed.Table)
-            //JohnnySeedsService.BasicSeed().fromFile().forEach {
-            //    // insert new city. SQL: INSERT INTO Cities (name) VALUES ('St. Petersburg')
-            //    val stPete = JohnnySeedsDb.BasicSeed.Entity.new {
-            //        name = it.name
-            //        secondary_name = it.secondary_name!!
-            //        description = it.description
-            //        image = it.image!!
-            //        link = it.link!!
-            //    }
-            //    println("Creating ${it.name}")
-            //}
-            //
-            //SchemaUtils.drop(JohnnySeedsDb.SeedFacts.Table)
-            //SchemaUtils.create (JohnnySeedsDb.SeedFacts.Table)
-            //JohnnySeedsService.SeedFacts().fromFile().forEach {
-            //    // insert new city. SQL: INSERT INTO Cities (name) VALUES ('St. Petersburg')
-            //    val stPete = JohnnySeedsDb.SeedFacts.Entity.new {
-            //        name = it.name
-            //        facts = it.facts!!
-            //        maturity = it.maturity!!
-            //
-            //    }
-            //    println("Creating ${it.name}")
-            //}
+            SchemaUtils.drop(JohnnySeedsDb.SeedFacts.Table)
+            SchemaUtils.create (JohnnySeedsDb.SeedFacts.Table)
+            val seedFacts = JohnnySeedsService(kMapper).SeedFacts()
+            seedFacts.fromFile().forEach {
+                JohnnySeedsDb.SeedFacts.Entity.new {
+                    name = it.name
+                    facts = it.facts!![0] //TODO - should be list in DB as well
+                    maturity = it.maturity!!
+
+                }
+                println("Creating ${it.name}")
+            }
 
             commit()
         }

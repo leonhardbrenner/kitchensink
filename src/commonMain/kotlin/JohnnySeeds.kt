@@ -1,9 +1,6 @@
 import kotlinx.serialization.Serializable
 
 class JohnnySeeds {
-    companion object {
-        const val path = "/johnnySeeds"
-    }
 
     @Serializable
     data class DetailedSeed(
@@ -13,14 +10,25 @@ class JohnnySeeds {
             val description: String?,
             val image: String?,
             val link: String?
-    )
+    ) {
+        companion object {
+            val path = "/johnnySeeds/detailedSeed"
+        }
+        //TODO - consider making links within here.
+    }
 
     @Serializable
     data class Category(
             val name: String,
             val image: String,
             val link: String
-    )
+    ) {
+        companion object {
+            val path = "/johnnySeeds/category"
+        }
+        //TODO - consider making links within here.
+    }
+
 
     @Serializable
     data class BasicSeed(
@@ -29,12 +37,24 @@ class JohnnySeeds {
             val description: String?,
             val image: String,
             val link: String
-    )
+    ) {
+        companion object {
+            val path = "/johnnySeeds/basicSeed"
+        }
+        //TODO - consider making links within here.
+    }
+
 
     @Serializable
     data class SeedFacts(
             val name: String,
             val facts: List<String>?,
             val maturity: String?
-    )
+    ) {
+        companion object {
+            val path = "/johnnySeeds/seedFacts"
+        }
+        //TODO - consider making links within here.
+    }
+
 }

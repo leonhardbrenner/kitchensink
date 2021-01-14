@@ -51,15 +51,15 @@ class App : RComponent<RProps, RState>() {
                 css { flexGrow = 1.0; backgroundColor = Color(theme.palette.background.paper) }
                 mAppBar(position = MAppBarPosition.static) {
                     mTabs(tab1Value, onChange = { _, value -> setState { tab1Value = value } }) {
-                        mTab("Item One with a really long name for a tab", "one")
-                        mTab("Item Two", "two")
-                        mTab("Item Three", "three")
+                        mTab("JohnnySeeds", "johnny-seeds")
+                        mTab("ShoppingList", "shopping-list")
+                        mTab("Material UI Demo", "material-ui-demo")
                     }
                 }
                 when (tab1Value) {
-                    "one" -> johnnySeeds()
-                    "two" -> shoppingList()
-                    "three" -> materialUIDemo()
+                    "johnny-seeds" -> { johnnySeeds() }
+                    "shopping-list" -> { shoppingList() }
+                    "material-ui-demo" -> { materialUIDemo() }
                 }
             }
         }

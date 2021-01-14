@@ -63,9 +63,24 @@ fun main() {
             static("/") {
                 resources("")
             }
-            route(JohnnySeeds.path) {
+            route(JohnnySeeds.DetailedSeed.path) {
                 get {
                     call.respond(JohnnySeedsDb.DetailedSeed.fetchAll())
+                }
+            }
+            route(JohnnySeeds.Category.path) {
+                get {
+                    call.respond(JohnnySeedsDb.Category.fetchAll())
+                }
+            }
+            route(JohnnySeeds.BasicSeed.path) {
+                get {
+                    call.respond(JohnnySeedsDb.BasicSeed.fetchAll())
+                }
+            }
+            route(JohnnySeeds.SeedFacts.path) {
+                get {
+                    call.respond(JohnnySeedsDb.SeedFacts.fetchAll())
                 }
             }
             route(ShoppingListItem.path) {

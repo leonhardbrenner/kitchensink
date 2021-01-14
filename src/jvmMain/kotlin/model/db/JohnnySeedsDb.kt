@@ -8,7 +8,6 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-
 object JohnnySeedsDb {
     object DetailedSeed {
         object Table : IntIdTable("detailed_seed") {
@@ -92,9 +91,6 @@ object JohnnySeedsDb {
             val name = text("name")
             val facts = text("facts") //TODO - facts should be plural
             val maturity = text("maturity")
-            fun create(it: ResultRow) = JohnnySeeds.Category(
-                    it[name], it[facts], it[maturity]
-            )
         }
         class Entity(id: EntityID<Int>) : IntEntity(id) {
             companion object : IntEntityClass<Entity>(Table)
@@ -108,7 +104,7 @@ object JohnnySeedsDb {
                 it[Table.maturity]
         )
         fun fetchAll() = transaction {
-            with (Category.Table) {
+            with (Table) {
                 selectAll().map { create(it) }
             }
         }
