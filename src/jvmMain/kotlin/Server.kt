@@ -14,6 +14,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.litote.kmongo.coroutine.*
 import com.mongodb.ConnectionString
+import model.db.JohnnySeedsDb
 import org.litote.kmongo.reactivestreams.KMongo
 import services.JohnnySeedsService
 import services.ShoppingListService
@@ -64,7 +65,7 @@ fun main() {
             }
             route(JohnnySeeds.path) {
                 get {
-                    call.respond(JohnnySeedsService.DetailedSeed().fetchAll())
+                    call.respond(JohnnySeedsDb.DetailedSeed.fetchAll())
                 }
             }
             route(ShoppingListItem.path) {

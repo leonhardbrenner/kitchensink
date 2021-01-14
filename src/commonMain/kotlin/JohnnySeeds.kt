@@ -31,6 +31,7 @@ class JohnnySeeds {
             val link: String
     )
 
+    @Serializable
     data class SeedFacts(
             val name: String,
             val facts: List<String>?,

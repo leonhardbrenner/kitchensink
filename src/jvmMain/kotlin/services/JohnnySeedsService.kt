@@ -3,67 +3,56 @@ package services
 import com.fasterxml.jackson.databind.*
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
-import model.db.JohnnySeedsDb
-import model.db.JohnnySeedsDb.Categories.create
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
+import javax.inject.Inject
 
-class JohnnySeedsService {
 
-    companion object {
-        val kMapper = ObjectMapper().registerModule(KotlinModule())
-    }
+class JohnnySeedsService @Inject constructor(val kMapper: ObjectMapper) {
 
-    class DetailedSeed {
+    //TODO - get this working
+    inline fun <reified T> fromFile(path: String): List<T> = kMapper.readValue(
+            File(ClassLoader.getSystemResource(path).file).readText()
+    )
+
+    inner class DetailedSeed {
+        val path = "johnnyseeds/detailed-seeds.json"
+        //fun fromFile() = fromFile<JohnnySeeds.DetailedSeed>(path)
         fun fromFile(): List<JohnnySeeds.DetailedSeed> = kMapper.readValue(
-            File(ClassLoader.getSystemResource("johnnyseeds/detailed-seeds.json").file).readText()
+                File(ClassLoader.getSystemResource(path).file).readText()
         )
-        fun fetchAll(): List<JohnnySeeds.DetailedSeed> = transaction {
-            JohnnySeedsDb.DetailedSeeds.selectAll().map {
-                JohnnySeedsDb.DetailedSeeds.create(it)
-            }
-        }
     }
 
-    class Category {
+    inner class Category {
+        val path = "johnnyseeds/categories.json"
         fun fromFile(): List<JohnnySeeds.Category> = kMapper.readValue(
-                File(ClassLoader.getSystemResource("johnnyseeds/categories.json").file).readText()
+                File(ClassLoader.getSystemResource(path).file).readText()
         )
-        fun fetchAll(): List<JohnnySeeds.Category> = transaction {
-            JohnnySeedsDb.Categories.selectAll().map {
-                JohnnySeedsDb.Categories.create(it)
-            }
-        }
     }
 
-    class BasicSeed {
-        fun fromFile(): List<JohnnySeeds.DetailedSeed> = kMapper.readValue(
-                File(ClassLoader.getSystemResource("johnnyseeds/basic-seeds.json").file).readText()
+    inner class BasicSeed {
+        val path = "johnnyseeds/basic-seeds.json"
+        fun fromFile(): List<JohnnySeeds.BasicSeed> = kMapper.readValue(
+                File(ClassLoader.getSystemResource(path).file).readText()
         )
-        fun fetchAll(): List<JohnnySeeds.DetailedSeed> = transaction {
-            JohnnySeedsDb.DetailedSeeds.selectAll().map {
-                JohnnySeedsDb.DetailedSeeds.create(it)
-            }
-        }
     }
 
-    class SeedFacts {
-        fun deserialize(str: String) = kMapper.readValue<List<JohnnySeeds.SeedFacts>>(str)
-        fun fetch() = deserialize(
-            File(ClassLoader.getSystemResource("johnnyseeds/strawberry-seeds.json").file).readText()
-        )[0]
+    inner class SeedFacts {
+        val path = "johnnyseeds/strawberry-seeds.json"
+        fun fromFile(): List<JohnnySeeds.SeedFacts> = kMapper.readValue(
+                File(ClassLoader.getSystemResource(path).file).readText()
+        )
     }
 }
 
 fun main(args: Array<String>) {
-    val details = JohnnySeedsService.DetailedSeed().fetchAll()
-    val categories = JohnnySeedsService.Category().fetchAll()
-    val basicSeed = JohnnySeedsService.BasicSeed().fetchAll()
-    val seed = JohnnySeedsService.SeedFacts().fetch()
+    val kMapper = ObjectMapper().registerModule(KotlinModule())
+    val service = JohnnySeedsService(kMapper)
+    val details = service.DetailedSeed().fromFile()
+    val categories = service.Category().fromFile()
+    val basicSeeds = service.BasicSeed().fromFile()
+    val seed = service.SeedFacts().fromFile()
     println(details[0])
     println(categories[0])
-    println(basicSeed[0])
+    println(basicSeeds[0])
     println(seed)
 }
