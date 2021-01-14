@@ -1,0 +1,12 @@
+I use this pattern to manage projects:
+  branch main is for introducing a technology
+  branch <project> will have some pruning of branch main
+  branch <project>-<task> introduces a new feature to the project
+
+To find widgets and associate them with code:
+  clone https://github.com/cfnz/muirwik
+  ./gradlew :muirwik-testapp:run
+  [IntelliJ] -> Open <muirwik basedir>
+      Project -> muirwik-testapp/src/main/kotlin/com..ccfraser.muirwik.testapp
+  Now look at the code associated with what you were trying to add.
+
