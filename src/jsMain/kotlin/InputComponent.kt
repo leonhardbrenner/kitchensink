@@ -32,10 +32,6 @@ val InputComponent = functionalComponent<InputProps> { props ->
     }
 }
 
-fun RBuilder.inputComponent(handler: InputProps.() -> Unit) = child(InputComponent) {
-    attrs {
-        handler()
-    }
-}
+fun RBuilder.inputComponent(handler: InputProps.() -> Unit) = child(InputComponent) { attrs { handler() } }
 
 
