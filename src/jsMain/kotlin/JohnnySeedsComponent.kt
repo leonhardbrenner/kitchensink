@@ -3,6 +3,7 @@ import TestLists.ComponentStyles.listDiv
 import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.list.*
 import com.ccfraser.muirwik.components.menu.mMenuItem
+import io.ktor.utils.io.*
 import kotlinext.js.jsObject
 import react.*
 import react.dom.*
@@ -49,7 +50,9 @@ val detailedSeed = functionalComponent<RProps> { _ ->
         }
     }
     testLists {
-        this.items = items.map { item -> item.name to item }
+        this.items = items.map { item ->
+            item.name to item.secondary_name!!
+        }
     }
 }
 
@@ -62,7 +65,9 @@ val category = functionalComponent<RProps> { _ ->
         }
     }
     testLists {
-        this.items = items.map { item -> item.name to item }
+        this.items = items.map { item ->
+            item.name to item.image
+        }
     }
 }
 
@@ -75,7 +80,9 @@ val basicSeed = functionalComponent<RProps> { _ ->
         }
     }
     testLists {
-        this.items = items.map { item -> item.name to item }
+        this.items = items.map { item ->
+            item.name to item.image
+        }
     }
 }
 
@@ -88,19 +95,19 @@ val seedFacts = functionalComponent<RProps> { _ ->
         }
     }
     testLists {
-        this.items = items.map { item -> item.name to item }
+        this.items = items.map { item ->
+            item.name to item.maturity!!
+        }
     }
 }
 
 external interface TestListsProps: RProps {
-    var items: List<Pair<String, Any>>
+    var items: List<Pair<String, String>>
 }
-
-class TestLists : RComponent<TestListsProps, RState>() {
-    private var expanded: Boolean = false
-    private var checked = Array(3) { false }
-    private var selected = 0
-
+external interface TestListsState: RState {
+    var currentSeed: String
+}
+class TestLists(props: TestListsProps) : RComponent<TestListsProps, TestListsState>() {
     private object ComponentStyles : StyleSheet("ComponentStyles", isStatic = true) {
         val listDiv by css {
             display = Display.inlineFlex
@@ -111,10 +118,10 @@ class TestLists : RComponent<TestListsProps, RState>() {
             display = Display.inlineBlock
         }
     }
+
     override fun RBuilder.render() {
         // For building things that we don't want to render now (e.g. the component will render it later), we need another builder
         val builder2 = RBuilder()
-
         themeContext.Consumer { theme ->
             val themeStyles = object : StyleSheet("ComponentStyles", isStatic = true) {
                 val list by css {
@@ -127,12 +134,20 @@ class TestLists : RComponent<TestListsProps, RState>() {
                 css(listDiv)
                 mList {
                     css(themeStyles.list)
-                    props.items.forEach { (name, item) ->
-                        mListItem(alignItems = MListItemAlignItems.flexStart, button = true) {
-                            mListItemText( builder2.span { + name }, builder2.span {
-                                mTypography(name + " again", component = "span", variant = MTypographyVariant.body2) { css (inline) } } )
+                    props.items.forEach { (name, callback) ->
+                        mListItem(alignItems = MListItemAlignItems.flexStart, button = true, onClick = {
+                            setState {
+                                currentSeed = callback
+                            }
+                        }) {
+                            mListItemText(builder2.span { +name }, builder2.span {
+                                mTypography(name + " again", component = "span", variant = MTypographyVariant.body2) { css(inline) }
+                            })
                         }
                     }
+                }
+                mContainer {
+                    mTypography(state.currentSeed, component = "span", variant = MTypographyVariant.body2) { css(inline) }
                 }
             }
         }

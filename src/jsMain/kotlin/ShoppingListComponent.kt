@@ -1,10 +1,7 @@
 import react.*
 import react.dom.*
 import kotlinx.coroutines.*
-import kotlinx.css.*
 import kotlinx.html.js.onClickFunction
-import styled.css
-import styled.styledDiv
 
 private val scope = MainScope()
 
