@@ -1,5 +1,5 @@
-import MainWindow.Component.ComponentStyles.inline
-import MainWindow.Component.ComponentStyles.listDiv
+import JohnnySeedsWindow.DisplayComponent.ComponentStyles.inline
+import JohnnySeedsWindow.DisplayComponent.ComponentStyles.listDiv
 import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.list.*
 import com.ccfraser.muirwik.components.menu.mMenuItem
@@ -14,42 +14,40 @@ import styled.styledDiv
 
 private val scope = MainScope()
 
-val JohnnySeedsComponent = functionalComponent<RProps> { _ ->
-    val (age, setAge) = useState<Any>(JohnnySeeds.DetailedSeed.path)
+fun RBuilder.johnnySeeds() = child(JohnnySeedsWindow.Component) {}
 
-    val inputProps: RProps = jsObject { }
-    inputProps.asDynamic().name = "age"
-    inputProps.asDynamic().id = "age-simple"
-    val listDemoPath = "list.demo.path"
-    mSelect(age, name = "age", onChange = { event, _ -> setAge(event.targetValue) }) {
-        attrs.inputProps = inputProps
-        mMenuItem("Detailed Seed", value = JohnnySeeds.DetailedSeed.path)
-        mMenuItem("Category", value = JohnnySeeds.Category.path)
-        mMenuItem("Basic Seed", value = JohnnySeeds.BasicSeed.path)
-        mMenuItem("Seed Fact", value = JohnnySeeds.SeedFacts.path)
-    }
-    when (age) {
-        JohnnySeeds.DetailedSeed.path -> detailedSeed {}
-        JohnnySeeds.Category.path -> category {}
-        JohnnySeeds.BasicSeed.path -> basicSeed {}
-        JohnnySeeds.SeedFacts.path -> seedFacts {}
-    }
+object JohnnySeedsWindow {
 
-}
+    val Component = functionalComponent<RProps> { _ ->
+        val (age, setAge) = useState<Any>(JohnnySeeds.DetailedSeed.path)
 
-fun RBuilder.johnnySeeds() = child(JohnnySeedsComponent) {}
+        val inputProps: RProps = jsObject { }
+        inputProps.asDynamic().name = "age"
+        inputProps.asDynamic().id = "age-simple"
+        val listDemoPath = "list.demo.path"
+        mSelect(age, name = "age", onChange = { event, _ -> setAge(event.targetValue) }) {
+            attrs.inputProps = inputProps
+            mMenuItem("Detailed Seed", value = JohnnySeeds.DetailedSeed.path)
+            mMenuItem("Category", value = JohnnySeeds.Category.path)
+            mMenuItem("Basic Seed", value = JohnnySeeds.BasicSeed.path)
+            mMenuItem("Seed Fact", value = JohnnySeeds.SeedFacts.path)
+        }
+        when (age) {
+            JohnnySeeds.DetailedSeed.path -> detailedSeed {}
+            JohnnySeeds.Category.path -> category {}
+            JohnnySeeds.BasicSeed.path -> basicSeed {}
+            JohnnySeeds.SeedFacts.path -> seedFacts {}
+        }
 
-object MainWindow {
-
-    interface Props : RProps {
     }
 
+    interface Props : RProps
     interface State<T> : RState {
         var items: List<Pair<String, T>>
         var currentSeed: String
     }
 
-    abstract class Component<T> (props: Props) : RComponent<Props, State<T>>() {
+    private abstract class DisplayComponent<T> (props: Props) : RComponent<Props, State<T>>() {
         private object ComponentStyles : StyleSheet("ComponentStyles", isStatic = true) {
             val listDiv by css {
                 display = Display.inlineFlex
@@ -109,49 +107,31 @@ object MainWindow {
 
     }
 
-    class DetailedSeed(props: Props): Component<JohnnySeeds.DetailedSeed>(props) {
-        override fun State<JohnnySeeds.DetailedSeed>.init() {
-            items = listOf()
-            val mainScope = MainScope()
-            mainScope.launch {
-                val seeds = getJohnnySeedsDetailedSeed()
-                setState {
-                    items = seeds.map { it.name to it }
-                }
-            }
-        }
+    private class DetailedSeed(props: Props): DisplayComponent<JohnnySeeds.DetailedSeed>(props) {
         override suspend fun get(): List<JohnnySeeds.DetailedSeed> = getJohnnySeedsDetailedSeed()
         override fun JohnnySeeds.DetailedSeed.label() = name
         override fun JohnnySeeds.DetailedSeed.transform() = name
     }
+    fun RBuilder.detailedSeed(handler: Props.() -> Unit) = child(DetailedSeed::class) { attrs { handler() } }
 
-    class Category(props: Props): Component<JohnnySeeds.Category>(props) {
+    private class Category(props: Props): DisplayComponent<JohnnySeeds.Category>(props) {
         override suspend fun get(): List<JohnnySeeds.Category> = getJohnnySeedsCategory()
         override fun JohnnySeeds.Category.label() = name
         override fun JohnnySeeds.Category.transform() = image
     }
-    class BasicSeed(props: Props): Component<JohnnySeeds.BasicSeed>(props) {
+    fun RBuilder.category(handler: Props.() -> Unit) = child(Category::class) { attrs { handler() } }
+
+    private class BasicSeed(props: Props): DisplayComponent<JohnnySeeds.BasicSeed>(props) {
         override suspend fun get(): List<JohnnySeeds.BasicSeed> = getJohnnySeedsBasicSeed()
         override fun JohnnySeeds.BasicSeed.label() = name
         override fun JohnnySeeds.BasicSeed.transform() = image
     }
-    class SeedFacts(props: Props): Component<JohnnySeeds.SeedFacts>(props) {
-        override fun State<JohnnySeeds.SeedFacts>.init() {
-            items = listOf()
-            val mainScope = MainScope()
-            mainScope.launch {
-                val seeds = getJohnnySeedsSeedFacts()
-                setState {
-                    items = seeds.map { it.name to it }
-                }
-            }
-        }
+    fun RBuilder.basicSeed(handler: Props.() -> Unit) = child(BasicSeed::class) { attrs { handler() } }
+
+    private class SeedFacts(props: Props): DisplayComponent<JohnnySeeds.SeedFacts>(props) {
         override suspend fun get(): List<JohnnySeeds.SeedFacts> = getJohnnySeedsSeedFacts()
         override fun JohnnySeeds.SeedFacts.label() = name
         override fun JohnnySeeds.SeedFacts.transform() = maturity!!
     }
+    fun RBuilder.seedFacts(handler: Props.() -> Unit) = child(SeedFacts::class) { attrs { handler() } }
 }
-fun RBuilder.detailedSeed(handler: MainWindow.Props.() -> Unit) = child(MainWindow.DetailedSeed::class) { attrs { handler() } }
-fun RBuilder.category(handler: MainWindow.Props.() -> Unit) = child(MainWindow.Category::class) { attrs { handler() } }
-fun RBuilder.basicSeed(handler: MainWindow.Props.() -> Unit) = child(MainWindow.BasicSeed::class) { attrs { handler() } }
-fun RBuilder.seedFacts(handler: MainWindow.Props.() -> Unit) = child(MainWindow.SeedFacts::class) { attrs { handler() } }
