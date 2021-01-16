@@ -1,9 +1,8 @@
-import TestLists.ComponentStyles.inline
-import TestLists.ComponentStyles.listDiv
+import MainWindow.Component.ComponentStyles.inline
+import MainWindow.Component.ComponentStyles.listDiv
 import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.list.*
 import com.ccfraser.muirwik.components.menu.mMenuItem
-import io.ktor.utils.io.*
 import kotlinext.js.jsObject
 import react.*
 import react.dom.*
@@ -28,130 +27,131 @@ val JohnnySeedsComponent = functionalComponent<RProps> { _ ->
         mMenuItem("Category", value = JohnnySeeds.Category.path)
         mMenuItem("Basic Seed", value = JohnnySeeds.BasicSeed.path)
         mMenuItem("Seed Fact", value = JohnnySeeds.SeedFacts.path)
-        mMenuItem("List Demo", value = listDemoPath)
     }
     when (age) {
-        JohnnySeeds.DetailedSeed.path -> child(detailedSeed)
-        JohnnySeeds.Category.path -> child(category)
-        JohnnySeeds.BasicSeed.path -> child(basicSeed)
-        JohnnySeeds.SeedFacts.path -> child(seedFacts)
+        JohnnySeeds.DetailedSeed.path -> detailedSeed {}
+        JohnnySeeds.Category.path -> category {}
+        JohnnySeeds.BasicSeed.path -> basicSeed {}
+        JohnnySeeds.SeedFacts.path -> seedFacts {}
     }
 
 }
 
 fun RBuilder.johnnySeeds() = child(JohnnySeedsComponent) {}
 
-val detailedSeed = functionalComponent<RProps> { _ ->
-    val (items, setItems) = useState(emptyList<JohnnySeeds.DetailedSeed>())
+object MainWindow {
 
-    useEffect(dependencies = listOf()) {
-        scope.launch {
-            setItems(getJohnnySeedsDetailedSeed())
-        }
-    }
-    testLists {
-        this.items = items.map { item ->
-            item.name to item.secondary_name!!
-        }
-    }
-}
-
-val category = functionalComponent<RProps> { _ ->
-    val (items, setItems) = useState(emptyList<JohnnySeeds.Category>())
-
-    useEffect(dependencies = listOf()) {
-        scope.launch {
-            setItems(getJohnnySeedsCategory())
-        }
-    }
-    testLists {
-        this.items = items.map { item ->
-            item.name to item.image
-        }
-    }
-}
-
-val basicSeed = functionalComponent<RProps> { _ ->
-    val (items, setItems) = useState(emptyList<JohnnySeeds.BasicSeed>())
-
-    useEffect(dependencies = listOf()) {
-        scope.launch {
-            setItems(getJohnnySeedsBasicSeed())
-        }
-    }
-    testLists {
-        this.items = items.map { item ->
-            item.name to item.image
-        }
-    }
-}
-
-val seedFacts = functionalComponent<RProps> { _ ->
-    val (items, setItems) = useState(emptyList<JohnnySeeds.SeedFacts>())
-
-    useEffect(dependencies = listOf()) {
-        scope.launch {
-            setItems(getJohnnySeedsSeedFacts())
-        }
-    }
-    testLists {
-        this.items = items.map { item ->
-            item.name to item.maturity!!
-        }
-    }
-}
-
-external interface TestListsProps: RProps {
-    var items: List<Pair<String, String>>
-}
-external interface TestListsState: RState {
-    var currentSeed: String
-}
-class TestLists(props: TestListsProps) : RComponent<TestListsProps, TestListsState>() {
-    private object ComponentStyles : StyleSheet("ComponentStyles", isStatic = true) {
-        val listDiv by css {
-            display = Display.inlineFlex
-            padding(1.spacingUnits)
-        }
-
-        val inline by css {
-            display = Display.inlineBlock
-        }
+    interface Props : RProps {
     }
 
-    override fun RBuilder.render() {
-        // For building things that we don't want to render now (e.g. the component will render it later), we need another builder
-        val builder2 = RBuilder()
-        themeContext.Consumer { theme ->
-            val themeStyles = object : StyleSheet("ComponentStyles", isStatic = true) {
-                val list by css {
-                    width = 320.px
-                    backgroundColor = Color(theme.palette.background.paper)
-                }
+    interface State<T> : RState {
+        var items: List<Pair<String, T>>
+        var currentSeed: String
+    }
+
+    abstract class Component<T> (props: Props) : RComponent<Props, State<T>>() {
+        private object ComponentStyles : StyleSheet("ComponentStyles", isStatic = true) {
+            val listDiv by css {
+                display = Display.inlineFlex
+                padding(1.spacingUnits)
             }
 
-            styledDiv {
-                css(listDiv)
-                mList {
-                    css(themeStyles.list)
-                    props.items.forEach { (name, callback) ->
-                        mListItem(alignItems = MListItemAlignItems.flexStart, button = true, onClick = {
-                            setState {
-                                currentSeed = callback
-                            }
-                        }) {
-                            mListItemText(builder2.span { +name }, builder2.span {
-                                mTypography(name + " again", component = "span", variant = MTypographyVariant.body2) { css(inline) }
-                            })
-                        }
+            val inline by css {
+                display = Display.inlineBlock
+            }
+        }
+
+        override fun State<T>.init() {
+            items = listOf()
+            scope.launch {
+                val seeds: List<T> = get()
+                setState {
+                    items = seeds.map { it.label() to it }
+                }
+            }
+        }
+
+        override fun RBuilder.render() {
+            // For building things that we don't want to render now (e.g. the component will render it later), we need another builder
+            val builder2 = RBuilder()
+            themeContext.Consumer { theme ->
+                val themeStyles = object : StyleSheet("ComponentStyles", isStatic = true) {
+                    val list by css {
+                        width = 320.px
+                        backgroundColor = Color(theme.palette.background.paper)
                     }
                 }
-                mContainer {
-                    mTypography(state.currentSeed, component = "span", variant = MTypographyVariant.body2) { css(inline) }
+                styledDiv {
+                    css(listDiv)
+                    mList {
+                        css(themeStyles.list)
+                        state.items.forEach { (name, callback) ->
+                            mListItem(alignItems = MListItemAlignItems.flexStart, button = true, onClick = {
+                                setState {
+                                    currentSeed = callback.transform()
+                                }
+                            }) {
+                                mListItemText(builder2.span { +name }, builder2.span {
+                                    mTypography(name + " again", component = "span", variant = MTypographyVariant.body2) { css(inline) }
+                                })
+                            }
+                        }
+                    }
+                    mContainer {
+                        mTypography(state.currentSeed, component = "span", variant = MTypographyVariant.body2) { css(inline) }
+                    }
                 }
             }
         }
+        abstract suspend fun get(): List<T>
+        abstract fun T.label(): String
+        abstract fun T.transform(): String
+
+    }
+
+    class DetailedSeed(props: Props): Component<JohnnySeeds.DetailedSeed>(props) {
+        override fun State<JohnnySeeds.DetailedSeed>.init() {
+            items = listOf()
+            val mainScope = MainScope()
+            mainScope.launch {
+                val seeds = getJohnnySeedsDetailedSeed()
+                setState {
+                    items = seeds.map { it.name to it }
+                }
+            }
+        }
+        override suspend fun get(): List<JohnnySeeds.DetailedSeed> = getJohnnySeedsDetailedSeed()
+        override fun JohnnySeeds.DetailedSeed.label() = name
+        override fun JohnnySeeds.DetailedSeed.transform() = name
+    }
+
+    class Category(props: Props): Component<JohnnySeeds.Category>(props) {
+        override suspend fun get(): List<JohnnySeeds.Category> = getJohnnySeedsCategory()
+        override fun JohnnySeeds.Category.label() = name
+        override fun JohnnySeeds.Category.transform() = image
+    }
+    class BasicSeed(props: Props): Component<JohnnySeeds.BasicSeed>(props) {
+        override suspend fun get(): List<JohnnySeeds.BasicSeed> = getJohnnySeedsBasicSeed()
+        override fun JohnnySeeds.BasicSeed.label() = name
+        override fun JohnnySeeds.BasicSeed.transform() = image
+    }
+    class SeedFacts(props: Props): Component<JohnnySeeds.SeedFacts>(props) {
+        override fun State<JohnnySeeds.SeedFacts>.init() {
+            items = listOf()
+            val mainScope = MainScope()
+            mainScope.launch {
+                val seeds = getJohnnySeedsSeedFacts()
+                setState {
+                    items = seeds.map { it.name to it }
+                }
+            }
+        }
+        override suspend fun get(): List<JohnnySeeds.SeedFacts> = getJohnnySeedsSeedFacts()
+        override fun JohnnySeeds.SeedFacts.label() = name
+        override fun JohnnySeeds.SeedFacts.transform() = maturity!!
     }
 }
-
-fun RBuilder.testLists(handler: TestListsProps.() -> Unit) = child(TestLists::class) { attrs { handler() } }
+fun RBuilder.detailedSeed(handler: MainWindow.Props.() -> Unit) = child(MainWindow.DetailedSeed::class) { attrs { handler() } }
+fun RBuilder.category(handler: MainWindow.Props.() -> Unit) = child(MainWindow.Category::class) { attrs { handler() } }
+fun RBuilder.basicSeed(handler: MainWindow.Props.() -> Unit) = child(MainWindow.BasicSeed::class) { attrs { handler() } }
+fun RBuilder.seedFacts(handler: MainWindow.Props.() -> Unit) = child(MainWindow.SeedFacts::class) { attrs { handler() } }
