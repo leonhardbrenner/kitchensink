@@ -1,4 +1,4 @@
-class JohnnySeeds {
+interface JohnnySeeds {
 
     interface DetailedSeed {
         val name: String
@@ -29,4 +29,17 @@ class JohnnySeeds {
         val maturity: String?
     }
 
+    interface X {
+        val a: Int
+        val z: Z
+        val z2: Z?
+        interface Y {
+            val b: String
+            val z22: List<Z?>?
+        }
+    }
+}
+interface Z {
+    val c: Double
+    val d: List<String>
 }

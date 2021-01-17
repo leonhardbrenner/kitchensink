@@ -1,6 +1,6 @@
 import kotlinx.serialization.Serializable
 
-class JohnnySeedsDto {
+interface JohnnySeedsDto {
 
     @Serializable
     data class DetailedSeedDto(
