@@ -16,7 +16,6 @@ import org.litote.kmongo.coroutine.*
 import com.mongodb.ConnectionString
 import model.db.JohnnySeedsDb
 import org.litote.kmongo.reactivestreams.KMongo
-import services.JohnnySeedsService
 import services.ShoppingListService
 
 
@@ -63,22 +62,22 @@ fun main() {
             static("/") {
                 resources("")
             }
-            route(JohnnySeeds.DetailedSeed.path) {
+            route(JohnnySeedsDto.DetailedSeedDto.path) {
                 get {
                     call.respond(JohnnySeedsDb.DetailedSeed.fetchAll().subList(0, 100))
                 }
             }
-            route(JohnnySeeds.Category.path) {
+            route(JohnnySeedsDto.CategoryDto.path) {
                 get {
                     call.respond(JohnnySeedsDb.Category.fetchAll().subList(0, 100))
                 }
             }
-            route(JohnnySeeds.BasicSeed.path) {
+            route(JohnnySeedsDto.BasicSeedDto.path) {
                 get {
                     call.respond(JohnnySeedsDb.BasicSeed.fetchAll().subList(0, 100))
                 }
             }
-            route(JohnnySeeds.SeedFacts.path) {
+            route(JohnnySeedsDto.SeedFactsDto.path) {
                 get {
                     call.respond(JohnnySeedsDb.SeedFacts.fetchAll().let { it.subList(0, if (it.size < 100) it.size else 100) })
                 }

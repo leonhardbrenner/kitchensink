@@ -17,28 +17,28 @@ class JohnnySeedsService @Inject constructor(val kMapper: ObjectMapper) {
     inner class DetailedSeed {
         val path = "johnnyseeds/detailed-seeds.json"
         //fun fromFile() = fromFile<JohnnySeeds.DetailedSeed>(path)
-        fun fromFile(): List<JohnnySeeds.DetailedSeed> = kMapper.readValue(
+        fun fromFile(): List<JohnnySeedsDto.DetailedSeedDto> = kMapper.readValue(
                 File(ClassLoader.getSystemResource(path).file).readText()
         )
     }
 
     inner class Category {
         val path = "johnnyseeds/categories.json"
-        fun fromFile(): List<JohnnySeeds.Category> = kMapper.readValue(
+        fun fromFile(): List<JohnnySeedsDto.CategoryDto> = kMapper.readValue(
                 File(ClassLoader.getSystemResource(path).file).readText()
         )
     }
 
     inner class BasicSeed {
         val path = "johnnyseeds/basic-seeds.json"
-        fun fromFile(): List<JohnnySeeds.BasicSeed> = kMapper.readValue(
+        fun fromFile(): List<JohnnySeedsDto.BasicSeedDto> = kMapper.readValue(
                 File(ClassLoader.getSystemResource(path).file).readText()
         )
     }
 
     inner class SeedFacts {
         val path = "johnnyseeds/strawberry-seeds.json"
-        fun fromFile(): List<JohnnySeeds.SeedFacts> = kMapper.readValue(
+        fun fromFile(): List<JohnnySeedsDto.SeedFactsDto> = kMapper.readValue(
                 File(ClassLoader.getSystemResource(path).file).readText()
         )
     }

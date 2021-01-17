@@ -27,18 +27,18 @@ suspend fun deleteShoppingListItem(shoppingListItem: ShoppingListItem) {
     jsonClient.delete<Unit>(endpoint + ShoppingListItem.path + "/${shoppingListItem.id}")
 }
 
-suspend fun getJohnnySeedsDetailedSeed(): List<JohnnySeeds.DetailedSeed> {
-    return jsonClient.get(endpoint + JohnnySeeds.DetailedSeed.path)
+suspend fun getJohnnySeedsDetailedSeed(): List<JohnnySeedsDto.DetailedSeedDto> {
+    return jsonClient.get(endpoint + JohnnySeedsDto.DetailedSeedDto.path)
 }
 
-suspend fun getJohnnySeedsCategory(): List<JohnnySeeds.Category> {
-    return jsonClient.get(endpoint + JohnnySeeds.Category.path)
+suspend fun getJohnnySeedsCategory(): List<JohnnySeedsDto.CategoryDto> {
+    return jsonClient.get(endpoint + JohnnySeedsDto.CategoryDto.path)
 }
 
-suspend fun getJohnnySeedsBasicSeed(): List<JohnnySeeds.BasicSeed> {
-    return jsonClient.get(endpoint + JohnnySeeds.BasicSeed.path)
+suspend fun getJohnnySeedsBasicSeed(): List<JohnnySeedsDto.BasicSeedDto> {
+    return jsonClient.get(endpoint + JohnnySeedsDto.BasicSeedDto.path)
 }
 
-suspend fun getJohnnySeedsSeedFacts(): List<JohnnySeeds.SeedFacts> {
-    return jsonClient.get(endpoint + JohnnySeeds.SeedFacts.path)
+suspend fun getJohnnySeedsSeedFacts(): List<JohnnySeedsDto.SeedFactsDto> {
+    return jsonClient.get(endpoint + JohnnySeedsDto.SeedFactsDto.path)
 }
