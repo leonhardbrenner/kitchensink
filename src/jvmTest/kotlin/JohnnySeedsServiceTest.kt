@@ -1,30 +1,32 @@
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.KotlinModule
 import org.junit.Test
-import java.io.File
 import services.JohnnySeedsService
 
 /**
  * Expand out the tests in here
  */
 class JohnnySeedsServiceTest {
+    val service = JohnnySeedsService(ObjectMapper().registerModule(KotlinModule()))
 
     @Test
     fun `DetailedSeed deserialize`() {
-        JohnnySeedsService.DetailedSeed().fetchAll()
+        service.DetailedSeed().fromFile()
     }
 
     @Test
     fun `Category deserialize`() {
-        JohnnySeedsService.Category().fetchAll()
+        service.Category().fromFile()
     }
 
     @Test
     fun `BasicSeed deserialize`() {
-        JohnnySeedsService.BasicSeed().fetchAll()
+        service.BasicSeed().fromFile()
     }
 
     @Test
     fun `SeedFacts deserialize`() {
-        JohnnySeedsService.SeedFacts().fetch()
+        service.SeedFacts().fromFile()
     }
 
 }
