@@ -3,6 +3,9 @@ package generators
 import com.squareup.kotlinpoet.*
 import java.io.StringWriter
 import kotlin.reflect.KClass
+import kotlin.reflect.KType
+import kotlin.reflect.full.createType
+import kotlin.reflect.jvm.jvmErasure
 
 @DslMarker
 @Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.TYPE)
@@ -12,30 +15,26 @@ class FileBuilder(packageName: String, fileName: String, block: (@KotlinPoetDsl 
 
     val builder: FileSpec.Builder = FileSpec.builder(packageName, fileName)
 
-    init { apply(block) }
+    init {
+        apply(block)
+    }
 
-    inner class Class(name: String, block: ClazzBuilder.() -> Unit) {
-        init {
-            builder.addType(ClazzBuilder(TypeSpec.classBuilder(name), block).build())
+    fun Class(name: String, block: ClazzBuilder.() -> Unit) =
+        ClazzBuilder(TypeSpec.classBuilder(name), block).build().apply {
+            builder.addType(this)
         }
-    }
 
-    inner class Interface(val name: String, val block: InterfaceBuilder.() -> Unit) {
-        init {
-            builder.addType(InterfaceBuilder(TypeSpec.interfaceBuilder(name), block).build())
+    fun Interface(name: String, block: InterfaceBuilder.() -> Unit) =
+        InterfaceBuilder(TypeSpec.interfaceBuilder(name), block).build().apply {
+            builder.addType(this)
         }
-    }
 
-    inner class Function(name: String, block: FunctionBuilder.() -> Unit) {
-        init {
-            builder.addFunction(FunctionBuilder(FunSpec.builder(name), block).build())
+    fun Function(name: String, block: FunctionBuilder.() -> Unit) =
+        FunctionBuilder(FunSpec.builder(name), block).build().apply {
+            builder.addFunction(this)
         }
-    }
 
-    fun build(): FileSpec {
-        return builder.build()
-    }
-
+    fun build() = builder.build()
 }
 
 class ClazzBuilder(
@@ -45,33 +44,28 @@ class ClazzBuilder(
 
     init { apply(block) }
 
-    inner class PrimaryConstructor(block: FunctionBuilder.() -> Unit) {
-        init {
-            builder.primaryConstructor(FunctionBuilder(FunSpec.constructorBuilder(), block).build())
+    fun PrimaryConstructor(block: FunctionBuilder.() -> Unit) =
+        FunctionBuilder(FunSpec.constructorBuilder(), block).build().apply {
+            builder.primaryConstructor(this)
         }
-    }
 
-    inner class Annotation(type: KClass<*>, block: AnnotationSpec.Builder.() -> Unit) {
-        init {
-            builder.addAnnotation(AnnotationSpec.builder(type.asClassName()).apply(block).build())
+    fun Annotation(type: KClass<*>, block: AnnotationSpec.Builder.() -> Unit) =
+        AnnotationSpec.builder(type.asClassName()).apply(block).build().apply {
+            builder.addAnnotation(this)
         }
-    }
 
-    inner class Property(name: String, type: KClass<*>, block: PropertySpec.Builder.() -> Unit = {}) {
-        init {
-            builder.addProperty(PropertySpec.builder(name, type).apply(block).build())
+    fun Property(name: String, type: KType, block: PropertySpec.Builder.() -> Unit = {}) =
+        //type.isMarkedNullable
+        PropertySpec.builder(name, type.asTypeName()).apply(block).build().apply {
+            builder.addProperty(this)
         }
-    }
 
-    inner class Function(name: String, block: FunctionBuilder.() -> Unit) {
-        init {
-            builder.addFunction(FunctionBuilder(FunSpec.builder(name), block).build())
+    fun Function(name: String, block: FunctionBuilder.() -> Unit) =
+        FunctionBuilder(FunSpec.builder(name), block).build().apply {
+            builder.addFunction(this)
         }
-    }
 
-    fun build(): TypeSpec {
-        return builder.build()
-    }
+    fun build() = builder.build()
 }
 
 class InterfaceBuilder(
@@ -93,14 +87,12 @@ class InterfaceBuilder(
         }
     }
 
-    fun build(): TypeSpec {
-        return builder.build()
-    }
+    fun build() = builder.build()
 
 }
 
 class FunctionBuilder(
-    private val function: FunSpec.Builder,
+    private val builder: FunSpec.Builder,
     block: (@KotlinPoetDsl FunctionBuilder).() -> Unit
 ) {
 
@@ -108,25 +100,24 @@ class FunctionBuilder(
 
     inner class Parameter(name: String, type: KClass<*>, block: ParameterSpec.Builder.() -> Unit = {}) {
         init {
-            function.addParameter(ParameterSpec.builder(name, type).apply(block).build())
+            builder.addParameter(ParameterSpec.builder(name, type).apply(block).build())
         }
     }
 
     inner class Body(block: CodeBlock.Builder.() -> Unit) {
         init {
-            function.addCode(CodeBlock.builder().apply(block).build())
+            builder.addCode(CodeBlock.builder().apply(block).build())
         }
     }
 
     inner class Annotation(type: KClass<*>) {
         init {
-            function.addAnnotation(type)
+            builder.addAnnotation(type)
         }
     }
 
-    fun build(): FunSpec {
-        return function.build()
-    }
+    fun build() = builder.build()
+
 }
 
 fun main(args: Array<String>) {
@@ -139,7 +130,7 @@ fun main(args: Array<String>) {
                     Parameter("name", String::class)
                 }
 
-                Property("name", String::class) {
+                Property("name", String::class.createType()) {
                     initializer("name")
                 }
 

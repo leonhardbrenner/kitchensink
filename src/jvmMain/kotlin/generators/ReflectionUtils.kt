@@ -7,6 +7,8 @@ import com.squareup.kotlinpoet.asTypeName
 import java.io.StringWriter
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
+import kotlin.reflect.full.createType
+import kotlin.reflect.jvm.jvmErasure
 
 class ComplexType <T: Any> (val manifest: KClass<T>) {
     val description = manifest.simpleName + " - " + manifest.qualifiedName
@@ -20,8 +22,6 @@ class ComplexType <T: Any> (val manifest: KClass<T>) {
             .map {
                 SimpleType(it)
             }
-
-
 }
 class SimpleType (val manifest: KCallable<*>) {
     val description
@@ -50,9 +50,13 @@ fun main(args: Array<String>) {
         FileBuilder("this.is.my.package", rootName) {
 
             Interface(rootName) {
-                reflector.complexTypes.forEach {
-                    Class(it.manifest, modifiers = listOf(KModifier.DATA)) {
+                reflector.complexTypes.forEach { x ->
+                    Class(x.manifest, modifiers = listOf(KModifier.DATA)) {
+                        x.simpleTypes.forEach { element ->
+                            Property(element.manifest.name, element.manifest.returnType) {
 
+                            }
+                        }
                     }
                 }
             }
@@ -70,4 +74,7 @@ fun main(args: Array<String>) {
         }.build().writeTo(this)
     }.toString()
     println(generatedCode)
+    val intType = Int::class.createType()
+    val klass = intType.classifier
+    println(klass!!.equals(Int::class))
 }
