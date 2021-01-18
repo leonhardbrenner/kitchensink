@@ -3,6 +3,7 @@ package generators
 import JohnnySeeds
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.asTypeName
+import java.io.Serializable
 import java.io.StringWriter
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
@@ -33,43 +34,38 @@ class Element (val source: KCallable<*>) {
 
 fun main(args: Array<String>) {
     val reflector = Container(JohnnySeeds::class)
-    reflector.complexTypes.forEach { x ->
-        println(x.description)
-        x.simpleTypes.forEach { y->
-            //TODO - investigate I find it odd that the outer interface does not have these.
-            println(y.description)
-        }
-    }
-    reflector.simpleTypes.forEach { y->
-        //TODO - investigate I find it odd that the outer interface does not have these.
-        println(y.description)
-    }
-
     val generatedCode = StringWriter().apply {
         val rootName = "JohnnySeedsDto"
-        FileBuilder("this.is.my.package", rootName) {
+        FileBuilder("", rootName) {
 
             Interface(rootName) {
+
                 reflector.complexTypes.forEach { x ->
                     Class(x.source, modifiers = listOf(KModifier.DATA)) {
+                        Annotation(Serializable::class) {
+
+                        }
+
+                        PrimaryConstructor {
+                            x.simpleTypes.forEach { element ->
+                                Property(element.source.name, element.source.returnType) {
+                                    mutable(false)
+                                }
+                            }
+                        }
+
                         CompanionObject {
                             Property("path", String::class.createType()) {
                                 initializer("/johnnySeeds/*")
                             }
                         }
-
-                        PrimaryConstructor {
-                            x.simpleTypes.forEach { element ->
-                                Parameter(element.source.name, element.source.returnType) {
-
-                                }
-                            }
-                        }
                     }
                 }
             }
+
         }.build().writeTo(this)
     }.toString()
+
     println(generatedCode)
     val intType = Int::class.createType()
     val klass = intType.classifier

@@ -87,6 +87,12 @@ class CompanionObjectBuilder(
                 builder.addFunction(this)
             }
 
+    fun Property(name: String, type: KType, block: PropertySpec.Builder.() -> Unit = {}) =
+            PropertySpec.builder(name, type.asTypeName()).apply(block).build().apply {
+                builder.addProperty(this)
+            }
+
+
     fun build() = builder.build()
 }
 
@@ -120,11 +126,10 @@ class FunctionBuilder(
 
     init { apply(block) }
 
-    inner class Parameter(name: String, type: KType, block: ParameterSpec.Builder.() -> Unit = {}) {
-        init {
-            builder.addParameter(ParameterSpec.builder(name, type.asTypeName()).addModifiers(modifiers).apply(block).build())
-        }
-    }
+    fun Parameter(name: String, type: KType, block: ParameterSpec.Builder.() -> Unit = {}) =
+            ParameterSpec.builder(name, type.asTypeName()).apply(block).build().apply {
+                builder.addParameter(this)
+            }
 
     inner class Body(block: CodeBlock.Builder.() -> Unit) {
         init {
