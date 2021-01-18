@@ -1,38 +1,38 @@
 package generators
 
 import JohnnySeeds
-import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.asTypeName
 import java.io.StringWriter
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
 import kotlin.reflect.full.createType
-import kotlin.reflect.jvm.jvmErasure
 
-class ComplexType <T: Any> (val manifest: KClass<T>) {
-    val description = manifest.simpleName + " - " + manifest.qualifiedName
+class Container <T: Any> (val source: KClass<T>) {
+    val description = source.simpleName + " - " + source.qualifiedName
+
     val complexTypes
-    get() = manifest.nestedClasses.map { ComplexType(it) }
+    get() = source.nestedClasses.map { Container(it) }
+
     val simpleTypes
-        get() = manifest.members
-            .filterNot {
-                listOf("equals", "hashCode", "toString").contains(it.name)
-            }
-            .map {
-                SimpleType(it)
-            }
+    get() = source.members
+            .filterNot { Element.filters.contains(it.name) }
+            .map { Element(it) }
 }
-class SimpleType (val manifest: KCallable<*>) {
+
+class Element (val source: KCallable<*>) {
+
+    companion object {
+        val filters = listOf("equals", "hashCode", "toString").toSet()
+    }
+
     val description
-    get() = "    ${manifest.name}, ${manifest.returnType.asTypeName()}"
+    get() = "    ${source.name}, ${source.returnType.asTypeName()}"
 }
 
 
 fun main(args: Array<String>) {
-    fun test(x: JohnnySeeds.DetailedSeed) = x.hashCode()
-
-    val reflector = ComplexType(JohnnySeeds::class)
+    val reflector = Container(JohnnySeeds::class)
     reflector.complexTypes.forEach { x ->
         println(x.description)
         x.simpleTypes.forEach { y->
@@ -51,26 +51,23 @@ fun main(args: Array<String>) {
 
             Interface(rootName) {
                 reflector.complexTypes.forEach { x ->
-                    Class(x.manifest, modifiers = listOf(KModifier.DATA)) {
-                        x.simpleTypes.forEach { element ->
-                            Property(element.manifest.name, element.manifest.returnType) {
+                    Class(x.source, modifiers = listOf(KModifier.DATA)) {
+                        CompanionObject {
+                            Property("path", String::class.createType()) {
+                                initializer("/johnnySeeds/*")
+                            }
+                        }
 
+                        PrimaryConstructor {
+                            x.simpleTypes.forEach { element ->
+                                Parameter(element.source.name, element.source.returnType) {
+
+                                }
                             }
                         }
                     }
                 }
             }
-
-            Function("main") {
-                Parameter("args", String::class) {
-                    addModifiers(KModifier.VARARG)
-                }
-
-                Body {
-                    addStatement("%T(args[0]).greet()", ClassName("", "Greeter"))
-                }
-            }
-
         }.build().writeTo(this)
     }.toString()
     println(generatedCode)
