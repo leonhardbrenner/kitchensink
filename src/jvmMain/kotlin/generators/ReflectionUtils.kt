@@ -47,27 +47,14 @@ fun main(args: Array<String>) {
 
     val generatedCode = StringWriter().apply {
         val rootName = "JohnnySeedsDto"
-        kotlinFile("this.is.my.package", rootName) {
+        FileBuilder("this.is.my.package", rootName) {
 
             Interface(rootName) {
                 reflector.complexTypes.forEach {
-                    DataClass(it.manifest, modifiers = listOf(KModifier.DATA)) {
+                    Class(it.manifest, modifiers = listOf(KModifier.DATA)) {
 
                     }
                 }
-                //primaryConstructor {
-                //    parameter("name", String::class)
-                //}
-                //
-                //property("name", String::class) {
-                //    initializer("name")
-                //}
-                //
-                //function("greet") {
-                //    body {
-                //        addStatement("println(%P)", "Hello, \$name")
-                //    }
-                //}
             }
 
             Function("main") {
@@ -80,7 +67,7 @@ fun main(args: Array<String>) {
                 }
             }
 
-        }.writeTo(this)
+        }.build().writeTo(this)
     }.toString()
     println(generatedCode)
 }

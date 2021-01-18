@@ -8,45 +8,46 @@ import kotlin.reflect.KClass
 @Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.TYPE)
 annotation class KotlinPoetDsl
 
-fun kotlinFile(packageName: String, fileName: String, block: (@KotlinPoetDsl FileBuilder).() -> Unit): FileSpec {
-    return FileBuilder(packageName, fileName).apply(block).build()
-}
-class FileBuilder(packageName: String, fileName: String) {
+class FileBuilder(packageName: String, fileName: String, block: (@KotlinPoetDsl FileBuilder).() -> Unit) {
 
-    private val builder: FileSpec.Builder = FileSpec.builder(packageName, fileName)
+    val builder: FileSpec.Builder = FileSpec.builder(packageName, fileName)
+
+    init { apply(block) }
 
     inner class Class(name: String, block: ClazzBuilder.() -> Unit) {
         init {
-            builder.addType(ClazzBuilder(TypeSpec.classBuilder(name)).apply(block).build())
+            builder.addType(ClazzBuilder(TypeSpec.classBuilder(name), block).build())
         }
     }
 
     inner class Interface(val name: String, val block: InterfaceBuilder.() -> Unit) {
         init {
-            builder.addType(InterfaceBuilder(TypeSpec.interfaceBuilder(name)).apply(block).build())
+            builder.addType(InterfaceBuilder(TypeSpec.interfaceBuilder(name), block).build())
         }
     }
 
     inner class Function(name: String, block: FunctionBuilder.() -> Unit) {
         init {
-            builder.addFunction(FunctionBuilder(FunSpec.builder(name)).apply(block).build())
+            builder.addFunction(FunctionBuilder(FunSpec.builder(name), block).build())
         }
     }
 
     fun build(): FileSpec {
         return builder.build()
     }
+
 }
 
-fun kotlinClass(name: String, block: (@KotlinPoetDsl ClazzBuilder).() -> Unit) : TypeSpec {
-    return ClazzBuilder(TypeSpec.classBuilder(name)).apply(block).build()
-}
+class ClazzBuilder(
+    private val builder: TypeSpec.Builder,
+    block: (@KotlinPoetDsl ClazzBuilder).() -> Unit
+) {
 
-class ClazzBuilder(private val builder: TypeSpec.Builder) {
+    init { apply(block) }
 
     inner class PrimaryConstructor(block: FunctionBuilder.() -> Unit) {
         init {
-            builder.primaryConstructor(FunctionBuilder(FunSpec.constructorBuilder()).apply(block).build())
+            builder.primaryConstructor(FunctionBuilder(FunSpec.constructorBuilder(), block).build())
         }
     }
 
@@ -64,25 +65,23 @@ class ClazzBuilder(private val builder: TypeSpec.Builder) {
 
     inner class Function(name: String, block: FunctionBuilder.() -> Unit) {
         init {
-            builder.addFunction(FunctionBuilder(FunSpec.builder(name)).apply(block).build())
+            builder.addFunction(FunctionBuilder(FunSpec.builder(name), block).build())
         }
     }
 
     fun build(): TypeSpec {
-
         return builder.build()
     }
 }
 
-class InterfaceBuilder(private val builder: TypeSpec.Builder) {
+class InterfaceBuilder(
+    private val builder: TypeSpec.Builder,
+    block: (@KotlinPoetDsl InterfaceBuilder).() -> Unit
+) {
 
-    inner class Class(name: String, block: ClazzBuilder.() -> Unit) {
-        init {
-            builder.addType(ClazzBuilder(TypeSpec.classBuilder(name)).apply(block).build())
-        }
-    }
+    init { apply(block) }
 
-    inner class DataClass(
+    inner class Class(
         type: KClass<*>,
         modifiers: List<KModifier> = emptyList(),
         block: ClazzBuilder.() -> Unit
@@ -90,7 +89,7 @@ class InterfaceBuilder(private val builder: TypeSpec.Builder) {
         init {
             builder.addType(ClazzBuilder(TypeSpec.classBuilder(type.simpleName!!)
                 .addSuperinterface(type)
-                .addModifiers(modifiers)).apply(block).build())
+                .addModifiers(modifiers), block).build())
         }
     }
 
@@ -100,11 +99,12 @@ class InterfaceBuilder(private val builder: TypeSpec.Builder) {
 
 }
 
-fun kotlinFunction(name: String, block: (@KotlinPoetDsl FunctionBuilder).() -> Unit) : FunSpec {
-    return FunctionBuilder(FunSpec.builder(name)).apply(block).build()
-}
+class FunctionBuilder(
+    private val function: FunSpec.Builder,
+    block: (@KotlinPoetDsl FunctionBuilder).() -> Unit
+) {
 
-class FunctionBuilder(private val function: FunSpec.Builder) {
+    init { apply(block) }
 
     inner class Parameter(name: String, type: KClass<*>, block: ParameterSpec.Builder.() -> Unit = {}) {
         init {
@@ -131,7 +131,7 @@ class FunctionBuilder(private val function: FunSpec.Builder) {
 
 fun main(args: Array<String>) {
     val generatedCode = StringWriter().apply {
-        kotlinFile("this.is.my.package", "HelloWorld") {
+        FileBuilder("this.is.my.package", "HelloWorld") {
 
             Class("Greeter") {
 
@@ -160,7 +160,7 @@ fun main(args: Array<String>) {
                 }
             }
 
-        }.writeTo(this)
+        }.build().writeTo(this)
     }.toString()
     println(generatedCode)
 """
