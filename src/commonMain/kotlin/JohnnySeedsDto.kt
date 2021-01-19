@@ -14,7 +14,8 @@ interface JohnnySeedsDto {
         companion object {
             val path = "/johnnySeeds/detailedSeed"
         }
-        //TODO - consider making links within here.
+        fun create(source: JohnnySeeds.DetailedSeed) = DetailedSeedDto(
+                source.name, source.maturity, source.secondary_name, source.description, source.image, source.link)
     }
 
     @Serializable

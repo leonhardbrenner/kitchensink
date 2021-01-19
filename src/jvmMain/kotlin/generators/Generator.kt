@@ -6,6 +6,8 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KType
 import kotlin.reflect.full.createType
 
+//TODO - revisit
+/* DO NOT USE. THERE ARE USEFUL IDEAS IN HERE BUT THEY ARE POORLY IMPLEMENTED. */
 @DslMarker
 @Target(AnnotationTarget.ANNOTATION_CLASS, AnnotationTarget.TYPE)
 annotation class KotlinPoetDsl
@@ -53,7 +55,7 @@ class ClazzBuilder(
             }
 
     fun PrimaryConstructor(block: FunctionBuilder.() -> Unit) =
-        FunctionBuilder(FunSpec.constructorBuilder(), block).build().apply {
+        FunctionBuilder(FunSpec.constructorBuilder().addParameter("name", String::class), block).build().apply {
             builder.primaryConstructor(this)
         }
 
@@ -121,8 +123,6 @@ class FunctionBuilder(
     private val builder: FunSpec.Builder,
     block: (@KotlinPoetDsl FunctionBuilder).() -> Unit
 ) {
-
-    val modifiers = listOf(KModifier.FINAL)
 
     init { apply(block) }
 

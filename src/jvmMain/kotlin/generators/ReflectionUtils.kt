@@ -1,73 +1,86 @@
 package generators
 
 import JohnnySeeds
-import com.squareup.kotlinpoet.KModifier
-import com.squareup.kotlinpoet.asTypeName
+import com.squareup.kotlinpoet.*
 import java.io.Serializable
-import java.io.StringWriter
 import kotlin.reflect.KCallable
 import kotlin.reflect.KClass
-import kotlin.reflect.full.createType
 
 class Container <T: Any> (val source: KClass<T>) {
-    val description = source.simpleName + " - " + source.qualifiedName
 
-    val complexTypes
+    val containers
     get() = source.nestedClasses.map { Container(it) }
 
-    val simpleTypes
+    val elements
     get() = source.members
             .filterNot { Element.filters.contains(it.name) }
             .map { Element(it) }
+
 }
 
 class Element (val source: KCallable<*>) {
 
     companion object {
+        //TODO - Investigate why these are polluting our namespace. I did not think interfaces would have these.
         val filters = listOf("equals", "hashCode", "toString").toSet()
     }
 
-    val description
-    get() = "    ${source.name}, ${source.returnType.asTypeName()}"
+    val name
+    get() = source.name
+
+    val returnType
+    get() = source.returnType
+
 }
 
 
 fun main(args: Array<String>) {
     val reflector = Container(JohnnySeeds::class)
-    val generatedCode = StringWriter().apply {
-        val rootName = "JohnnySeedsDto"
-        FileBuilder("", rootName) {
-
-            Interface(rootName) {
-
-                reflector.complexTypes.forEach { x ->
-                    Class(x.source, modifiers = listOf(KModifier.DATA)) {
-                        Annotation(Serializable::class) {
-
+    val file = FileSpec.builder("", "HelloWorld")
+            .addType(
+                    TypeSpec.interfaceBuilder("JohnnySeedsDto").apply {
+                        reflector.containers.forEach { container ->
+                            val typeSpec = TypeSpec.classBuilder(container.source.simpleName!!)
+                                    .addAnnotation(Serializable::class)
+                                    .addModifiers(KModifier.DATA)
+                                    .addSuperinterface(container.source)
+                                    .primaryConstructor(
+                                            FunSpec.constructorBuilder().apply {
+                                                container.elements.forEach { element ->
+                                                    addParameter(element.name, element.returnType.asTypeName()).build()
+                                                }
+                                            }.build()
+                                    )
+                                    .apply {
+                                        container.elements.forEach { element ->
+                                            val propertySpec = PropertySpec.builder(element.name, element.returnType.asTypeName(), KModifier.FINAL)
+                                                    .initializer(element.name)
+                                                    //.mutable(true)
+                                                    .build()
+                                            addProperty(propertySpec)
+                                        }
+                                    }
+                                    .addFunction(
+                                            FunSpec.builder("create")
+                                                    .addParameter("source", container.source.asTypeName())
+                                                    //Look at CodeBlock.addArgument and you will see L stands for literal
+                                                    .addCode("return %L(%L)", container.source.simpleName!!, container.elements.map { "source.${it.name}" }.joinToString(", "))
+                                                    .build()
+                                    )
+                                    .addType(
+                                            TypeSpec.companionObjectBuilder().apply {
+                                                val propertySpec = PropertySpec.builder("path", String::class, KModifier.FINAL)
+                                                        .initializer("\"/${container.source.qualifiedName!!.replace('.', '/')}\"")
+                                                        //.mutable(true)
+                                                        .build()
+                                                addProperty(propertySpec)
+                                            }.build()
+                                    )
+                                    .build()
+                            addType(typeSpec)
                         }
+                    }.build()
+            ).build()
 
-                        PrimaryConstructor {
-                            x.simpleTypes.forEach { element ->
-                                Property(element.source.name, element.source.returnType) {
-                                    mutable(false)
-                                }
-                            }
-                        }
-
-                        CompanionObject {
-                            Property("path", String::class.createType()) {
-                                initializer("/johnnySeeds/*")
-                            }
-                        }
-                    }
-                }
-            }
-
-        }.build().writeTo(this)
-    }.toString()
-
-    println(generatedCode)
-    val intType = Int::class.createType()
-    val klass = intType.classifier
-    println(klass!!.equals(Int::class))
+    file.writeTo(System.out)
 }
