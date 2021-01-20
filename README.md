@@ -12,11 +12,9 @@ Basic setup on Ubuntu:
         postgres> psql
         psql> postgres=# CREATE DATABASE test;
         psql> CREATE DATABASE
-        psql> postgres=# GRANT ALL ON DATABASE test TO test;
-        psql> GRANT
         psql> postgres=# CREATE USER test PASSWORD 'test';
         psql> CREATE ROLE
-        psql> postgres=# GRANT ALL ON SCHEMA test TO test;
+        psql> postgres=# GRANT ALL ON DATABASE test TO test;
         psql> GRANT
         psql> postgres=# GRANT ALL ON ALL TABLES IN SCHEMA test TO test;
         psql> GRANT
