@@ -6,7 +6,7 @@ import styled.css
 import styled.styledDiv
 
 class App : RComponent<RProps, RState>() {
-    private var tab1Value: Any = "one"
+    private var tab1Value: Any = "johnny-seeds"
 
     private object CustomTabStyles : StyleSheet("ComponentStyles", isStatic = true) {
         val tabsRoot by css {

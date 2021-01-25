@@ -33,10 +33,10 @@ object JohnnySeedsWindow {
             mMenuItem("Seed Fact", value = JohnnySeeds.SeedFacts.path)
         }
         when (age) {
-            JohnnySeedsDto.DetailedSeed.path -> detailedSeed {}
-            JohnnySeedsDto.Category.path -> category {}
-            JohnnySeedsDto.BasicSeed.path -> basicSeed {}
-            JohnnySeedsDto.SeedFacts.path -> seedFacts {}
+            JohnnySeeds.DetailedSeed.path -> detailedSeed {}
+            JohnnySeeds.Category.path -> category {}
+            JohnnySeeds.BasicSeed.path -> basicSeed {}
+            JohnnySeeds.SeedFacts.path -> seedFacts {}
         }
 
     }
@@ -114,17 +114,17 @@ object JohnnySeedsWindow {
     }
     fun RBuilder.detailedSeed(handler: Props.() -> Unit) = child(DetailedSeed::class) { attrs { handler() } }
 
-    private class Category(props: Props): DisplayComponent<JohnnySeedsDto.Category>(props) {
-        override suspend fun get(): List<JohnnySeedsDto.Category> = getJohnnySeedsCategory()
-        override fun JohnnySeedsDto.Category.label() = name
-        override fun JohnnySeedsDto.Category.transform() = image
+    private class Category(props: Props): DisplayComponent<JohnnySeeds.Category>(props) {
+        override suspend fun get(): List<JohnnySeeds.Category> = getJohnnySeedsCategory()
+        override fun JohnnySeeds.Category.label() = name
+        override fun JohnnySeeds.Category.transform() = image
     }
     fun RBuilder.category(handler: Props.() -> Unit) = child(Category::class) { attrs { handler() } }
 
-    private class BasicSeed(props: Props): DisplayComponent<JohnnySeedsDto.BasicSeed>(props) {
-        override suspend fun get(): List<JohnnySeedsDto.BasicSeed> = getJohnnySeedsBasicSeed()
-        override fun JohnnySeedsDto.BasicSeed.label() = name
-        override fun JohnnySeedsDto.BasicSeed.transform() = image
+    private class BasicSeed(props: Props): DisplayComponent<JohnnySeeds.BasicSeed>(props) {
+        override suspend fun get(): List<JohnnySeeds.BasicSeed> = getJohnnySeedsBasicSeed()
+        override fun JohnnySeeds.BasicSeed.label() = name
+        override fun JohnnySeeds.BasicSeed.transform() = image
     }
     fun RBuilder.basicSeed(handler: Props.() -> Unit) = child(BasicSeed::class) { attrs { handler() } }
 

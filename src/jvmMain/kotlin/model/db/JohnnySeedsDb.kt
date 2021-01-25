@@ -1,5 +1,6 @@
 package model.db
 
+import JohnnySeeds
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
@@ -27,7 +28,7 @@ object JohnnySeedsDb {
             var image by Table.image
             var link by Table.link
         }
-        fun create(it: ResultRow) = JohnnySeedsDto.DetailedSeed(
+        fun create(it: ResultRow) = JohnnySeeds.DetailedSeed.Dto(
                 it[Table.name], it[Table.maturity], it[Table.secondName], it[Table.description], it[Table.image]!!, it[Table.link]
         )
         fun fetchAll() = transaction {
@@ -49,7 +50,7 @@ object JohnnySeedsDb {
             var image by Table.image
             var link by Table.link
         }
-        fun create(it: ResultRow) = JohnnySeedsDto.Category(
+        fun create(it: ResultRow) = JohnnySeeds.Category.Dto(
                 it[Table.name], it[Table.image], it[Table.link]
         )
         fun fetchAll() = transaction {
@@ -76,7 +77,7 @@ object JohnnySeedsDb {
             var image by Table.image
             var link by Table.link
         }
-        fun create(it: ResultRow) = JohnnySeedsDto.BasicSeed(
+        fun create(it: ResultRow) = JohnnySeeds.BasicSeed.Dto(
                 it[Table.name], it[Table.secondary_name], it[Table.description], it[Table.image], it[Table.link]
         )
         fun fetchAll() = transaction {
@@ -98,7 +99,7 @@ object JohnnySeedsDb {
             var facts by Table.facts
             var maturity by Table.maturity
         }
-        fun create(it: ResultRow) = JohnnySeedsDto.SeedFacts(
+        fun create(it: ResultRow) = JohnnySeeds.SeedFacts.Dto(
                 it[Table.name]!!,
                 listOf(it[Table.facts])!!,  //..TODO - facts should be plural
                 it[Table.maturity]
