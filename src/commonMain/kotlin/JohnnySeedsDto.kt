@@ -3,7 +3,7 @@ import kotlinx.serialization.Serializable
 interface JohnnySeedsDto {
 
     @Serializable
-    data class DetailedSeedDto(
+    data class DetailedSeed(
             override val name: String,
             override val maturity: String?,
             override val secondary_name: String?,
@@ -14,12 +14,12 @@ interface JohnnySeedsDto {
         companion object {
             val path = "/johnnySeeds/detailedSeed"
         }
-        fun create(source: JohnnySeeds.DetailedSeed) = DetailedSeedDto(
+        fun create(source: JohnnySeeds.DetailedSeed) = DetailedSeed(
                 source.name, source.maturity, source.secondary_name, source.description, source.image, source.link)
     }
 
     @Serializable
-    data class CategoryDto(
+    data class Category(
             override val name: String,
             override val image: String,
             override val link: String
@@ -30,7 +30,7 @@ interface JohnnySeedsDto {
     }
 
     @Serializable
-    data class BasicSeedDto(
+    data class BasicSeed(
             override val name: String,
             override val secondary_name: String,
             override val description: String?,
@@ -43,7 +43,7 @@ interface JohnnySeedsDto {
     }
 
     @Serializable
-    data class SeedFactsDto(
+    data class SeedFacts(
             override val name: String,
             override val facts: List<String>?,
             override val maturity: String?

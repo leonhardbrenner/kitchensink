@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpack
+//import org.jetbrains.kotlin.kapt3.base.Kapt.kapt
 
 val kotlinVersion = "1.4.0"
 val serializationVersion = "1.0.0-RC"
@@ -8,8 +9,7 @@ plugins {
     kotlin("multiplatform") version "1.4.0"
     application //to run JVM part
     kotlin("plugin.serialization") version "1.4.0"
-    //Not sure I enjoyed using this the last time it make me use ugly sql. Must be something
-    //more kotliny
+    //Not sure I enjoyed using this the last time it make me use ugly sql. Must be something more kotliny
     //id( "org.flywaydb.flyway") version "5.2.4"
 }
 
@@ -24,6 +24,8 @@ repositories {
     maven { setUrl("https://dl.bintray.com/kotlin/kotlin-js-wrappers") }
 }
 
+//apply(plugin="kotlin-kapt")
+
 kotlin {
     jvm {
         withJava()
@@ -33,7 +35,27 @@ kotlin {
             binaries.executable()
         }
     }
+    //HERE
+    jvm("codegen") {
+        compilations.all {
+            kotlinOptions.jvmTarget = "1.8"
+        }
+        testRuns["test"].executionTask.configure {
+            useJUnit()
+        }
+    }
     sourceSets {
+        val codegenMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlin:kotlin-reflect")
+                implementation("com.squareup:kotlinpoet:1.5.0")
+            }
+        }
+        val codegenTest by getting {
+            dependencies {
+                implementation(kotlin("test-junit"))
+            }
+        }
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))

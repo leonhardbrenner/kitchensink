@@ -62,24 +62,25 @@ fun main() {
             static("/") {
                 resources("")
             }
-            route(JohnnySeedsDto.DetailedSeedDto.path) {
+            route(JohnnySeedsDto.DetailedSeed.path) {
                 get {
                     call.respond(JohnnySeedsDb.DetailedSeed.fetchAll().subList(0, 100))
                 }
             }
-            route(JohnnySeedsDto.CategoryDto.path) {
+            route(JohnnySeedsDto.Category.path) {
                 get {
                     call.respond(JohnnySeedsDb.Category.fetchAll().subList(0, 100))
                 }
             }
-            route(JohnnySeedsDto.BasicSeedDto.path) {
+            route(JohnnySeedsDto.BasicSeed.path) {
                 get {
                     call.respond(JohnnySeedsDb.BasicSeed.fetchAll().subList(0, 100))
                 }
             }
-            route(JohnnySeedsDto.SeedFactsDto.path) {
+            route(JohnnySeedsDto.SeedFacts.path) {
                 get {
-                    call.respond(JohnnySeedsDb.SeedFacts.fetchAll().let { it.subList(0, if (it.size < 100) it.size else 100) })
+                    call.respond(JohnnySeedsDb.SeedFacts.fetchAll().let { it ->
+                        it.subList(0, if (it.size < 100) it.size else 100) })
                 }
             }
             route(ShoppingListItem.path) {
