@@ -4,8 +4,8 @@ import org.gradle.api.tasks.TaskAction
 import java.util.*
 import kotlin.reflect.KClass
 
+//This is for native types
 class Type(val kClass: KClass<*>, val isNullable: Boolean? = false)
-
 
 class Element(val parent: Element?, val name: String, val type: Type? = null, val block: (Element).() -> Unit = {}) {
     val children: MutableList<Element>
