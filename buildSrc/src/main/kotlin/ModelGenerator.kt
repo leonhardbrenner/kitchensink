@@ -21,8 +21,10 @@ class Element(val parent: Element?, val name: String, val type: Type? = null, va
         Element(this, name, type, block)
 
     val path: String
-        get() = if (parent == null) "/$name" else "${parent.path}/$name"
+    get() = if (parent == null) "/$name" else "${parent.path}/$name"
 
+    val packageName: String
+    get() = parent?.path?.substring(1)?.replace("/", ".")?:""
 }
 
 fun Manifest(name: String, block: (Element).() -> Unit) =
@@ -59,28 +61,26 @@ open class ModelGenerator : DefaultTask() {
             }
         }
         Visitor(manifest).walk()
-
-        //val reflector = Container(Class.forName("manifest.Manifest").kotlin)
-        //val reflector = Container(Manifest::class)
+        
         val file = FileSpec.builder("", "HelloWorld")
             .addType(
                 TypeSpec.interfaceBuilder("JohnnySeedsDto").apply {
-                    manifest.children.forEachIndexed { i, element ->
+                    manifest.children.forEach { element ->
                         val typeSpec = TypeSpec.classBuilder(element.name)
-                            //XXX - .addAnnotation(Serializable::class)
+                            .addAnnotation(ClassName("java.lang", "Serializable"))
                             .addModifiers(KModifier.DATA)
-                            //XXX - .addSuperinterface(element.source)
+                            .addSuperinterface(ClassName(element.packageName, element.name))
                             .primaryConstructor(
                                 FunSpec.constructorBuilder().apply {
-                                    element.children.forEach { element ->
-                                        addParameter(element.name, element.type!!.kClass.asTypeName()).build()
+                                    element.children.forEach { child ->
+                                        addParameter(child.name, child.type!!.kClass.asTypeName()).build()
                                     }
                                 }.build()
                             )
                             .apply {
-                                element.children.forEach { element ->
-                                    val propertySpec = PropertySpec.builder(element.name, element.type!!.kClass.asTypeName(), KModifier.FINAL)
-                                        .initializer(element.name)
+                                element.children.forEach { child ->
+                                    val propertySpec = PropertySpec.builder(child.name, child.type!!.kClass.asTypeName(), KModifier.FINAL)
+                                        .initializer(child.name)
                                         //.mutable(true)
                                         .build()
                                     addProperty(propertySpec)
@@ -95,7 +95,7 @@ open class ModelGenerator : DefaultTask() {
                                     addProperty(propertySpec)
                                         .addFunction(
                                             FunSpec.builder("create")
-                                                //XXX - .addParameter("source", element.type.kClass.asTypeName())
+                                                .addParameter("source", ClassName(element.packageName, element.name))
                                                 //Look at CodeBlock.addArgument and you will see L stands for literal
                                                 .addCode(
                                                     "return %L(%L)",
