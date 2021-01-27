@@ -7,6 +7,7 @@ import kotlin.reflect.KClass
 //This is for native types
 class Type(val kClass: KClass<*>, val isNullable: Boolean? = false)
 
+//TODO - add Ref and Link so we can represent the use of another type and relationship between tables
 class Element(val parent: Element?, val name: String, val type: Type? = null, val block: (Element).() -> Unit = {}) {
     val children: MutableList<Element>
 
@@ -48,20 +49,39 @@ open class ModelGenerator : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        println("Hello from buildSrc")
+        //TODO - I think Visitor should be Model which takes manifests. Then it could be a nice DSL for calling various.
+        Visitor(johnnySeeds).walk()
+        generateInterfaces(johnnySeeds)
+        generateDtos(johnnySeeds)
+    }
+}
 
-        val manifest = Manifest("JohnnySeeds") {
-            Element("DetailedSeeds") {
-                Element("name", Type(String::class))
-                Element("maturity", Type(String::class))
-                Element("secondary_name", Type(String::class, true))
-                Element("description", Type(String::class, true))
-                Element("image", Type(String::class, true))
-                Element("link", Type(String::class, true))
-            }
-        }
-        Visitor(manifest).walk()
-        
+    fun generateInterfaces(manifest: Element) {
+        val file = FileSpec.builder("", "HelloWorld").apply {
+            addType(
+                TypeSpec.interfaceBuilder("JohnnySeeds").apply {
+                    manifest.children.forEach { element ->
+                        if (element.type==null)
+                            addType(
+                                TypeSpec.interfaceBuilder(element.name).apply {
+                                    element.children.forEach { child ->
+                                            addProperty(
+                                                PropertySpec.builder(
+                                                    child.name,
+                                                    child.type!!.kClass.asTypeName()
+                                                ).mutable(false).build()
+                                            )
+
+                                    }
+                                }.build())
+                    }
+                }.build()
+            )
+        }.build()
+        file.writeTo(System.out)
+    }
+
+    fun generateDtos(manifest: Element) {
         val file = FileSpec.builder("", "HelloWorld")
             .addType(
                 TypeSpec.interfaceBuilder("JohnnySeedsDto").apply {
@@ -79,7 +99,11 @@ open class ModelGenerator : DefaultTask() {
                             )
                             .apply {
                                 element.children.forEach { child ->
-                                    val propertySpec = PropertySpec.builder(child.name, child.type!!.kClass.asTypeName(), KModifier.FINAL)
+                                    val propertySpec = PropertySpec.builder(
+                                        child.name,
+                                        child.type!!.kClass.asTypeName(),
+                                        KModifier.FINAL
+                                    )
                                         .initializer(child.name)
                                         //.mutable(true)
                                         .build()
@@ -113,4 +137,3 @@ open class ModelGenerator : DefaultTask() {
             ).build()
         file.writeTo(System.out)
     }
-}
