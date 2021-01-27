@@ -13,12 +13,12 @@ class Container <T: Any> (val source: KClass<T>) {
 
     val elements
     get() = source.members
-            .filterNot { Element.filters.contains(it.name) }
-            .map { Element(it) }
+            .filterNot { ElementX.filters.contains(it.name) }
+            .map { ElementX(it) }
 
 }
 
-class Element (val source: KCallable<*>) {
+class ElementX (val source: KCallable<*>) {
 
     companion object {
         //TODO - Investigate why these are polluting our namespace. I did not think interfaces would have these.
