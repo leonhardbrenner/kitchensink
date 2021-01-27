@@ -28,7 +28,7 @@ object JohnnySeedsDb {
             var image by Table.image
             var link by Table.link
         }
-        fun create(it: ResultRow) = JohnnySeeds.DetailedSeed.Dto(
+        fun create(it: ResultRow) = JohnnySeedsDto.DetailedSeeds(
                 it[Table.name], it[Table.maturity], it[Table.secondName], it[Table.description], it[Table.image]!!, it[Table.link]
         )
         fun fetchAll() = transaction {
@@ -50,7 +50,7 @@ object JohnnySeedsDb {
             var image by Table.image
             var link by Table.link
         }
-        fun create(it: ResultRow) = JohnnySeeds.Category.Dto(
+        fun create(it: ResultRow) = JohnnySeedsDto.Category(
                 it[Table.name], it[Table.image], it[Table.link]
         )
         fun fetchAll() = transaction {
@@ -77,7 +77,7 @@ object JohnnySeedsDb {
             var image by Table.image
             var link by Table.link
         }
-        fun create(it: ResultRow) = JohnnySeeds.BasicSeed.Dto(
+        fun create(it: ResultRow) = JohnnySeedsDto.BasicSeed(
                 it[Table.name], it[Table.secondary_name], it[Table.description], it[Table.image], it[Table.link]
         )
         fun fetchAll() = transaction {
@@ -99,9 +99,9 @@ object JohnnySeedsDb {
             var facts by Table.facts
             var maturity by Table.maturity
         }
-        fun create(it: ResultRow) = JohnnySeeds.SeedFacts.Dto(
+        fun create(it: ResultRow) = JohnnySeedsDto.SeedFacts(
                 it[Table.name]!!,
-                listOf(it[Table.facts])!!,  //..TODO - facts should be plural
+                it[Table.facts], //listOf(it[Table.facts])!!,  //..TODO - facts should be plural
                 it[Table.maturity]
         )
         fun fetchAll() = transaction {

@@ -6,3 +6,4 @@
 /.idea/
 /buildSrc/.gradle/
 /buildSrc/build/
+src/commonMain/kotlin/generated

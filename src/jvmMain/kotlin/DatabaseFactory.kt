@@ -82,15 +82,16 @@ object DatabaseFactory {
             SchemaUtils.drop(JohnnySeedsDb.SeedFacts.Table)
             SchemaUtils.create (JohnnySeedsDb.SeedFacts.Table)
             val seedFacts = JohnnySeedsService(kMapper).SeedFacts()
-            seedFacts.fromFile().forEach {
-                JohnnySeedsDb.SeedFacts.Entity.new {
-                    name = it.name
-                    facts = it.facts!![0] //TODO - should be list in DB as well
-                    maturity = it.maturity!!
-
-                }
-                println("Creating ${it.name}")
-            }
+            //XXX - bring this back when you get List<> working.
+            //seedFacts.fromFile().forEach {
+            //    JohnnySeedsDb.SeedFacts.Entity.new {
+            //        name = it.name
+            //        facts = it.facts!!//[0] //TODO - should be list in DB as well
+            //        maturity = it.maturity!!
+            //
+            //    }
+            //    println("Creating ${it.name}")
+            //}
 
             commit()
         }

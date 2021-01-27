@@ -19,7 +19,7 @@ fun RBuilder.johnnySeeds() = child(JohnnySeedsWindow.Component) {}
 object JohnnySeedsWindow {
 
     val Component = functionalComponent<RProps> { _ ->
-        val (age, setAge) = useState<Any>(JohnnySeeds.DetailedSeed.path)
+        val (age, setAge) = useState<Any>(JohnnySeedsDto.DetailedSeeds.path)
 
         val inputProps: RProps = jsObject { }
         inputProps.asDynamic().name = "age"
@@ -27,16 +27,16 @@ object JohnnySeedsWindow {
         val listDemoPath = "list.demo.path"
         mSelect(age, name = "age", onChange = { event, _ -> setAge(event.targetValue) }) {
             attrs.inputProps = inputProps
-            mMenuItem("Detailed Seed", value = JohnnySeeds.DetailedSeed.path)
-            mMenuItem("Category", value = JohnnySeeds.Category.path)
-            mMenuItem("Basic Seed", value = JohnnySeeds.BasicSeed.path)
-            mMenuItem("Seed Fact", value = JohnnySeeds.SeedFacts.path)
+            mMenuItem("Detailed Seed", value = JohnnySeedsDto.DetailedSeeds.path)
+            mMenuItem("Category", value = JohnnySeedsDto.Category.path)
+            mMenuItem("Basic Seed", value = JohnnySeedsDto.BasicSeed.path)
+            mMenuItem("Seed Fact", value = JohnnySeedsDto.SeedFacts.path)
         }
         when (age) {
-            JohnnySeeds.DetailedSeed.path -> detailedSeed {}
-            JohnnySeeds.Category.path -> category {}
-            JohnnySeeds.BasicSeed.path -> basicSeed {}
-            JohnnySeeds.SeedFacts.path -> seedFacts {}
+            JohnnySeedsDto.DetailedSeeds.path -> detailedSeed {}
+            JohnnySeedsDto.Category.path -> category {}
+            JohnnySeedsDto.BasicSeed.path -> basicSeed {}
+            JohnnySeedsDto.SeedFacts.path -> seedFacts {}
         }
 
     }
@@ -107,10 +107,10 @@ object JohnnySeedsWindow {
 
     }
 
-    private class DetailedSeed(props: Props): DisplayComponent<JohnnySeeds.DetailedSeed>(props) {
-        override suspend fun get(): List<JohnnySeeds.DetailedSeed> = getJohnnySeedsDetailedSeed()
-        override fun JohnnySeeds.DetailedSeed.label() = name
-        override fun JohnnySeeds.DetailedSeed.transform() = name
+    private class DetailedSeed(props: Props): DisplayComponent<JohnnySeeds.DetailedSeeds>(props) {
+        override suspend fun get(): List<JohnnySeeds.DetailedSeeds> = getJohnnySeedsDetailedSeed()
+        override fun JohnnySeeds.DetailedSeeds.label() = name
+        override fun JohnnySeeds.DetailedSeeds.transform() = name
     }
     fun RBuilder.detailedSeed(handler: Props.() -> Unit) = child(DetailedSeed::class) { attrs { handler() } }
 

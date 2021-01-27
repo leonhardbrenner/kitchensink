@@ -1,11 +1,12 @@
 import com.squareup.kotlinpoet.*
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
+import java.io.File
 import java.util.*
 import kotlin.reflect.KClass
 
 //This is for native types
-class Type(val kClass: KClass<*>, val isNullable: Boolean? = false)
+class Type(val kClass: KClass<*>, val nullable: Boolean = false)
 
 //TODO - add Ref and Link so we can represent the use of another type and relationship between tables
 class Element(val parent: Element?, val name: String, val type: Type? = null, val block: (Element).() -> Unit = {}) {
@@ -57,7 +58,7 @@ open class ModelGenerator : DefaultTask() {
 }
 
     fun generateInterfaces(manifest: Element) {
-        val file = FileSpec.builder("", "HelloWorld").apply {
+        val file = FileSpec.builder("", "JohnnySeeds.kt").apply {
             addType(
                 TypeSpec.interfaceBuilder("JohnnySeeds").apply {
                     manifest.children.forEach { element ->
@@ -68,7 +69,7 @@ open class ModelGenerator : DefaultTask() {
                                             addProperty(
                                                 PropertySpec.builder(
                                                     child.name,
-                                                    child.type!!.kClass.asTypeName()
+                                                    child.type!!.kClass.asTypeName().copy(nullable = child.type.nullable)
                                                 ).mutable(false).build()
                                             )
 
@@ -78,22 +79,23 @@ open class ModelGenerator : DefaultTask() {
                 }.build()
             )
         }.build()
-        file.writeTo(System.out)
+        val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin/generated/model")
+        file.writeTo(writer)
     }
 
     fun generateDtos(manifest: Element) {
-        val file = FileSpec.builder("", "HelloWorld")
+        val file = FileSpec.builder("", "JohnnySeedsDto.kt")
             .addType(
                 TypeSpec.interfaceBuilder("JohnnySeedsDto").apply {
                     manifest.children.forEach { element ->
                         val typeSpec = TypeSpec.classBuilder(element.name)
-                            .addAnnotation(ClassName("java.lang", "Serializable"))
+                            .addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
                             .addModifiers(KModifier.DATA)
                             .addSuperinterface(ClassName(element.packageName, element.name))
                             .primaryConstructor(
                                 FunSpec.constructorBuilder().apply {
                                     element.children.forEach { child ->
-                                        addParameter(child.name, child.type!!.kClass.asTypeName()).build()
+                                        addParameter(child.name, child.type!!.kClass.asTypeName().copy(nullable = child.type.nullable)).build()
                                     }
                                 }.build()
                             )
@@ -101,8 +103,8 @@ open class ModelGenerator : DefaultTask() {
                                 element.children.forEach { child ->
                                     val propertySpec = PropertySpec.builder(
                                         child.name,
-                                        child.type!!.kClass.asTypeName(),
-                                        KModifier.FINAL
+                                        child.type!!.kClass.asTypeName().copy(nullable = child.type.nullable),
+                                        KModifier.OVERRIDE
                                     )
                                         .initializer(child.name)
                                         //.mutable(true)
@@ -135,5 +137,6 @@ open class ModelGenerator : DefaultTask() {
                     }
                 }.build()
             ).build()
-        file.writeTo(System.out)
+        val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin/generated/model")
+        file.writeTo(writer)
     }

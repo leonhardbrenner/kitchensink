@@ -18,7 +18,6 @@ import model.db.JohnnySeedsDb
 import org.litote.kmongo.reactivestreams.KMongo
 import services.ShoppingListService
 
-
 class ApplicationModule : AbstractModule() {
     //TODO -  this should be loaded via dependency injection
     fun database(): CoroutineDatabase {
@@ -62,22 +61,22 @@ fun main() {
             static("/") {
                 resources("")
             }
-            route(JohnnySeeds.DetailedSeed.path) {
+            route(JohnnySeedsDto.DetailedSeeds.path) {
                 get {
                     call.respond(JohnnySeedsDb.DetailedSeed.fetchAll().subList(0, 100))
                 }
             }
-            route(JohnnySeeds.Category.path) {
+            route(JohnnySeedsDto.Category.path) {
                 get {
                     call.respond(JohnnySeedsDb.Category.fetchAll().subList(0, 100))
                 }
             }
-            route(JohnnySeeds.BasicSeed.path) {
+            route(JohnnySeedsDto.BasicSeed.path) {
                 get {
                     call.respond(JohnnySeedsDb.BasicSeed.fetchAll().subList(0, 100))
                 }
             }
-            route(JohnnySeeds.SeedFacts.path) {
+            route(JohnnySeedsDto.SeedFacts.path) {
                 get {
                     call.respond(JohnnySeedsDb.SeedFacts.fetchAll().let { it ->
                         it.subList(0, if (it.size < 100) it.size else 100) })
