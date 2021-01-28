@@ -1,3 +1,8 @@
+package models
+
+import schema.Manifest
+import schema.Type //TODO Make this a method of Manifest
+
 val johnnySeeds = Manifest("JohnnySeeds") {
 
     Element("DetailedSeeds") {
