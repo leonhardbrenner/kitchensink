@@ -52,91 +52,145 @@ open class ModelGenerator : DefaultTask() {
     fun generate() {
         //TODO - I think Visitor should be Model which takes manifests. Then it could be a nice DSL for calling various.
         Visitor(johnnySeeds).walk()
-        generateInterfaces(johnnySeeds)
-        generateDtos(johnnySeeds)
+        generateInterface(johnnySeeds)
+        generateDto(johnnySeeds)
+        //generateDb(johnnySeeds)
     }
 }
 
-    fun generateInterfaces(manifest: Element) {
-        val file = FileSpec.builder("", "JohnnySeeds.kt").apply {
-            addType(
-                TypeSpec.interfaceBuilder("JohnnySeeds").apply {
-                    manifest.children.forEach { element ->
-                        if (element.type==null)
-                            addType(
-                                TypeSpec.interfaceBuilder(element.name).apply {
-                                    element.children.forEach { child ->
-                                            addProperty(
-                                                PropertySpec.builder(
-                                                    child.name,
-                                                    child.type!!.kClass.asTypeName().copy(nullable = child.type.nullable)
-                                                ).mutable(false).build()
-                                            )
-
-                                    }
-                                }.build())
-                    }
-                }.build()
-            )
-        }.build()
-        val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin/generated/model")
-        file.writeTo(writer)
-    }
-
-    fun generateDtos(manifest: Element) {
-        val file = FileSpec.builder("", "JohnnySeedsDto.kt")
-            .addType(
-                TypeSpec.interfaceBuilder("JohnnySeedsDto").apply {
-                    manifest.children.forEach { element ->
-                        val typeSpec = TypeSpec.classBuilder(element.name)
-                            .addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
-                            .addModifiers(KModifier.DATA)
-                            .addSuperinterface(ClassName(element.packageName, element.name))
-                            .primaryConstructor(
-                                FunSpec.constructorBuilder().apply {
-                                    element.children.forEach { child ->
-                                        addParameter(child.name, child.type!!.kClass.asTypeName().copy(nullable = child.type.nullable)).build()
-                                    }
-                                }.build()
-                            )
-                            .apply {
+fun generateInterface(manifest: Element) {
+    val file = FileSpec.builder("", "JohnnySeeds.kt").apply {
+        addType(
+            TypeSpec.interfaceBuilder("JohnnySeeds").apply {
+                manifest.children.forEach { element ->
+                    if (element.type==null)
+                        addType(
+                            TypeSpec.interfaceBuilder(element.name).apply {
                                 element.children.forEach { child ->
-                                    val propertySpec = PropertySpec.builder(
-                                        child.name,
-                                        child.type!!.kClass.asTypeName().copy(nullable = child.type.nullable),
-                                        KModifier.OVERRIDE
-                                    )
-                                        .initializer(child.name)
-                                        //.mutable(true)
-                                        .build()
-                                    addProperty(propertySpec)
-                                }
-                            }
-                            .addType(
-                                TypeSpec.companionObjectBuilder().apply {
-                                    val propertySpec = PropertySpec.builder("path", String::class, KModifier.FINAL)
-                                        .initializer("\"${element.path}\"")
-                                        //.mutable(true)
-                                        .build()
-                                    addProperty(propertySpec)
-                                        .addFunction(
-                                            FunSpec.builder("create")
-                                                .addParameter("source", ClassName(element.packageName, element.name))
-                                                //Look at CodeBlock.addArgument and you will see L stands for literal
-                                                .addCode(
-                                                    "return %L(%L)",
-                                                    element.name!!,
-                                                    element.children.map { "source.${it.name}" }.joinToString(", ")
-                                                )
-                                                .build()
+                                        addProperty(
+                                            PropertySpec.builder(
+                                                child.name,
+                                                child.type!!.kClass.asTypeName().copy(nullable = child.type.nullable)
+                                            ).mutable(false).build()
                                         )
+
+                                }
+                            }.build())
+                }
+            }.build()
+        )
+    }.build()
+    val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin/generated/model")
+    file.writeTo(writer)
+}
+
+fun generateDto(manifest: Element) {
+    //TODO - consider dropping the generated. prefix. We can keep the files in a different directoru from packagename???
+    val file = FileSpec.builder("generated.model", "JohnnySeedsDto.kt")
+        .addType(
+            TypeSpec.interfaceBuilder("JohnnySeedsDb").apply {
+                manifest.children.forEach { element ->
+                    val typeSpec = TypeSpec.classBuilder(element.name)
+                        .addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
+                        .addModifiers(KModifier.DATA)
+                        .addSuperinterface(ClassName(element.packageName, element.name))
+                        .primaryConstructor(
+                            FunSpec.constructorBuilder().apply {
+                                element.children.forEach { child ->
+                                    addParameter(
+                                        child.name,
+                                        child.type!!.kClass.asTypeName().copy(nullable = child.type.nullable)
+                                    ).build()
+                                }
+                            }.build()
+                        )
+                        .apply {
+                            element.children.forEach { child ->
+                                val propertySpec = PropertySpec.builder(
+                                    child.name,
+                                    child.type!!.kClass.asTypeName().copy(nullable = child.type.nullable),
+                                    KModifier.OVERRIDE
+                                )
+                                    .initializer(child.name)
+                                    //.mutable(true)
+                                    .build()
+                                addProperty(propertySpec)
+                            }
+                        }
+                        .addType(
+                            TypeSpec.companionObjectBuilder().apply {
+                                val propertySpec = PropertySpec.builder("path", String::class, KModifier.FINAL)
+                                    .initializer("\"${element.path}\"")
+                                    //.mutable(true)
+                                    .build()
+                                addProperty(propertySpec)
+                                    .addFunction(
+                                        FunSpec.builder("create")
+                                            .addParameter("source", ClassName(element.packageName, element.name))
+                                            //Look at CodeBlock.addArgument and you will see L stands for literal
+                                            .addCode(
+                                                "return %L(%L)",
+                                                element.name!!,
+                                                element.children.map { "source.${it.name}" }.joinToString(", ")
+                                            )
+                                            .build()
+                                    )
+                            }.build()
+                        )
+                        .build()
+                    addType(typeSpec)
+                }
+            }.build()
+        ).build()
+    val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin/generated/model")
+    file.writeTo(writer)
+}
+
+fun generateDb(manifest: Element) {
+    //TODO - consider dropping the generated. prefix. We can keep the files in a different directoru from packagename???
+//import org.jetbrains.exposed.sql.ResultRow
+//import org.jetbrains.exposed.sql.selectAll
+//import org.jetbrains.exposed.sql.transactions.transaction
+   val file = FileSpec.builder("generated.model.db", "JohnnySeedsDb.kt")
+       .addImport("org.jetbrains.exposed.dao","IntEntity", "IntEntityClass")
+       .addImport("org.jetbrains.exposed.dao.id", "EntityID", "IntIdTable")
+       .addImport("org.jetbrains.exposed.sql", "ResultRow", "selectAll")
+       .addImport("org.jetbrains.exposed.sql.transactions.transaction", "EntityID", "IntIdTable")
+       .addType(
+            TypeSpec.objectBuilder("JohnnySeedsDb").apply {
+                manifest.children.forEach { element ->
+                    val typeSpec = TypeSpec.objectBuilder(element.name)
+                        .addType(
+                            TypeSpec.objectBuilder("Table")
+                                //.superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)) //XXX - I need to get this working it has to extend IntIdTable(<table_name>)
+                                .apply {
+                                    element.children.forEach { child ->
+                                        val propertySpec = PropertySpec.builder(child.name, String::class)
+                                            .initializer("text(\"${child.name}\")")
+                                            //.mutable(true)
+                                            .build()
+                                        addProperty(propertySpec)
+                                    }
                                 }.build()
-                            )
-                            .build()
-                        addType(typeSpec)
-                    }
-                }.build()
-            ).build()
-        val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin/generated/model")
-        file.writeTo(writer)
-    }
+                        )
+                        .addType(
+                            TypeSpec.objectBuilder("Element")
+                                //.superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)) //XXX - I need to get this working it has to extend IntIdTable(<table_name>)
+                                .apply {
+                                    addType(TypeSpec.companionObjectBuilder().superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)).build())
+                                    element.children.forEach { child ->
+                                        val propertySpec = PropertySpec.builder(child.name, String::class)
+                                            .delegate("Table.%L", child.name)
+                                            .mutable(true)
+                                            .build()
+                                        addProperty(propertySpec)
+                                    }
+                                }.build()
+                        )
+                    addType(typeSpec.build())
+                }
+            }.build()
+        ).build()
+    val writer = File("/home/lbrenner/projects/kitchensink/src/jvmMain/kotlin/generated/model/db")
+    file.writeTo(writer)
+}

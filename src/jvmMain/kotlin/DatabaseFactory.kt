@@ -86,13 +86,12 @@ object DatabaseFactory {
             //seedFacts.fromFile().forEach {
             //    JohnnySeedsDb.SeedFacts.Entity.new {
             //        name = it.name
-            //        facts = it.facts!!//[0] //TODO - should be list in DB as well
+            //        facts = ""//it.facts!!//[0] //TODO - should be list in DB as well
             //        maturity = it.maturity!!
             //
             //    }
             //    println("Creating ${it.name}")
             //}
-
             commit()
         }
     }

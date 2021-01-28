@@ -1,6 +1,5 @@
 package model.db
 
-import JohnnySeeds
 import org.jetbrains.exposed.dao.IntEntity
 import org.jetbrains.exposed.dao.IntEntityClass
 import org.jetbrains.exposed.dao.id.EntityID
