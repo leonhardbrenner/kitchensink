@@ -1,6 +1,6 @@
 package generators
 
-import JohnnySeeds
+import generated.model.JohnnySeeds
 import com.squareup.kotlinpoet.*
 import java.io.Serializable
 import kotlin.reflect.KCallable

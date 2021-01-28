@@ -1,4 +1,5 @@
 import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import java.io.File
@@ -54,12 +55,12 @@ open class ModelGenerator : DefaultTask() {
         Visitor(johnnySeeds).walk()
         generateInterface(johnnySeeds)
         generateDto(johnnySeeds)
-        //generateDb(johnnySeeds)
+        generateDb(johnnySeeds)
     }
 }
 
 fun generateInterface(manifest: Element) {
-    val file = FileSpec.builder("", "JohnnySeeds.kt").apply {
+    val file = FileSpec.builder("generated.model", "JohnnySeeds").apply {
         addType(
             TypeSpec.interfaceBuilder("JohnnySeeds").apply {
                 manifest.children.forEach { element ->
@@ -80,15 +81,15 @@ fun generateInterface(manifest: Element) {
             }.build()
         )
     }.build()
-    val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin/generated/model")
+    val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin")
     file.writeTo(writer)
 }
 
 fun generateDto(manifest: Element) {
     //TODO - consider dropping the generated. prefix. We can keep the files in a different directoru from packagename???
-    val file = FileSpec.builder("generated.model", "JohnnySeedsDto.kt")
+    val file = FileSpec.builder("generated.model", "JohnnySeedsDto")
         .addType(
-            TypeSpec.interfaceBuilder("JohnnySeedsDb").apply {
+            TypeSpec.interfaceBuilder("JohnnySeedsDto").apply {
                 manifest.children.forEach { element ->
                     val typeSpec = TypeSpec.classBuilder(element.name)
                         .addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
@@ -124,17 +125,17 @@ fun generateDto(manifest: Element) {
                                     //.mutable(true)
                                     .build()
                                 addProperty(propertySpec)
-                                    .addFunction(
-                                        FunSpec.builder("create")
-                                            .addParameter("source", ClassName(element.packageName, element.name))
-                                            //Look at CodeBlock.addArgument and you will see L stands for literal
-                                            .addCode(
-                                                "return %L(%L)",
-                                                element.name!!,
-                                                element.children.map { "source.${it.name}" }.joinToString(", ")
-                                            )
-                                            .build()
-                                    )
+                                addFunction(
+                                    FunSpec.builder("create")
+                                        .addParameter("source", ClassName(element.packageName, element.name))
+                                        //Look at CodeBlock.addArgument and you will see L stands for literal
+                                        .addCode(
+                                            "return %L(%L)",
+                                            element.name!!,
+                                            element.children.map { "source.${it.name}" }.joinToString(", ")
+                                        )
+                                        .build()
+                                )
                             }.build()
                         )
                         .build()
@@ -142,7 +143,7 @@ fun generateDto(manifest: Element) {
                 }
             }.build()
         ).build()
-    val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin/generated/model")
+    val writer = File("/home/lbrenner/projects/kitchensink/src/commonMain/kotlin")
     file.writeTo(writer)
 }
 
@@ -151,22 +152,29 @@ fun generateDb(manifest: Element) {
 //import org.jetbrains.exposed.sql.ResultRow
 //import org.jetbrains.exposed.sql.selectAll
 //import org.jetbrains.exposed.sql.transactions.transaction
-   val file = FileSpec.builder("generated.model.db", "JohnnySeedsDb.kt")
-       .addImport("org.jetbrains.exposed.dao","IntEntity", "IntEntityClass")
-       .addImport("org.jetbrains.exposed.dao.id", "EntityID", "IntIdTable")
-       .addImport("org.jetbrains.exposed.sql", "ResultRow", "selectAll")
-       .addImport("org.jetbrains.exposed.sql.transactions.transaction", "EntityID", "IntIdTable")
-       .addType(
+    val file = FileSpec.builder("generated.model.db", "JohnnySeedsDb")
+        .addImport("org.jetbrains.exposed.dao", "IntEntity", "IntEntityClass")
+        .addImport("org.jetbrains.exposed.dao.id", "EntityID", "IntIdTable")
+        .addImport("org.jetbrains.exposed.sql", "ResultRow", "selectAll")
+        .addImport("org.jetbrains.exposed.sql.transactions", "transaction")
+        .addImport("generated.model", "JohnnySeedsDto")
+        .addType(
             TypeSpec.objectBuilder("JohnnySeedsDb").apply {
                 manifest.children.forEach { element ->
                     val typeSpec = TypeSpec.objectBuilder(element.name)
                         .addType(
                             TypeSpec.objectBuilder("Table")
+                                .superclass(ClassName("org.jetbrains.exposed.dao.id", "IntIdTable"))
+                                .addSuperclassConstructorParameter("%S", element.name)
                                 //.superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)) //XXX - I need to get this working it has to extend IntIdTable(<table_name>)
                                 .apply {
                                     element.children.forEach { child ->
-                                        val propertySpec = PropertySpec.builder(child.name, String::class)
-                                            .initializer("text(\"${child.name}\")")
+                                        val propertySpec = PropertySpec.builder(
+                                            child.name,
+                                            ClassName("org.jetbrains.exposed.sql", "Column")
+                                                .parameterizedBy(String::class.asTypeName().copy(nullable = child.type!!.nullable))
+                                        )
+                                            .initializer("text(\"${child.name}\")${if (child.type!!.nullable) ".nullable()" else ""}")
                                             //.mutable(true)
                                             .build()
                                         addProperty(propertySpec)
@@ -174,23 +182,74 @@ fun generateDb(manifest: Element) {
                                 }.build()
                         )
                         .addType(
-                            TypeSpec.objectBuilder("Element")
+                            TypeSpec.classBuilder("Entity")
+                                .superclass(ClassName("org.jetbrains.exposed.dao", "IntEntity"))
+                                .addSuperclassConstructorParameter("id")
+                                .addSuperinterface(ClassName("generated.model.JohnnySeeds", element.name))
+                                .primaryConstructor(
+                                    FunSpec.constructorBuilder().apply {
+                                        addParameter(
+                                            "id",
+                                            ClassName("org.jetbrains.exposed.dao.id", "EntityID")
+                                                .parameterizedBy(Int::class.asTypeName())
+                                        ).build()
+                                    }.build()
+                                )
+                                .addType(
+                                    TypeSpec.companionObjectBuilder()
+                                        .superclass(
+                                            ClassName("org.jetbrains.exposed.dao", "IntEntityClass")
+                                                .parameterizedBy(ClassName("", "Entity"))
+                                        )
+                                        .addSuperclassConstructorParameter("Table")
+                                        .build()
+                                )
                                 //.superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)) //XXX - I need to get this working it has to extend IntIdTable(<table_name>)
                                 .apply {
-                                    addType(TypeSpec.companionObjectBuilder().superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)).build())
+                                    //addType(TypeSpec.companionObjectBuilder().superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)).build())
                                     element.children.forEach { child ->
-                                        val propertySpec = PropertySpec.builder(child.name, String::class)
+                                        val propertySpec = PropertySpec.builder(
+                                            child.name,
+                                            String::class.asTypeName().copy(nullable = child.type!!.nullable),
+                                            KModifier.OVERRIDE
+                                        )
+                                            //ClassName("org.jetbrains.exposed.sql", "Column")
+                                            //    .parameterizedBy(String::class.asTypeName())
                                             .delegate("Table.%L", child.name)
                                             .mutable(true)
+                                            //.modifiers(KModifier.OVERRIDE)
                                             .build()
                                         addProperty(propertySpec)
                                     }
-                                }.build()
+                                }
+                                .build()
+                        )
+                        .addFunction(
+                            FunSpec.builder("create")
+                                .addParameter(
+                                    "source",
+                                    ClassName("org.jetbrains.exposed.sql", "ResultRow")
+                                )
+                                //Look at CodeBlock.addArgument and you will see L stands for literal
+                                .addCode(
+                                    "return %LDto.%L(%L)",
+                                    element.parent!!.name,
+                                    element.name!!,
+                                    element.children.map { "source[Table.${it.name}]" }.joinToString(", ")
+                                )
+                                .build()
+                        )
+                        .addFunction(
+                            FunSpec.builder("fetchAll")
+                                .addCode(
+                                    "return transaction { with (Table) { selectAll().map { create(it) } } }"
+                                )
+                                .build()
                         )
                     addType(typeSpec.build())
                 }
             }.build()
         ).build()
-    val writer = File("/home/lbrenner/projects/kitchensink/src/jvmMain/kotlin/generated/model/db")
+    val writer = File("/home/lbrenner/projects/kitchensink/src/jvmMain/kotlin")
     file.writeTo(writer)
 }

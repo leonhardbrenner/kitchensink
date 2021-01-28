@@ -3,6 +3,8 @@ import JohnnySeedsWindow.DisplayComponent.ComponentStyles.listDiv
 import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.list.*
 import com.ccfraser.muirwik.components.menu.mMenuItem
+import generated.model.JohnnySeeds
+import generated.model.JohnnySeedsDto
 import kotlinext.js.jsObject
 import react.*
 import react.dom.*

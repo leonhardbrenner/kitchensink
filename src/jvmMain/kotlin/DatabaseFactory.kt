@@ -6,7 +6,7 @@ import com.zaxxer.hikari.HikariDataSource
 import io.ktor.config.HoconApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import model.db.JohnnySeedsDb
+import generated.model.db.JohnnySeedsDb
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import services.JohnnySeedsService
@@ -29,14 +29,14 @@ object DatabaseFactory {
             // print sql to std-out
             addLogger(StdOutSqlLogger)
 
-            SchemaUtils.drop(JohnnySeedsDb.DetailedSeed.Table)
-            SchemaUtils.create (JohnnySeedsDb.DetailedSeed.Table)
+            SchemaUtils.drop(JohnnySeedsDb.DetailedSeeds.Table)
+            SchemaUtils.create (JohnnySeedsDb.DetailedSeeds.Table)
             val seeds = JohnnySeedsService(kMapper).DetailedSeed().fromFile()
             seeds.forEach { row ->
-                JohnnySeedsDb.DetailedSeed.Entity.new {
+                JohnnySeedsDb.DetailedSeeds.Entity.new {
                     name = row.name
                     maturity = row.maturity
-                    secondName = row.secondary_name
+                    secondary_name = row.secondary_name
                     description = row.description
                     image = row.image
                     link = row.link

@@ -1,3 +1,4 @@
+import generated.model.JohnnySeedsDto
 import io.ktor.http.*
 import io.ktor.client.*
 import io.ktor.client.request.*

@@ -14,7 +14,8 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.litote.kmongo.coroutine.*
 import com.mongodb.ConnectionString
-import model.db.JohnnySeedsDb
+import generated.model.JohnnySeedsDto
+import generated.model.db.JohnnySeedsDb
 import org.litote.kmongo.reactivestreams.KMongo
 import services.ShoppingListService
 
@@ -63,7 +64,7 @@ fun main() {
             }
             route(JohnnySeedsDto.DetailedSeeds.path) {
                 get {
-                    call.respond(JohnnySeedsDb.DetailedSeed.fetchAll().subList(0, 100))
+                    call.respond(JohnnySeedsDb.DetailedSeeds.fetchAll().subList(0, 100))
                 }
             }
             route(JohnnySeedsDto.Category.path) {
