@@ -26,7 +26,6 @@ object JohnnySeedsWindow {
         val inputProps: RProps = jsObject { }
         inputProps.asDynamic().name = "age"
         inputProps.asDynamic().id = "age-simple"
-        val listDemoPath = "list.demo.path"
         mSelect(age, name = "age", onChange = { event, _ -> setAge(event.targetValue) }) {
             attrs.inputProps = inputProps
             mMenuItem("Detailed Seed", value = JohnnySeedsDto.DetailedSeeds.path)

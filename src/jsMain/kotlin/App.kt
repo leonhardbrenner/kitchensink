@@ -28,24 +28,24 @@ class App : RComponent<RProps, RState>() {
 
     override fun RBuilder.render() {
         themeContext.Consumer { theme ->
-            val themeStyles = object : StyleSheet("ComponentStyles", isStatic = true) {
-                val tabRoot by css {
-                    textTransform = TextTransform.none
-                    fontWeight = FontWeight(theme.typography.fontWeightRegular.toString())
-                    marginRight = 4.spacingUnits
-                    hover {
-                        color = Color("#40a9ff")
-                        opacity = 1
-                    }
-                    focus {
-                        color = Color("#40a9ff")
-                    }
-                }
-                val tabSelected by css {
-                    color = Color("#1890ff")
-                    fontWeight = FontWeight(theme.typography.fontWeightMedium.toString())
-                }
-            }
+            //val themeStyles = object : StyleSheet("ComponentStyles", isStatic = true) {
+            //    val tabRoot by css {
+            //        textTransform = TextTransform.none
+            //        fontWeight = FontWeight(theme.typography.fontWeightRegular.toString())
+            //        marginRight = 4.spacingUnits
+            //        hover {
+            //            color = Color("#40a9ff")
+            //            opacity = 1
+            //        }
+            //        focus {
+            //            color = Color("#40a9ff")
+            //        }
+            //    }
+            //    val tabSelected by css {
+            //        color = Color("#1890ff")
+            //        fontWeight = FontWeight(theme.typography.fontWeightMedium.toString())
+            //    }
+            //}
 
             styledDiv {
                 css { flexGrow = 1.0; backgroundColor = Color(theme.palette.background.paper) }
