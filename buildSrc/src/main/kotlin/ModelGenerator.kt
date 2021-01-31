@@ -16,10 +16,11 @@ open class ModelGenerator : DefaultTask() {
     @TaskAction
     fun generate() {
         //TODO - I think Visitor should be Model which takes manifests. Then it could be a nice DSL for calling various.
-        Visitor(johnnySeeds).walk()
+        //Visitor(johnnySeeds).walk()
         InterfaceGenerator.generate(johnnySeeds)
         DtoGenerator.generateDto(johnnySeeds)
         DbGenerator.generate(johnnySeeds)
+        //generators.generateWorkflows()
     }
 
 }
