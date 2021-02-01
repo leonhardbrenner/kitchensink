@@ -6,63 +6,73 @@ import com.squareup.kotlinpoet.asTypeName
 import java.util.*
 import kotlin.reflect.KClass
 
-class Type(val kClass: KClass<*>? = null, val nullable: Boolean = false)
-class Ref(val element: Element? = null, val nullable: Boolean = false)
-
-//TODO - add Ref and Link so we can represent the use of another type and relationship between tables
-interface IElement {
-    val parent: Element?
+interface Element {
+    val parent: X?
     val name: String
     val type: KClass<*>?
+    val ref: Element?
     val nullable: Boolean
-    val path: String
     val children: List<Element>
-    fun asPropertySpec(mutable: Boolean = false, vararg modifiers: KModifier): PropertySpec.Builder
-}
-
-class Element(
-    override val parent: Element?,
-    override val name: String,
-    override val type: KClass<*>? = null, //Swap for ClassName
-    val ref: Element? = null,
-    override val nullable: Boolean = false,
-    val block: Element.() -> Unit = {}
-): IElement {
-    override val children = LinkedList<Element>()
-    init { block() }
-
-    fun Element(
-        name: String, type: KClass<*>? = null,
-        ref: Element? = null,
-        nullable: Boolean = false,
-        block: (Element).() -> Unit = {}
-    ) =
-        children.add(Element(this, name, type, ref, nullable, block))
-
     val isManifest: Boolean
         get() = parent == null
-
     val isNamespace: Boolean
         get() = !isManifest && parent!!.isManifest
-
     val isRoot: Boolean
-        get() = parent != null && parent.isNamespace
-
-    override val path: String
+        get() = parent != null && parent!!.isNamespace
+    val path: String
         get() = if (isManifest) "" else "${parent!!.path}/$name"
-
     val isSlot: Boolean
         get() = type != null || ref!=null
-
-    override fun asPropertySpec(mutable: Boolean, vararg modifiers: KModifier) = PropertySpec.builder(
+    fun asPropertySpec(mutable: Boolean, vararg modifiers: KModifier) = PropertySpec.builder(
         name,
         type!!.asTypeName().copy(nullable = nullable)
     ).addModifiers(modifiers.map { it } ).mutable(mutable)
 
-}
+    class X(
+        override val parent: X?,
+        override val name: String,
+        override val type: KClass<*>? = null, //Swap for ClassName
+        override val ref: X? = null,
+        override val nullable: Boolean = false,
+        block: X.() -> Unit = {}
+    ): Element {
+        override val children = LinkedList<Element>()
+        init { block() }
+        fun x(
+            name: String, type: KClass<*>? = null,
+            ref: X? = null,
+            nullable: Boolean = false,
+            block: (X).() -> Unit = {}
+        ) = children.add(
+            X(this, name, type, ref, nullable, block)
+        )
+    }
 
-fun Manifest(name: String, block: Element.() -> Unit) =
-    Element(null, name, null, null, false, block)
+    class Model(element: Element): Element by element {
+        val namespaces by lazy {
+            children.map { Namespace(it)}
+        }
+        inner class Namespace(element: Element): Element by element {
+            val types by lazy {
+                children.map { Type(it) }
+            }
+        }
+        inner class Type(element: Element): Element by element {
+            val slots by lazy {
+                children.map { Slot(it) }
+            }
+            val packageName: String
+                get() = parent?.path?.substring(1)?.replace("/", ".")?:""
+        }
+        inner class Slot(element: Element): Element by element
+    }
+
+    companion object {
+        fun model(name: String, block: X.() -> Unit) = Model(
+            X(null, name, null, null, false, block)
+        )
+    }
+}
 
 class Workflow(
     val name_: String,

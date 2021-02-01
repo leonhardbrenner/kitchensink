@@ -5,8 +5,7 @@ import java.io.File
 import schema.Element
 
 object DtoGenerator: Generator {
-    fun generateDto(manifest: Element) {
-        val model = Model(manifest)
+    fun generateDto(model: Element.Model) {
         model.namespaces.forEach { namespace ->
             val file = FileSpec.builder("generated.model", "JohnnySeedsDto")
                 .addType(
@@ -34,7 +33,6 @@ object DtoGenerator: Generator {
                                             KModifier.OVERRIDE
                                         )
                                             .initializer(slot.name)
-                                            //.mutable(true)
                                             .build()
                                         addProperty(
                                             slot.asPropertySpec(false, KModifier.OVERRIDE)

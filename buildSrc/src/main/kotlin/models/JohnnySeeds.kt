@@ -1,48 +1,40 @@
 package models
 
-import schema.Manifest
-import schema.Type //TODO Make this a method of Manifest
+import schema.Element
 
-val manifest = Manifest("Manifest") {
-    Element("JohnnySeeds") {
-        Element("DetailedSeeds") {
-            Element("name", type = String::class)
-            Element("maturity", type = String::class, nullable = true)
-            Element("secondary_name", type = String::class, nullable = true)
-            Element("description", type = String::class, nullable = true)
-            Element("image", type = String::class, nullable = true)
-            Element("link", type = String::class, nullable = true)
+val manifest = Element.
+model("Manifest") {
+
+    x("JohnnySeeds") {
+
+        x("DetailedSeeds") {
+            x("name", String::class)
+            x("maturity", String::class, nullable = true)
+            x("secondary_name", String::class, nullable = true)
+            x("description", String::class, nullable = true)
+            x("image", String::class, nullable = true)
+            x("link", String::class, nullable = true)
         }
 
-        Element("Category") {
-            Element("name", type = String::class)
-            Element("image", type = String::class)
-            Element("link", type = String::class)
+        x("Category") {
+            x("name", String::class)
+            x("image", String::class)
+            x("link", String::class)
         }
 
-        Element("BasicSeed") {
-            Element("name", type = String::class)
-            Element("secondary_name", type = String::class)
-            Element("description", type = String::class, nullable = true)
-            Element("image", type = String::class)
-            Element("link", type = String::class)
+        x("BasicSeed") {
+            x("name", String::class)
+            x("secondary_name", String::class)
+            x("description", String::class, nullable = true)
+            x("image", String::class)
+            x("link", String::class)
         }
 
-        Element("SeedFacts") {
-            Element("name", type = String::class)
-            Element("facts", type = String::class, nullable = true) //TODO - This should be a list
-            Element("maturity", type = String::class, nullable = true)
+        x("SeedFacts") {
+            x("name", String::class)
+            //TODO - This should be a list
+            x("facts", String::class, nullable = true)
+            x("maturity", String::class, nullable = true)
         }
-        //Element("DetailedSeedsWithCategoryAndFacts") {
-        //    Element("name", Type(String::class))
-        //    Element("maturity", Type(String::class, true))
-        //    Element("secondary_name", Type(String::class, true))
-        //    Element("description", Type(String::class, true))
-        //    Element("image", Type(String::class, true))
-        //    Element("link", Type(String::class, true))
-        //    //Element("facts", Ref("SeedFacts"))
-        //}
-
-        //val x = Array<String>::class
     }
 }

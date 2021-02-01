@@ -6,11 +6,8 @@ import schema.Element
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
 
 object DbGenerator: Generator {
-    fun generate(manifest: Element) {
-        val model = Model(manifest)
+    fun generate(model: Element.Model) {
         model.namespaces.forEach { namespace ->
-
-            //TODO - consider dropping the generated. prefix. We can keep the files in a different directoru from packagename???
             val file = FileSpec.builder("generated.model.db", "JohnnySeedsDb")
                 .addImport("org.jetbrains.exposed.dao", "IntEntity", "IntEntityClass")
                 .addImport("org.jetbrains.exposed.dao.id", "EntityID", "IntIdTable")
@@ -25,7 +22,6 @@ object DbGenerator: Generator {
                                     TypeSpec.objectBuilder("Table")
                                         .superclass(ClassName("org.jetbrains.exposed.dao.id", "IntIdTable"))
                                         .addSuperclassConstructorParameter("%S", complexType.name)
-                                        //.superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)) //XXX - I need to get this working it has to extend IntIdTable(<table_name>)
                                         .apply {
                                             complexType.slots.forEach { slot ->
                                                 val propertySpec = PropertySpec.builder(
@@ -37,7 +33,6 @@ object DbGenerator: Generator {
                                                         )
                                                 )
                                                     .initializer("text(\"${slot.name}\")${if (slot.nullable) ".nullable()" else ""}")
-                                                    //.mutable(true)
                                                     .build()
                                                 addProperty(propertySpec)
                                             }
@@ -66,14 +61,11 @@ object DbGenerator: Generator {
                                                 .addSuperclassConstructorParameter("Table")
                                                 .build()
                                         )
-                                        //.superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)) //XXX - I need to get this working it has to extend IntIdTable(<table_name>)
                                         .apply {
-                                            //addType(TypeSpec.companionObjectBuilder().superclass(element.type!!.kClass.asTypeName().copy(nullable = element.type.nullable)).build())
-                                            complexType.children.forEach { child ->
-                                                val propertySpec = child.asPropertySpec(true, KModifier.OVERRIDE)
-                                                    .delegate("Table.%L", child.name)
+                                            complexType.slots.forEach { slot ->
+                                                val propertySpec = slot.asPropertySpec(true, KModifier.OVERRIDE)
+                                                    .delegate("Table.%L", slot.name)
                                                     .mutable(true)
-                                                    //.modifiers(KModifier.OVERRIDE)
                                                     .build()
                                                 addProperty(propertySpec)
                                             }
@@ -86,7 +78,6 @@ object DbGenerator: Generator {
                                             "source",
                                             ClassName("org.jetbrains.exposed.sql", "ResultRow")
                                         )
-                                        //Look at CodeBlock.addArgument and you will see L stands for literal
                                         .addCode(
                                             "return %LDto.%L(%L)",
                                             complexType.parent!!.name,
