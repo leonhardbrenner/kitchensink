@@ -14,7 +14,10 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import org.litote.kmongo.coroutine.*
 import com.mongodb.ConnectionString
+import generated.model.DvdRental
+import generated.model.DvdRentalDto
 import generated.model.JohnnySeedsDto
+import generated.model.db.DvdRentalDb
 import generated.model.db.JohnnySeedsDb
 import org.litote.kmongo.reactivestreams.KMongo
 import services.ShoppingListService
@@ -81,6 +84,11 @@ fun main() {
                 get {
                     call.respond(JohnnySeedsDb.SeedFacts.fetchAll().let { it ->
                         it.subList(0, if (it.size < 100) it.size else 100) })
+                }
+            }
+            route(DvdRentalDto.actor.path) {
+                get {
+                    call.respond(DvdRentalDb.actor.fetchAll().subList(0, 100))
                 }
             }
             route(ShoppingListItem.path) {

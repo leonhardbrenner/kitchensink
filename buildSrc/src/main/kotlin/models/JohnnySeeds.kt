@@ -2,7 +2,10 @@ package models
 
 import schema.Element
 
-val manifest = Element.
+interface Types {
+
+}
+val johnnySeeds = Element.
 model("Manifest") {
 
     x("JohnnySeeds") {
@@ -37,4 +40,5 @@ model("Manifest") {
             x("maturity", String::class, nullable = true)
         }
     }
-}
+    x("")
+}.namespaces.first()

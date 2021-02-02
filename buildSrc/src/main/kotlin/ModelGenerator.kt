@@ -3,7 +3,8 @@ import org.gradle.api.tasks.TaskAction
 import generators.InterfaceGenerator
 import generators.DtoGenerator
 import generators.DbGenerator
-import models.manifest
+import models.johnnySeeds
+import models.dvdRental
 
 open class ModelGenerator : DefaultTask() {
 
@@ -15,11 +16,10 @@ open class ModelGenerator : DefaultTask() {
     @TaskAction
     fun generate() {
         //TODO - I think Visitor should be Model which takes manifests. Then it could be a nice DSL for calling various.
-        //Visitor(johnnySeeds).walk()
-        InterfaceGenerator.generate(manifest)
-        DtoGenerator.generateDto(manifest)
-        DbGenerator.generate(manifest)
-        //generators.generateWorkflows()
+        listOf(johnnySeeds, dvdRental).forEach { manifest ->
+            InterfaceGenerator.generate(manifest)
+            DtoGenerator.generateDto(manifest)
+            DbGenerator.generate(manifest)
+        }
     }
-
 }

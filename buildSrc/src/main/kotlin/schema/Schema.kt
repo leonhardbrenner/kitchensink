@@ -54,10 +54,10 @@ interface Element {
         }
         inner class Namespace(element: Element): Element by element {
             val types by lazy {
-                children.map { Type(it) }
+                children.map { Type(this, it) }
             }
         }
-        inner class Type(element: Element): Element by element {
+        inner class Type(val namespace: Namespace, element: Element): Element by element {
             val slots by lazy {
                 children.map { Slot(it) }
             }

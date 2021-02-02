@@ -46,17 +46,18 @@ class App : RComponent<RProps, RState>() {
             //        fontWeight = FontWeight(theme.typography.fontWeightMedium.toString())
             //    }
             //}
-
             styledDiv {
                 css { flexGrow = 1.0; backgroundColor = Color(theme.palette.background.paper) }
                 mAppBar(position = MAppBarPosition.static) {
                     mTabs(tab1Value, onChange = { _, value -> setState { tab1Value = value } }) {
+                        mTab("DvdStore", "dvd-store")
                         mTab("JohnnySeeds", "johnny-seeds")
                         mTab("ShoppingList", "shopping-list")
                         mTab("Material UI Demo", "material-ui-demo")
                     }
                 }
                 when (tab1Value) {
+                    "dvd-store" -> { dvdStore() }
                     "johnny-seeds" -> { johnnySeeds() }
                     "shopping-list" -> { shoppingList() }
                     "material-ui-demo" -> { materialUIDemo() }

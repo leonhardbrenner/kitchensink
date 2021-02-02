@@ -93,6 +93,11 @@ object DatabaseFactory {
             //    println("Creating ${it.name}")
             //}
             commit()
+
+            //Look across at dvd rentals the copy * from should be handled as a dsl off which loads
+            //the values in the order they appear in the type and inserts them just as we did above but this
+            //we are loading from a DSL. This seems like a good time to clean up code above. Also don't
+            //use x everywhere. Play tribute to XmlSchema and go SimpleType and ComplexType. :+2
         }
     }
 

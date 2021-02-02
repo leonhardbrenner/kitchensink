@@ -1,3 +1,4 @@
+import generated.model.DvdRentalDto
 import generated.model.JohnnySeedsDto
 import io.ktor.http.*
 import io.ktor.client.*
@@ -42,4 +43,8 @@ suspend fun getJohnnySeedsBasicSeed(): List<JohnnySeedsDto.BasicSeed> {
 
 suspend fun getJohnnySeedsSeedFacts(): List<JohnnySeedsDto.SeedFacts> {
     return jsonClient.get(endpoint + JohnnySeedsDto.SeedFacts.path)
+}
+
+suspend fun getDvdRentalActor(): List<DvdRentalDto.actor> {
+    return jsonClient.get(endpoint + DvdRentalDto.actor.path)
 }
