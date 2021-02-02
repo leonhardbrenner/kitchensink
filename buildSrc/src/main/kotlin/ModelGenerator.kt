@@ -10,8 +10,8 @@ import models.dvdRental
 open class ModelGenerator : DefaultTask() {
 
     init {
-        group = "com.buckysoap"
-        description = "Generate Aspects of our model."
+        group = "com.kotlinexpertise"
+        description = "task1"
     }
 
     @TaskAction

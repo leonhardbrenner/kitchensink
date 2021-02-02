@@ -3,6 +3,7 @@ import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
+import generated.model.DvdRentalCsvLoader
 import io.ktor.config.HoconApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -26,78 +27,45 @@ object DatabaseFactory {
         //flyway.migrate()
         //For now I am just loading some sample data
         transaction {
-            // print sql to std-out
-            addLogger(StdOutSqlLogger)
-
             SchemaUtils.drop(JohnnySeedsDb.DetailedSeeds.Table)
             SchemaUtils.create (JohnnySeedsDb.DetailedSeeds.Table)
-            val seeds = JohnnySeedsService(kMapper).DetailedSeed().fromFile()
-            seeds.forEach { row ->
-                JohnnySeedsDb.DetailedSeeds.Entity.new {
-                    name = row.name
-                    maturity = row.maturity
-                    secondary_name = row.secondary_name
-                    description = row.description
-                    image = row.image
-                    link = row.link
-                }
-                //TODO - see if there is any advantage to this I prefer using Seed.new.
-                //JohnnySeedsDb.DetailedSeed.Table.insert { record ->
-                //    record[name] =row.name
-                //    record[maturity] = row.maturity
-                //    record[secondName] = row.secondary_name
-                //    record[description] = row.description
-                //    record[image] = row.image
-                //    record[link] = row.link
-                //}
-                println("Creating ${row.name}")
+            val seeds = JohnnySeedsService(kMapper).DetailedSeed().fromJson()
+            seeds.forEach { source ->
+                JohnnySeedsDb.DetailedSeeds.Entity.create(source)
+                println("Creating ${source.name}")
             }
 
-            SchemaUtils.drop(JohnnySeedsDb.Category.Table)
+            //SchemaUtils.drop(JohnnySeedsDb.Category.Table)
             SchemaUtils.create (JohnnySeedsDb.Category.Table)
-            val categories = JohnnySeedsService(kMapper).Category().fromFile()
-            categories.forEach {
-                JohnnySeedsDb.Category.Entity.new {
-                    name = it.name
-                    image = it.image
-                    link = it.link
-                }
-                println("Creating ${it.name}")
+            val categories = JohnnySeedsService(kMapper).Category().fromJson()
+            categories.forEach { source ->
+                JohnnySeedsDb.Category.Entity.create(source)
+                println("Creating ${source.name}")
             }
 
-            SchemaUtils.drop(JohnnySeedsDb.BasicSeed.Table)
+            //SchemaUtils.drop(JohnnySeedsDb.BasicSeed.Table)
             SchemaUtils.create (JohnnySeedsDb.BasicSeed.Table)
             val basicSeeds = JohnnySeedsService(kMapper).BasicSeed()
-            basicSeeds.fromFile().forEach {
-                JohnnySeedsDb.BasicSeed.Entity.new {
-                    name = it.name
-                    secondary_name = it.secondary_name
-                    description = it.description
-                    image = it.image
-                    link = it.link
-                }
-                println("Creating ${it.name}")
+            basicSeeds.fromJson().forEach { source ->
+                JohnnySeedsDb.BasicSeed.Entity.create(source)
+                println("Creating ${source.name}")
             }
 
             SchemaUtils.drop(JohnnySeedsDb.SeedFacts.Table)
             SchemaUtils.create (JohnnySeedsDb.SeedFacts.Table)
             val seedFacts = JohnnySeedsService(kMapper).SeedFacts()
             //XXX - bring this back when you get List<> working.
-            //seedFacts.fromFile().forEach {
-            //    JohnnySeedsDb.SeedFacts.Entity.new {
-            //        name = it.name
-            //        facts = ""//it.facts!!//[0] //TODO - should be list in DB as well
-            //        maturity = it.maturity!!
-            //
-            //    }
-            //    println("Creating ${it.name}")
+            //seedFacts.fromFile().forEach { source ->
+            //  JohnnySeedsDb.SeedFacts.Entity.create(source)
             //}
+
             commit()
 
             //Look across at dvd rentals the copy * from should be handled as a dsl off which loads
             //the values in the order they appear in the type and inserts them just as we did above but this
             //we are loading from a DSL. This seems like a good time to clean up code above. Also don't
             //use x everywhere. Play tribute to XmlSchema and go SimpleType and ComplexType. :+2
+            val actors = DvdRentalCsvLoader.actor.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3057.dat")
         }
     }
 

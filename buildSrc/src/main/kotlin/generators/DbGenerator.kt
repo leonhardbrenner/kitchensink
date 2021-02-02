@@ -62,6 +62,16 @@ object DbGenerator: Generator {
                         .parameterizedBy(ClassName("", "Entity"))
                 )
                 .addSuperclassConstructorParameter("Table")
+                .addFunction(
+                    FunSpec.builder("create")
+                        .addParameter(
+                            ParameterSpec("source", ClassName(packageName, name))
+                        )
+                        .addCode("""Entity.new {
+                            |%L
+                            |}""".trimMargin(), slots.map { "  ${it.columnName} = source.${it.name}" }.joinToString("\n"))
+                        .build()
+                )
                 .build()
         )
         .apply {
@@ -81,6 +91,7 @@ object DbGenerator: Generator {
             .addImport("org.jetbrains.exposed.dao.id", "EntityID", "IntIdTable")
             .addImport("org.jetbrains.exposed.sql", "ResultRow", "selectAll")
             .addImport("org.jetbrains.exposed.sql.transactions", "transaction")
+            .addImport("generated.model", "${namespace.name}")
             .addImport("generated.model", "${namespace.name}Dto")
             .addType(
                 TypeSpec.objectBuilder("${namespace.name}Db").apply {

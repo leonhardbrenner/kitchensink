@@ -11,22 +11,22 @@ class JohnnySeedsServiceTest {
 
     @Test
     fun `DetailedSeed deserialize`() {
-        service.DetailedSeed().fromFile()
+        service.DetailedSeed().fromJson()
     }
 
     @Test
     fun `Category deserialize`() {
-        service.Category().fromFile()
+        service.Category().fromJson()
     }
 
     @Test
     fun `BasicSeed deserialize`() {
-        service.BasicSeed().fromFile()
+        service.BasicSeed().fromJson()
     }
 
     @Test
     fun `SeedFacts deserialize`() {
-        service.SeedFacts().fromFile()
+        service.SeedFacts().fromJson()
     }
 
 }
