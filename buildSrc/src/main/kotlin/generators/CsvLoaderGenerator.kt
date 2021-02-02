@@ -5,11 +5,11 @@ import java.io.File
 import schema.Element
 
 //TODO - try to make this go away. Seed not on why we deleted Serializable below.
-object Dto2Generator: Generator {
-    fun generateDto(namespace: Element.Model.Namespace) {
-        val file = FileSpec.builder("generated.model", "${namespace.name}Dto2")
+object CsvLoaderGenerator: Generator {
+    fun generateCsvLoader(namespace: Element.Model.Namespace) {
+        val file = FileSpec.builder("generated.model", "${namespace.name}CsvLoader")
             .addType(
-                TypeSpec.interfaceBuilder("${namespace.name}Dto2").apply {
+                TypeSpec.interfaceBuilder("${namespace.name}CsvLoader").apply {
                     namespace.types.forEach { type ->
                         val typeSpec = TypeSpec.classBuilder(type.name)
                             //This is all that is different between Dto and Dto2 for what ever reason @Serializable polutes the data class with seen1 and serializerConstructor:(
@@ -58,6 +58,13 @@ object Dto2Generator: Generator {
                                             )
                                             .build()
                                     )
+                                    addFunction(
+                                        FunSpec.builder("loadCsv")
+                                            .addParameter("pathname", String::class)
+                                            .addCode("return loadCsv<class>(pathname, header)")
+                                            )
+                                            .build()
+                                    )
                                 }.build()
                             )
                             .build()
@@ -65,7 +72,7 @@ object Dto2Generator: Generator {
                     }
                 }.build()
             ).build()
-        val writer = File("$path/commonMain/kotlin")
+        val writer = File("$path/jvmMain/kotlin")
         file.writeTo(writer)
     }
 }

@@ -78,6 +78,7 @@ kotlin {
                 implementation("com.zaxxer:HikariCP:2.7.8")
                 implementation("org.postgresql:postgresql:42.2.2")
                 //implementation("org.flywaydb:flyway-core:5.2.4")
+
                 implementation("org.jetbrains.kotlin:kotlin-reflect")
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
                 implementation("com.squareup:kotlinpoet:1.5.0")

@@ -61,10 +61,11 @@ interface Element {
             val slots by lazy {
                 children.map { Slot(it) }
             }
-            val packageName: String
-                get() = parent?.path?.substring(1)?.replace("/", ".")?:""
+            val packageName get() = parent?.path?.substring(1)?.replace("/", ".")?:""
         }
-        inner class Slot(element: Element): Element by element
+        inner class Slot(element: Element): Element by element {
+            val columnName get() = name
+        }
     }
 
     companion object {

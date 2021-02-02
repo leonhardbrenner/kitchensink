@@ -26,14 +26,8 @@ object DtoGenerator: Generator {
                             )
                             .apply {
                                 type.slots.forEach { slot ->
-                                    val propertySpec = PropertySpec.builder(
-                                        slot.name,
-                                        slot.type!!.asTypeName().copy(nullable = slot.nullable),
-                                        KModifier.OVERRIDE
-                                    )
-                                        .initializer(slot.name)
-                                        .build()
                                     addProperty(
+                                        //TODO - make extension function
                                         slot.asPropertySpec(false, KModifier.OVERRIDE)
                                             .initializer(slot.name).build()
                                     )
@@ -46,6 +40,11 @@ object DtoGenerator: Generator {
                                         //.mutable(true)
                                         .build()
                                     addProperty(propertySpec)
+                                    addProperty(
+                                        PropertySpec.builder("header", String::class, KModifier.FINAL)
+                                            .initializer("%S\n", type.slots.map { it.columnName }.joinToString("\t"))
+                                            .build()
+                                    )
                                     addFunction(
                                         FunSpec.builder("create")
                                             .addParameter("source", ClassName(type.packageName, type.name))
