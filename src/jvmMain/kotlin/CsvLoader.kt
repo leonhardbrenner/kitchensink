@@ -1,6 +1,7 @@
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.google.common.io.CharSource
 import com.vhl.blackmo.grass.dsl.grass
+import generated.model.DvdRentalCsvLoader
 import org.postgresql.util.ReaderInputStream
 import java.io.File
 import java.io.SequenceInputStream
@@ -18,11 +19,7 @@ inline fun <reified T> loadCsv(pathname: String, header: String): List<T> {
 
 fun main() {
     val actors = DvdRentalCsvLoader.actor.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3057.dat")
-    val dataClasses = loadCsv<DvdRentalCsvLoader.actor>(
-        "/home/lbrenner/projects/kitchensink/dvdrental/3057.dat", DvdRentalCsvLoader.actor.header
-    )
-
-    dataClasses.forEach {
+    actors.forEach {
         println(it)
     }
 }

@@ -3,7 +3,6 @@ package model
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.google.common.io.CharSource
 import com.vhl.blackmo.grass.dsl.grass
-import generated.model.DvdRentalDto2
 import org.postgresql.util.ReaderInputStream
 import java.io.File
 import java.io.SequenceInputStream

@@ -61,8 +61,7 @@ object CsvLoaderGenerator: Generator {
                                     addFunction(
                                         FunSpec.builder("loadCsv")
                                             .addParameter("pathname", String::class)
-                                            .addCode("return loadCsv<class>(pathname, header)")
-                                            )
+                                            .addCode("return model.loadCsv<${type.name}>(pathname, header)")
                                             .build()
                                     )
                                 }.build()
