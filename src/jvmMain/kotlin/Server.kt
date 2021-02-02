@@ -28,7 +28,9 @@ class ApplicationModule : AbstractModule() {
         val connectionString: ConnectionString? = System.getenv("MONGODB_URI")?.let {
             ConnectionString("$it?retryWrites=false")
         }
-        val client = if (connectionString != null) KMongo.createClient(connectionString).coroutine else KMongo.createClient().coroutine
+        val client = connectionString?.let {
+            KMongo.createClient(connectionString).coroutine
+            } ?: KMongo.createClient().coroutine
         return client.getDatabase(connectionString?.database ?: "test")
     }
     override fun configure() {

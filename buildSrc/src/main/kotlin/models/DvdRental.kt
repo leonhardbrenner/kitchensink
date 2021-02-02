@@ -12,7 +12,7 @@ model("Manifest") {
             x("actor_id", Int::class) // integer DEFAULT nextval("public.actor_actor_id_seq"::regclass) NOT NULL,
             x("first_name", String::class) // character varying(45) NOT NULL,
             x("last_name", String::class) // character varying(45) NOT NULL,
-            //x("last_update", Int::class) // timestamp without time zone DEFAULT now() NOT NULL
+            x("last_update", String::class) // timestamp without time zone DEFAULT now() NOT NULL
         }
         //COPY public.address (address_id, address, address2, district, city_id, postal_code, phone, last_update) FROM '$$PATH$$/3065.dat';
         x("address") {

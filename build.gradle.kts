@@ -35,27 +35,7 @@ kotlin {
             binaries.executable()
         }
     }
-    //HERE
-    jvm("codegen") {
-        compilations.all {
-            kotlinOptions.jvmTarget = "1.8"
-        }
-        testRuns["test"].executionTask.configure {
-            useJUnit()
-        }
-    }
     sourceSets {
-        val codegenMain by getting {
-            dependencies {
-                implementation("org.jetbrains.kotlin:kotlin-reflect")
-                implementation("com.squareup:kotlinpoet:1.5.0")
-            }
-        }
-        val codegenTest by getting {
-            dependencies {
-                implementation(kotlin("test-junit"))
-            }
-        }
         val commonMain by getting {
             dependencies {
                 implementation(kotlin("stdlib-common"))
@@ -102,6 +82,9 @@ kotlin {
                 implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
                 implementation("com.squareup:kotlinpoet:1.5.0")
 
+                implementation("com.github.doyaaaaaken:kotlin-csv-jvm:0.15.0")
+                implementation("com.github.doyaaaaaken:kotlin-csv-jvm:0.10.4")
+                implementation("com.vhl.blackmo:kotlin-grass-jvm:0.3.0")
             }
         }
 
