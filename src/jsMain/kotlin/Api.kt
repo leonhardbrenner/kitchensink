@@ -48,3 +48,7 @@ suspend fun getJohnnySeedsSeedFacts(): List<JohnnySeedsDto.SeedFacts> {
 suspend fun getDvdRentalActor(): List<DvdRentalDto.actor> {
     return jsonClient.get(endpoint + DvdRentalDto.actor.path)
 }
+
+suspend fun getDvdRentalAddress(): List<DvdRentalDto.address> {
+    return jsonClient.get(endpoint + DvdRentalDto.address.path)
+}

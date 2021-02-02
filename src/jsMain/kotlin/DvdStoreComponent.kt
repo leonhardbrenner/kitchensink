@@ -28,10 +28,12 @@ object DvdStoreWindow {
         inputProps.asDynamic().id = "age-simple"
         mSelect(age, name = "age", onChange = { event, _ -> setAge(event.targetValue) }) {
             attrs.inputProps = inputProps
-            mMenuItem("Dvd Rental", value = DvdRentalDto.actor.path)
+            mMenuItem("Actor", value = DvdRentalDto.actor.path)
+            mMenuItem("Address", value = DvdRentalDto.address.path)
         }
         when (age) {
             DvdRentalDto.actor.path -> actor {}
+            DvdRentalDto.address.path -> address {}
         }
 
     }
@@ -107,5 +109,12 @@ object DvdStoreWindow {
         override fun DvdRental.actor.label() = "$first_name $last_name"
         override fun DvdRental.actor.transform() = actor_id.toString()
     }
+    private class Address(props: Props): DisplayComponent<DvdRental.address>(props) {
+        override suspend fun get(): List<DvdRental.address> = getDvdRentalAddress()
+        override fun DvdRental.address.label() = "$address $phone"
+        override fun DvdRental.address.transform() = address_id.toString()
+    }
+
     fun RBuilder.actor(handler: Props.() -> Unit) = child(Actor::class) { attrs { handler() } }
+    fun RBuilder.address(handler: Props.() -> Unit) = child(Address::class) { attrs { handler() } }
 }

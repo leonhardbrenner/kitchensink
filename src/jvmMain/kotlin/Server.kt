@@ -93,6 +93,11 @@ fun main() {
                     call.respond(DvdRentalDb.actor.fetchAll().subList(0, 100))
                 }
             }
+            route(DvdRentalDto.address.path) {
+                get {
+                    call.respond(DvdRentalDb.address.fetchAll().subList(0, 100))
+                }
+            }
             route(ShoppingListItem.path) {
                 get {
                     call.respond(shoppingListService.get())
