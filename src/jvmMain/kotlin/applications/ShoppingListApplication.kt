@@ -21,7 +21,7 @@ class ShoppingListService @Inject constructor(val database: CoroutineDatabase) {
     suspend fun delete(id: Int) = collection.deleteOne(ShoppingListItem::id eq id)
 }
 
-object ShoppingListApplication : AbstractModule() {
+class ShoppingListApplication : AbstractModule() {
 
     override fun configure() {
         DatabaseFactory.init()
@@ -38,7 +38,4 @@ object ShoppingListApplication : AbstractModule() {
         return client.getDatabase(connectionString?.database ?: "test")
     }
 
-    val injector: Injector = Guice.createInjector(ShoppingListApplication)
-
-    val shoppingListService = injector.getInstance<ShoppingListService>()
 }

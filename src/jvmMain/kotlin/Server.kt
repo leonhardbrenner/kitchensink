@@ -1,3 +1,8 @@
+import applications.ShoppingListApplication
+import applications.ShoppingListService
+import com.authzee.kotlinguice4.getInstance
+import com.google.inject.Guice
+import com.google.inject.Injector
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -9,7 +14,7 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import routing.JohnnySeedsRoutes
 import routing.DvdRentalRoutes
-import routing.shopingListRoutes
+import routing.shoppingListRoutes
 
 fun main() {
     val port = System.getenv("PORT")?.toInt() ?: 9090
@@ -43,11 +48,14 @@ fun main() {
                 resources("")
             }
 
+            val injector: Injector = Guice.createInjector(ShoppingListApplication())
+            val shoppingListService = injector.getInstance<ShoppingListService>()
+
             JohnnySeedsRoutes()
 
             DvdRentalRoutes()
 
-            shopingListRoutes()
+            shoppingListRoutes(shoppingListService)
 
 
         }

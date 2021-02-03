@@ -6,23 +6,24 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import applications.ShoppingListApplication
+import applications.ShoppingListService
 import models.ShoppingListItem
 
-fun Routing.shopingListRoutes() = route(ShoppingListItem.path) {
+fun Routing.shoppingListRoutes(shoppingListService: ShoppingListService) = route(ShoppingListItem.path) {
 
     get {
-        call.respond(ShoppingListApplication.shoppingListService.get())
+        call.respond(shoppingListService.get())
     }
 
     post {
         val item = call.receive<ShoppingListItem>()
-        ShoppingListApplication.shoppingListService.post(item)
+        shoppingListService.post(item)
         call.respond(HttpStatusCode.OK)
     }
 
     delete("/{id}") {
         val id = call.parameters["id"]?.toInt() ?: error("Invalid delete request")
-        ShoppingListApplication.shoppingListService.delete(id)
+        shoppingListService.delete(id)
         call.respond(HttpStatusCode.OK)
     }
 }
