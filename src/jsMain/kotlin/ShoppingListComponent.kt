@@ -2,6 +2,7 @@ import react.*
 import react.dom.*
 import kotlinx.coroutines.*
 import kotlinx.html.js.onClickFunction
+import models.ShoppingListItem
 
 private val scope = MainScope()
 

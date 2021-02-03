@@ -1,6 +1,6 @@
 package services
 
-import ShoppingListItem
+import models.ShoppingListItem
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.eq
 import javax.inject.Inject
