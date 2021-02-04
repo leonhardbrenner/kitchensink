@@ -16,7 +16,6 @@ open class ModelGenerator : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        //TODO - I think Visitor should be Model which takes manifests. Then it could be a nice DSL for calling various.
         listOf(johnnySeeds, dvdRental).forEach { manifest ->
             InterfaceGenerator.generate(manifest)
             DtoGenerator.generateDto(manifest)
