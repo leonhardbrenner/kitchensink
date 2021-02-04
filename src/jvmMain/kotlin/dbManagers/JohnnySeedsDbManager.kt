@@ -75,7 +75,7 @@ object JohnnySeedsDBManager {
             println("Creating ${source.name}")
         }
         //XXX - bring this back when you get List<> working.
-        //JohnnySeedsService(kMapper).seedFacts.forEach { //source ->
+        //JohnnySeedsService(getKMapper).seedFacts.forEach { //source ->
         //    JohnnySeedsDb.SeedFacts.Entity.create(source)
         //}
     }

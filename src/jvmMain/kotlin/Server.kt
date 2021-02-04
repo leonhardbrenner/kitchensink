@@ -1,3 +1,5 @@
+import applications.DvdRentalApplication
+import applications.JohnnySeedsApplication
 import applications.ShoppingListApplication
 import io.ktor.application.*
 import io.ktor.features.*
@@ -8,10 +10,10 @@ import io.ktor.routing.*
 import io.ktor.serialization.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
-import routing.JohnnySeedsRoutes
-import routing.DvdRentalRoutes
 
 fun main() {
+    DatabaseFactory.init()
+
     val port = System.getenv("PORT")?.toInt() ?: 9090
     embeddedServer(Netty, port) {
 
@@ -43,12 +45,9 @@ fun main() {
                 resources("")
             }
 
-            JohnnySeedsRoutes()
-
-            DvdRentalRoutes()
-
             ShoppingListApplication.routesFrom(this)
-
+            DvdRentalApplication.routesFrom(this)
+            JohnnySeedsApplication().routesFrom(this)
 
         }
     }.start(wait = true)

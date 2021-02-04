@@ -1,12 +1,15 @@
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.transaction
+import generated.model.db.JohnnySeedsDb
+
 import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import io.ktor.config.HoconApplicationConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.transaction
 
+//https://www.thebookofjoel.com/kotlin-ktor-exposed-postgres
 object DatabaseFactory {
 
     private val appConfig = HoconApplicationConfig(ConfigFactory.load())
@@ -37,5 +40,21 @@ object DatabaseFactory {
         withContext(Dispatchers.IO) {
             transaction { block() }
         }
+
+}
+
+fun main(args: Array<String>) {
+    //DatabaseFactory.init()
+
+    transaction {
+        // print sql to std-out
+        addLogger(StdOutSqlLogger)
+
+        //'select *' SQL: SELECT Cities.id, Cities.name FROM Cities
+        println("Seeds:")
+        JohnnySeedsDb.DetailedSeeds.Entity.all().forEach { seed ->
+            println("\t${seed.name} - ${seed.maturity}")
+        }
+    }
 
 }

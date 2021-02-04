@@ -19,22 +19,24 @@ import io.ktor.routing.*
 
 object ShoppingListApplication {
 
-    fun routesFrom(routing: Routing) = routing.route(ShoppingListItem.path) {
+    fun routesFrom(routing: Routing) = routing.apply {
+        route(ShoppingListItem.path) {
 
-        get {
-            call.respond(service.get())
-        }
+            get {
+                call.respond(service.get())
+            }
 
-        post {
-            val item = call.receive<ShoppingListItem>()
-            service.post(item)
-            call.respond(HttpStatusCode.OK)
-        }
+            post {
+                val item = call.receive<ShoppingListItem>()
+                service.post(item)
+                call.respond(HttpStatusCode.OK)
+            }
 
-        delete("/{id}") {
-            val id = call.parameters["id"]?.toInt() ?: error("Invalid delete request")
-            service.delete(id)
-            call.respond(HttpStatusCode.OK)
+            delete("/{id}") {
+                val id = call.parameters["id"]?.toInt() ?: error("Invalid delete request")
+                service.delete(id)
+                call.respond(HttpStatusCode.OK)
+            }
         }
     }
 
@@ -44,7 +46,6 @@ object ShoppingListApplication {
     object Module : AbstractModule() {
 
         override fun configure() {
-            DatabaseFactory.init()
             bind(CoroutineDatabase::class.java).toInstance(database())
         }
 
@@ -68,5 +69,4 @@ object ShoppingListApplication {
         suspend fun post(item: ShoppingListItem) = collection.insertOne(item)
         suspend fun delete(id: Int) = collection.deleteOne(ShoppingListItem::id eq id)
     }
-
 }
