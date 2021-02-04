@@ -30,10 +30,12 @@ object DvdStoreWindow {
             attrs.inputProps = inputProps
             mMenuItem("Actor", value = DvdRentalDto.actor.path)
             mMenuItem("Address", value = DvdRentalDto.address.path)
+            mMenuItem("Category", value = DvdRentalDto.category.path)
         }
         when (age) {
             DvdRentalDto.actor.path -> actor {}
             DvdRentalDto.address.path -> address {}
+            DvdRentalDto.category.path -> category {}
         }
 
     }
@@ -109,12 +111,19 @@ object DvdStoreWindow {
         override fun DvdRental.actor.label() = "$first_name $last_name"
         override fun DvdRental.actor.transform() = actor_id.toString()
     }
+    fun RBuilder.actor(handler: Props.() -> Unit) = child(Actor::class) { attrs { handler() } }
+
     private class Address(props: Props): DisplayComponent<DvdRental.address>(props) {
         override suspend fun get(): List<DvdRental.address> = getDvdRentalAddress()
         override fun DvdRental.address.label() = "$address $phone"
         override fun DvdRental.address.transform() = address_id.toString()
     }
-
-    fun RBuilder.actor(handler: Props.() -> Unit) = child(Actor::class) { attrs { handler() } }
     fun RBuilder.address(handler: Props.() -> Unit) = child(Address::class) { attrs { handler() } }
+
+    private class Category(props: Props): DisplayComponent<DvdRental.category>(props) {
+        override suspend fun get(): List<DvdRental.category> = getDvdRentalCategory()
+        override fun DvdRental.category.label() = "$name"
+        override fun DvdRental.category.transform() = category_id.toString()
+    }
+    fun RBuilder.category(handler: Props.() -> Unit) = child(Category::class) { attrs { handler() } }
 }

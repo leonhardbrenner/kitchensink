@@ -42,19 +42,3 @@ object DatabaseFactory {
         }
 
 }
-
-fun main(args: Array<String>) {
-    //DatabaseFactory.init()
-
-    transaction {
-        // print sql to std-out
-        addLogger(StdOutSqlLogger)
-
-        //'select *' SQL: SELECT Cities.id, Cities.name FROM Cities
-        println("Seeds:")
-        JohnnySeedsDb.DetailedSeeds.Entity.all().forEach { seed ->
-            println("\t${seed.name} - ${seed.maturity}")
-        }
-    }
-
-}

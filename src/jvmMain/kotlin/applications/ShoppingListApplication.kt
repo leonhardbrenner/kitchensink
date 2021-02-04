@@ -1,9 +1,6 @@
 package applications
 
-import com.authzee.kotlinguice4.getInstance
 import com.google.inject.AbstractModule
-import com.google.inject.Guice
-import com.google.inject.Injector
 import com.mongodb.ConnectionString
 import org.litote.kmongo.coroutine.CoroutineDatabase
 import org.litote.kmongo.coroutine.coroutine
@@ -17,7 +14,7 @@ import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 
-object ShoppingListApplication {
+class ShoppingListApplication @Inject constructor(val service: Service) {
 
     fun routesFrom(routing: Routing) = routing.apply {
         route(ShoppingListItem.path) {
@@ -39,9 +36,6 @@ object ShoppingListApplication {
             }
         }
     }
-
-    private val injector: Injector = Guice.createInjector(Module)
-    val service = injector.getInstance<Service>()
 
     object Module : AbstractModule() {
 

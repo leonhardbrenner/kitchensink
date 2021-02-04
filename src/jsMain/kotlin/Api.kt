@@ -53,3 +53,7 @@ suspend fun getDvdRentalActor(): List<DvdRentalDto.actor> {
 suspend fun getDvdRentalAddress(): List<DvdRentalDto.address> {
     return jsonClient.get(endpoint + DvdRentalDto.address.path)
 }
+
+suspend fun getDvdRentalCategory(): List<DvdRentalDto.category> {
+    return jsonClient.get(endpoint + DvdRentalDto.category.path)
+}

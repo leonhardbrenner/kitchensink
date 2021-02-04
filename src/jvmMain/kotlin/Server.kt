@@ -1,6 +1,8 @@
 import applications.DvdRentalApplication
 import applications.JohnnySeedsApplication
 import applications.ShoppingListApplication
+import com.authzee.kotlinguice4.getInstance
+import com.google.inject.Guice
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -13,6 +15,12 @@ import io.ktor.server.netty.*
 
 fun main() {
     DatabaseFactory.init()
+    val shoppingListApplication = Guice.createInjector(ShoppingListApplication.Module)
+        .getInstance<ShoppingListApplication>()
+    val johnnySeedsApplication = Guice.createInjector(JohnnySeedsApplication.Module)
+        .getInstance<JohnnySeedsApplication>()
+    val dvdRentalApplication = Guice.createInjector(DvdRentalApplication.Module)
+        .getInstance<DvdRentalApplication>()
 
     val port = System.getenv("PORT")?.toInt() ?: 9090
     embeddedServer(Netty, port) {
@@ -45,9 +53,9 @@ fun main() {
                 resources("")
             }
 
-            ShoppingListApplication.routesFrom(this)
-            DvdRentalApplication.routesFrom(this)
-            JohnnySeedsApplication().routesFrom(this)
+            shoppingListApplication.routesFrom(this)
+            johnnySeedsApplication.routesFrom(this)
+            dvdRentalApplication.routesFrom(this)
 
         }
     }.start(wait = true)

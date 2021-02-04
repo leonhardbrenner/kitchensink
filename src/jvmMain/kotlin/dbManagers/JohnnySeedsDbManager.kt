@@ -89,10 +89,12 @@ object DvdRentalDBManager {
     fun drop() = transaction {
         SchemaUtils.drop(DvdRentalDb.actor.Table)
         SchemaUtils.drop(DvdRentalDb.address.Table)
+        SchemaUtils.drop(DvdRentalDb.category.Table)
     }
     fun create() = transaction {
         SchemaUtils.create (DvdRentalDb.actor.Table)
         SchemaUtils.create (DvdRentalDb.address.Table)
+        SchemaUtils.create (DvdRentalDb.category.Table)
     }
     fun populate() = transaction {
         DvdRentalCsvLoader.actor.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3057.dat").forEach { source ->
@@ -102,6 +104,10 @@ object DvdRentalDBManager {
         DvdRentalCsvLoader.address.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3065.dat").forEach { source ->
             DvdRentalDb.address.Entity.create(source)
             println("Creating ${source.address} ${source.phone}")
+        }
+        DvdRentalCsvLoader.category.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3059.dat").forEach { source ->
+            DvdRentalDb.category.Entity.create(source)
+            println("Creating ${source.name}")
         }
     }
 }
