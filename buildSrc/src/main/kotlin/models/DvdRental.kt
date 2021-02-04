@@ -1,5 +1,6 @@
 package models
 
+//TODO - replace this! Look at DvdRentalNew which has the syntax I am moving towards and this will make more sense.
 import schema.Element
 
 val dvdRental = Element.
