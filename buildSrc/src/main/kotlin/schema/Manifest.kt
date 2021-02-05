@@ -5,8 +5,9 @@ import kotlin.reflect.KClass
 
 object Manifest {
     val namespaces = HashMap<String, Namespace>()
-    fun namespace(name: String, block: Namespace.() -> Unit) =
-        Namespace(name, block)
+    fun namespace(name: String, block: Namespace.() -> Unit) = Namespace(name, block).let { namespace ->
+        namespaces[name] = namespace
+    }
     init {
         namespace("builtIn") {
             //This deviates from XMLSchema which would make nullable an attribute of the type but in Kotlin we use String?
@@ -71,3 +72,24 @@ open class ComplexType(val name: String, block: ComplexType.() -> Unit): Type {
 }
 
 open class SimpleType(val name: String, kclass: KClass<*>?, nullable: Boolean = false): Type
+
+fun main () {
+    Manifest.namespace("BuckySoap") {
+        element("ElementAndComplexType") {
+            element("boolean", "builtin:boolean")
+            element("int", "builtin:int")
+            element("long", "builtin:long")
+            element("string", "builtin:string")
+        }
+        complexType("ComplexType") {
+            element("boolean", "builtin:boolean")
+            element("int", "builtin:int")
+            element("long", "builtin:long")
+            element("string", "builtin:string")
+        }
+        element("element", "ComplexType")
+    }
+    Manifest.namespaces.values.forEach { namespace ->
+        println(namespace.name)
+    }
+}

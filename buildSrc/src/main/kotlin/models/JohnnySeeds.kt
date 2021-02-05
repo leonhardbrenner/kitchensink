@@ -4,9 +4,6 @@ package models
 
 import schema.Element
 
-interface Types {
-
-}
 val johnnySeeds = Element.
 model("Manifest") {
 
