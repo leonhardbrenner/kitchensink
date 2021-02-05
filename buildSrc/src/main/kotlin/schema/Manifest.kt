@@ -1,95 +1,204 @@
 package schemanew
 
-import java.util.*
+import com.squareup.kotlinpoet.*
+import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
 object Manifest {
-    val namespaces = HashMap<String, Namespace>()
-    fun namespace(name: String, block: Namespace.() -> Unit) = Namespace(name, block).let { namespace ->
-        namespaces[name] = namespace
-    }
+
+    val namespaceMap = HashMap<String, Namespace>()
+
+    val namespaces get() = namespaceMap.values.toList()
+
     init {
-        namespace("builtIn") {
+        namespace("builtin") {
             //This deviates from XMLSchema which would make nullable an attribute of the type but in Kotlin we use String?
-            SimpleType("string", String::class)
-            SimpleType("nullableString", String::class, nullable = true)
-            SimpleType("int", Int::class)
-            SimpleType("nullableString", Int::class, nullable = true)
-            SimpleType("long", Long::class)
-            SimpleType("nullableLong", Long::class, nullable = true)
-            SimpleType("boolean", Boolean::class)
-            SimpleType("nullableBoolean", Boolean::class, nullable = true)
+            simpleType("boolean", Boolean::class)
+            simpleType("nullableBoolean", Boolean::class, nullable = true)
+            simpleType("string", String::class)
+            simpleType("nullableString", String::class, nullable = true)
+            simpleType("int", Int::class)
+            simpleType("nullableInt", Int::class, nullable = true)
+            simpleType("long", Long::class)
+            simpleType("nullableLong", Long::class, nullable = true)
+            simpleType("double", Double::class)
+            simpleType("nullableDouble", Double::class, nullable = true)
+            simpleType("float", Float::class)
+            simpleType("nullableLong", Float::class, nullable = true)
+        }
+    }
+
+    fun namespace(name: String, block: Namespace.() -> Unit): Namespace {
+        return if (namespaceMap.contains(name)) namespaceMap[name]!! else {
+            Namespace(name, block).apply { namespaceMap[name] = this }
         }
     }
 }
 
 class Namespace(val name: String, block: Namespace.() -> Unit) {
-    val types = HashMap<String, Type>()
-    val simpleTypes = LinkedList<SimpleType>()
-    val complexTypes = LinkedList<ComplexType>()
-    val elements = LinkedList<Element>()
+    val simpleTypeMap = HashMap<String, SimpleType>()
+    val simpleTypes get() = simpleTypeMap.values
 
-    fun complexType(name: String, block: ComplexType.() -> Unit) =
-        ComplexType(name, block)
+    val complexTypeMap = HashMap<String, ComplexType>()
+    val complexTypes get() = complexTypeMap.values.sortedBy { it.name }
 
+    val typeMap = HashMap<String, Type>()
+    val types get() = typeMap.values
 
-    fun element(name: String, type: String? = null, block: (ComplexType.() -> Unit)? = null) =
-        Element(name, type, block)
+    val elementMap = HashMap<String, Element>()
+    val elements get() = elementMap.values
+
     init { block() }
+
+    fun complexType(name: String, block: ComplexType.() -> Unit): ComplexType {
+        val complexType = ComplexType(this, null, name, block)
+        complexTypeMap[name] = complexType
+        typeMap[name] = complexType
+        return complexType
+    }
+
+    fun simpleType(name: String, kclass: KClass<*>?,
+                   nullable: Boolean = false, block: SimpleType.() -> Unit = {}) {
+        val simpleType = SimpleType(this, null, name, kclass, nullable, block)
+        simpleTypeMap[name] = simpleType
+        typeMap[name] = simpleType
+    }
+
+    fun element(name: String, typeRef: String? = null, block: (ComplexType.() -> Unit)? = null) {
+        Element(this, null, name, typeRef, block)
+    }
+
+
+    //fun qname(name: String) = Qname(this, name)
+
 }
 
-open class Element(val name: String, type: String?, val block: (ComplexType.() -> Unit)?) {
-    val type: Type?
-    val elements = LinkedList<Element>()
+class Qname(val namespace: Namespace, val name: String)
+
+open class Element(
+    val namespace: Namespace,
+    val parent: ComplexType?,
+    val name: String,
+    typeRef: String?,
+    val block: (ComplexType.() -> Unit)? = null
+) {
+    val typeRef = if (typeRef != null)
+        TypeRef(namespace, typeRef)
+    else
+        null
+
+    val type: Type get() = if (block != null)
+        complexType(name, block)
+    else
+        typeRef!! //TODO - xor assert and ^^^ XXX actually I think we can assume a simple type here
+
+    //val type get() = block?.let { block -> ComplexType(namespace, parent, name, block) }?:typeRef!! //TODO add xor assert
     init {
-        val message = { "Element must have type xor block(which allows us to define one)" }
-        this.type = if (type != null) {
-            assert(block != null, message)
-            val colonPosition = name.indexOf(':')
-            Manifest.namespaces.get(name.substring(0, colonPosition))?.let { namespace ->
-                //TODO - This should throw a name lookup exception.
-                namespace.types.get(name.substring(colonPosition + 1))
+        if (parent != null) {
+            parent.elementMap[name] = this
+            type?.let { it ->
+                parent.typeMap[name] = it
+                if (it is ComplexType) { //TODO - Encapsulate this
+                    parent.complexTypeMap[name] = it
+                }
             }
         } else {
-            assert(block != null, message)
-            ComplexType(name, block!!)
+            namespace.elementMap[name] = this
+            type?.let { it ->
+                namespace.typeMap[name] = it
+                if (it is ComplexType) { //TODO - Encapsulate this
+                    namespace.complexTypeMap[name] = it
+                }
+            }
         }
-
     }
+    fun complexType(name: String, block: ComplexType.() -> Unit): ComplexType {
+        return if (parent != null)
+            parent.complexType(name, block)
+        else
+            namespace.complexType(name, block)
+    }
+    fun asPropertySpec(mutable: Boolean, vararg modifiers: KModifier) = PropertySpec.builder(
+        name,
+        type.typeName
+    ).addModifiers(modifiers.toList() ).mutable(mutable)
+
 }
 
-interface Type
+open class Attribute(val namespace: Namespace, val parent: ComplexType?, val name: String, typeRef: String?) {
+    val elements = HashMap<String, Element>()
+    val typeRef = typeRef?.let { TypeRef(namespace, it) }
+}
 
-open class ComplexType(val name: String, block: ComplexType.() -> Unit): Type {
+interface Type {
+    val namespace: Namespace
+    val name: String
+    val typeName: TypeName
+}
+
+class TypeRef(
+    override val namespace: Namespace,
+    override val name: String //This may be a local or qualified reference to a type.
+): Type {
+    override val typeName: TypeName
+        get() = let {
+            val indexOfColon = name.indexOf(":")
+            return if (indexOfColon > 0) {
+                try {Manifest.namespaceMap[name.substring(0, indexOfColon)]!!
+                    .typeMap[name.substring(indexOfColon + 1)]!!.typeName} catch(ex: Exception) {
+                    ClassName("", "SomethingWeirdHappend")
+                }
+            } else if (namespace.typeMap.containsKey(name)) {
+                //XXX - I think there is a third option where the type is contained in the parent
+                namespace.typeMap[name]!!.typeName
+            } else {
+                ClassName("", "")
+            }
+        }
+}
+
+open class ComplexType(
+    override val namespace: Namespace,
+    val parent: ComplexType?,
+    override val name: String,
+    block: ComplexType.() -> Unit
+): Type {
+    val typeMap = HashMap<String, Type>()
+    val types get() = typeMap.values
+    val complexTypeMap = HashMap<String, ComplexType>()
+    val complexTypes = complexTypeMap.values
+    val elementMap = HashMap<String, Element>()
+    val elements get() = elementMap.values.sortedBy { it.name }.toList() //XXX - looks like not all of the geenerators are using this.
     init {
         block()
+        namespace.complexTypeMap[name] = this
     }
-    val types = LinkedList<Type>()
-    val elements = LinkedList<Element>()
-    fun element(name: String, type: String? = null, block: (ComplexType.() -> Unit)? = null) =
-        Element(name, type, block)
-
+    fun complexType(name: String, block: ComplexType.() -> Unit): ComplexType {
+        val complexType = ComplexType(namespace, this, name, block)
+        complexTypeMap[name] = complexType
+        typeMap[name] = complexType
+        return complexType
+    }
+    fun attribute(name: String, typeRef: String? = null) =
+        Attribute(namespace, this, name, typeRef)
+    fun element(name: String, typeRef: String? = null, block: (ComplexType.() -> Unit)? = null) {
+        Element(namespace, this, name, typeRef, block)
+    }
+    override val typeName get() = ClassName("", name)
 }
 
-open class SimpleType(val name: String, kclass: KClass<*>?, nullable: Boolean = false): Type
-
-fun main () {
-    Manifest.namespace("BuckySoap") {
-        element("ElementAndComplexType") {
-            element("boolean", "builtin:boolean")
-            element("int", "builtin:int")
-            element("long", "builtin:long")
-            element("string", "builtin:string")
-        }
-        complexType("ComplexType") {
-            element("boolean", "builtin:boolean")
-            element("int", "builtin:int")
-            element("long", "builtin:long")
-            element("string", "builtin:string")
-        }
-        element("element", "ComplexType")
+open class SimpleType(
+    override val namespace: Namespace,
+    val parent: ComplexType?,
+    override val name: String,
+    val kclass: KClass<*>?,
+    val nullable: Boolean = false,
+    block: SimpleType.() -> Unit
+): Type {
+    init {
+        block()
+        namespace.typeMap[name] = this
+        namespace.simpleTypeMap[name] = this
     }
-    Manifest.namespaces.values.forEach { namespace ->
-        println(namespace.name)
-    }
+    override val typeName get() = kclass!!.asTypeName().copy(nullable = nullable)
 }

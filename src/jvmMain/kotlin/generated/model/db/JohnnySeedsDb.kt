@@ -14,7 +14,6 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object JohnnySeedsDb {
-
   object DetailedSeeds {
     fun create(source: ResultRow) = JohnnySeedsDto.DetailedSeeds(source[Table.name],
         source[Table.maturity], source[Table.secondary_name], source[Table.description],
