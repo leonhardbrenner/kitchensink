@@ -86,6 +86,11 @@ kotlin {
                 implementation("com.github.doyaaaaaken:kotlin-csv-jvm:0.15.0")
                 implementation("com.github.doyaaaaaken:kotlin-csv-jvm:0.10.4")
                 implementation("com.vhl.blackmo:kotlin-grass-jvm:0.3.0")
+
+                //Consider removing this since we already have a json library
+                // https://mvnrepository.com/artifact/io.dropwizard/dropwizard-jackson
+                implementation("io.dropwizard:dropwizard-jackson:1.1.2")
+
             }
         }
 

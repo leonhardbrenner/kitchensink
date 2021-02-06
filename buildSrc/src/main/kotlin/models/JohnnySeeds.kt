@@ -9,13 +9,12 @@ model("Manifest") {
 
     x("JohnnySeeds") {
 
-        x("DetailedSeeds") {
+        x("BasicSeed") {
             x("name", String::class)
-            x("maturity", String::class, nullable = true)
-            x("secondary_name", String::class, nullable = true)
+            x("secondary_name", String::class)
             x("description", String::class, nullable = true)
-            x("image", String::class, nullable = true)
-            x("link", String::class, nullable = true)
+            x("image", String::class)
+            x("link", String::class)
         }
 
         x("Category") {
@@ -24,12 +23,13 @@ model("Manifest") {
             x("link", String::class)
         }
 
-        x("BasicSeed") {
+        x("DetailedSeeds") {
             x("name", String::class)
-            x("secondary_name", String::class)
+            x("maturity", String::class, nullable = true)
+            x("secondary_name", String::class, nullable = true)
             x("description", String::class, nullable = true)
-            x("image", String::class)
-            x("link", String::class)
+            x("image", String::class, nullable = true)
+            x("link", String::class, nullable = true)
         }
 
         x("SeedFacts") {

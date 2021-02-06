@@ -77,9 +77,9 @@ object CsvLoaderGenerator: Generator {
     }
 
     fun generate2(namespace: Namespace) {
-        val file = FileSpec.builder("generated.model", "${namespace.name}CsvLoader")
+        val file = FileSpec.builder("generated.model", "${namespace.name}CsvLoader2")
             .addType(
-                TypeSpec.interfaceBuilder("${namespace.name}CsvLoader").apply {
+                TypeSpec.interfaceBuilder("${namespace.name}CsvLoader2").apply {
                     namespace.complexTypes.forEach { type ->
                         val typeSpec = TypeSpec.classBuilder(type.name)
                             //This is all that is different between Dto and Dto2 for what ever reason @Serializable polutes the data class with seen1 and serializerConstructor:(

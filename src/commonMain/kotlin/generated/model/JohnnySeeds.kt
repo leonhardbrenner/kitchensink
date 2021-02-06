@@ -3,6 +3,26 @@ package generated.model
 import kotlin.String
 
 interface JohnnySeeds {
+  interface BasicSeed {
+    val description: String?
+
+    val image: String
+
+    val link: String
+
+    val name: String
+
+    val secondary_name: String
+  }
+
+  interface Category {
+    val image: String
+
+    val link: String
+
+    val name: String
+  }
+
   interface DetailedSeeds {
     val description: String?
 
@@ -15,26 +35,6 @@ interface JohnnySeeds {
     val name: String
 
     val secondary_name: String?
-  }
-
-  interface Category {
-    val image: String
-
-    val link: String
-
-    val name: String
-  }
-
-  interface BasicSeed {
-    val description: String?
-
-    val image: String
-
-    val link: String
-
-    val name: String
-
-    val secondary_name: String
   }
 
   interface SeedFacts {

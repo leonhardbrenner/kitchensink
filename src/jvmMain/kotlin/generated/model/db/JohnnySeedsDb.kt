@@ -14,47 +14,41 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object JohnnySeedsDb {
-  object DetailedSeeds {
-    fun create(source: ResultRow) = JohnnySeedsDto.DetailedSeeds(source[Table.description],
-        source[Table.image], source[Table.link], source[Table.maturity], source[Table.name],
-        source[Table.secondary_name])
+  object BasicSeed {
+    fun create(source: ResultRow) = JohnnySeedsDto.BasicSeed(source[Table.description],
+        source[Table.image], source[Table.link], source[Table.name], source[Table.secondary_name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
-    object Table : IntIdTable("DetailedSeeds") {
+    object Table : IntIdTable("BasicSeed") {
       val description: Column<String?> = text("description").nullable()
 
-      val image: Column<String?> = text("image").nullable()
+      val image: Column<String> = text("image")
 
-      val link: Column<String?> = text("link").nullable()
-
-      val maturity: Column<String?> = text("maturity").nullable()
+      val link: Column<String> = text("link")
 
       val name: Column<String> = text("name")
 
-      val secondary_name: Column<String?> = text("secondary_name").nullable()
+      val secondary_name: Column<String> = text("secondary_name")
     }
 
     class Entity(
       id: EntityID<Int>
-    ) : IntEntity(id), generated.model.JohnnySeeds.DetailedSeeds {
+    ) : IntEntity(id), generated.model.JohnnySeeds.BasicSeed {
       override var description: String? by Table.description
 
-      override var image: String? by Table.image
+      override var image: String by Table.image
 
-      override var link: String? by Table.link
-
-      override var maturity: String? by Table.maturity
+      override var link: String by Table.link
 
       override var name: String by Table.name
 
-      override var secondary_name: String? by Table.secondary_name
+      override var secondary_name: String by Table.secondary_name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: JohnnySeeds.DetailedSeeds) {
+        fun create(source: JohnnySeeds.BasicSeed) {
           Entity.new {
             description = source.description
             image = source.image
             link = source.link
-            maturity = source.maturity
             name = source.name
             secondary_name = source.secondary_name
           }
@@ -96,41 +90,47 @@ object JohnnySeedsDb {
     }
   }
 
-  object BasicSeed {
-    fun create(source: ResultRow) = JohnnySeedsDto.BasicSeed(source[Table.description],
-        source[Table.image], source[Table.link], source[Table.name], source[Table.secondary_name])
+  object DetailedSeeds {
+    fun create(source: ResultRow) = JohnnySeedsDto.DetailedSeeds(source[Table.description],
+        source[Table.image], source[Table.link], source[Table.maturity], source[Table.name],
+        source[Table.secondary_name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
-    object Table : IntIdTable("BasicSeed") {
+    object Table : IntIdTable("DetailedSeeds") {
       val description: Column<String?> = text("description").nullable()
 
-      val image: Column<String> = text("image")
+      val image: Column<String?> = text("image").nullable()
 
-      val link: Column<String> = text("link")
+      val link: Column<String?> = text("link").nullable()
+
+      val maturity: Column<String?> = text("maturity").nullable()
 
       val name: Column<String> = text("name")
 
-      val secondary_name: Column<String> = text("secondary_name")
+      val secondary_name: Column<String?> = text("secondary_name").nullable()
     }
 
     class Entity(
       id: EntityID<Int>
-    ) : IntEntity(id), generated.model.JohnnySeeds.BasicSeed {
+    ) : IntEntity(id), generated.model.JohnnySeeds.DetailedSeeds {
       override var description: String? by Table.description
 
-      override var image: String by Table.image
+      override var image: String? by Table.image
 
-      override var link: String by Table.link
+      override var link: String? by Table.link
+
+      override var maturity: String? by Table.maturity
 
       override var name: String by Table.name
 
-      override var secondary_name: String by Table.secondary_name
+      override var secondary_name: String? by Table.secondary_name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: JohnnySeeds.BasicSeed) {
+        fun create(source: JohnnySeeds.DetailedSeeds) {
           Entity.new {
             description = source.description
             image = source.image
             link = source.link
+            maturity = source.maturity
             name = source.name
             secondary_name = source.secondary_name
           }

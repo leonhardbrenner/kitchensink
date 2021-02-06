@@ -3,6 +3,20 @@ package models
 import schemanew.Manifest
 
 val seeds = Manifest.namespace("JohnnySeeds") {
+    element("BasicSeed") {
+        element("name", "builtin:string")
+        element("secondary_name", "builtin:string")
+        element("description", "builtin:nullableString")
+        element("image", "builtin:string")
+        element("link", "builtin:string")
+    }
+
+    element("Category") {
+        element("name", "builtin:string")
+        element("image", "builtin:string")
+        element("link", "builtin:string")
+    }
+
     element("DetailedSeeds", "DetailedSeed")
     complexType("DetailedSeeds") {
         element("name", "builtin:string")
@@ -11,19 +25,6 @@ val seeds = Manifest.namespace("JohnnySeeds") {
         element("description", "builtin:nullableString")
         element("image", "builtin:nullableString")
         element("link", "builtin:nullableString")
-    }
-    element("Category") {
-        element("name", "builtin:string")
-        element("image", "builtin:string")
-        element("link", "builtin:string")
-    }
-
-    element("BasicSeed") {
-        element("name", "builtin:string")
-        element("secondary_name", "builtin:string")
-        element("description", "builtin:nullableString")
-        element("image", "builtin:string")
-        element("link", "builtin:string")
     }
 
     element("SeedFacts") {

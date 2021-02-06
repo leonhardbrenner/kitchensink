@@ -5,22 +5,21 @@ import kotlinx.serialization.Serializable
 
 interface JohnnySeedsDto {
   @Serializable
-  data class DetailedSeeds(
+  data class BasicSeed(
     override val description: String?,
-    override val image: String?,
-    override val link: String?,
-    override val maturity: String?,
+    override val image: String,
+    override val link: String,
     override val name: String,
-    override val secondary_name: String?
-  ) : JohnnySeeds.DetailedSeeds {
+    override val secondary_name: String
+  ) : JohnnySeeds.BasicSeed {
     companion object {
-      final val path: String = "/JohnnySeeds/DetailedSeeds"
+      final val path: String = "/JohnnySeeds/BasicSeed"
 
-      final val header: String = "description\timage\tlink\tmaturity\tname\tsecondary_name"
+      final val header: String = "description\timage\tlink\tname\tsecondary_name"
 
 
-      fun create(source: JohnnySeeds.DetailedSeeds) = DetailedSeeds(source.description,
-          source.image, source.link, source.maturity, source.name, source.secondary_name)}
+      fun create(source: JohnnySeeds.BasicSeed) = BasicSeed(source.description, source.image,
+          source.link, source.name, source.secondary_name)}
   }
 
   @Serializable
@@ -39,21 +38,22 @@ interface JohnnySeedsDto {
   }
 
   @Serializable
-  data class BasicSeed(
+  data class DetailedSeeds(
     override val description: String?,
-    override val image: String,
-    override val link: String,
+    override val image: String?,
+    override val link: String?,
+    override val maturity: String?,
     override val name: String,
-    override val secondary_name: String
-  ) : JohnnySeeds.BasicSeed {
+    override val secondary_name: String?
+  ) : JohnnySeeds.DetailedSeeds {
     companion object {
-      final val path: String = "/JohnnySeeds/BasicSeed"
+      final val path: String = "/JohnnySeeds/DetailedSeeds"
 
-      final val header: String = "description\timage\tlink\tname\tsecondary_name"
+      final val header: String = "description\timage\tlink\tmaturity\tname\tsecondary_name"
 
 
-      fun create(source: JohnnySeeds.BasicSeed) = BasicSeed(source.description, source.image,
-          source.link, source.name, source.secondary_name)}
+      fun create(source: JohnnySeeds.DetailedSeeds) = DetailedSeeds(source.description,
+          source.image, source.link, source.maturity, source.name, source.secondary_name)}
   }
 
   @Serializable

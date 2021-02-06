@@ -12,7 +12,7 @@ open class ModelGenerator : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        listOf(dvdRentalsNew).forEach { namespace ->
+        listOf(seeds, dvdRentalsNew).forEach { namespace ->
             InterfaceGenerator.generate2(namespace)
             DtoGenerator.generate2(namespace)
             DbGenerator2.generate(namespace)

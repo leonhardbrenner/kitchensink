@@ -101,10 +101,11 @@ object DvdRentalDBManager {
             DvdRentalDb.actor.Entity.create(source)
             println("Creating ${source.first_name} ${source.last_name}")
         }
-        DvdRentalCsvLoader.address.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3065.dat").forEach { source ->
-            DvdRentalDb.address.Entity.create(source)
-            println("Creating ${source.address} ${source.phone}")
-        }
+        //XXX
+        //DvdRentalCsvLoader.address.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3065.dat").forEach { source ->
+        //    DvdRentalDb.address.Entity.create(source)
+        //    println("Creating ${source.address} ${source.phone}")
+        //}
         DvdRentalCsvLoader.category.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3059.dat").forEach { source ->
             DvdRentalDb.category.Entity.create(source)
             println("Creating ${source.name}")
