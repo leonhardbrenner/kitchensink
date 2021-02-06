@@ -77,7 +77,7 @@ class TestManifest {
             namespace.complexTypes.forEach { type ->
                 println("Complex Type:" + type.name)
                 type.elements.forEach { element ->
-                    println("${element.name} ${element.type.name} ${element.asPropertySpec(false)}")
+                    println("${element.name} ${element.type.name}  ${element.type.nullable} ${element.asPropertySpec(false)}")
                 }
             }
         }

@@ -42,9 +42,9 @@ interface DvdRentalDto {
           "address\taddress2\taddress_id\tcity_id\tdistrict\tlast_update\tphone\tpostal_code"
 
 
-      fun create(source: DvdRental.address) = address(source.address_id, source.address,
-          source.address2, source.district, source.city_id, source.postal_code, source.phone,
-          source.last_update)}
+      fun create(source: DvdRental.address) = address(source.address, source.address2,
+          source.address_id, source.city_id, source.district, source.last_update, source.phone,
+          source.postal_code)}
   }
 
   @Serializable
@@ -59,8 +59,8 @@ interface DvdRentalDto {
       final val header: String = "category_id\tlast_update\tname"
 
 
-      fun create(source: DvdRental.category) = category(source.category_id, source.name,
-          source.last_update)}
+      fun create(source: DvdRental.category) = category(source.category_id, source.last_update,
+          source.name)}
   }
 
   @Serializable
@@ -76,7 +76,7 @@ interface DvdRentalDto {
       final val header: String = "city\tcity_id\tcountry_id\tlast_update"
 
 
-      fun create(source: DvdRental.city) = city(source.city_id, source.city, source.country_id,
+      fun create(source: DvdRental.city) = city(source.city, source.city_id, source.country_id,
           source.last_update)}
   }
 
@@ -92,7 +92,7 @@ interface DvdRentalDto {
       final val header: String = "country\tcountry_id\tlast_update"
 
 
-      fun create(source: DvdRental.country) = country(source.country_id, source.country,
+      fun create(source: DvdRental.country) = country(source.country, source.country_id,
           source.last_update)}
   }
 
@@ -116,9 +116,9 @@ interface DvdRentalDto {
           "active\tactivebool\taddress_id\tcreate_date\tcustomer_id\temail\tfirst_name\tlast_name\tlast_update\tstore_id"
 
 
-      fun create(source: DvdRental.customer) = customer(source.customer_id, source.store_id,
-          source.first_name, source.last_name, source.email, source.address_id, source.activebool,
-          source.create_date, source.last_update, source.active)}
+      fun create(source: DvdRental.customer) = customer(source.active, source.activebool,
+          source.address_id, source.create_date, source.customer_id, source.email,
+          source.first_name, source.last_name, source.last_update, source.store_id)}
   }
 
   @Serializable
@@ -144,10 +144,10 @@ interface DvdRentalDto {
           "description\tfilm_id\tfulltext\tlanguage_id\tlast_update\tlength\trating\trelease_year\trental_duration\trental_rate\treplacement_cost\tspecial_features\ttitle"
 
 
-      fun create(source: DvdRental.film) = film(source.film_id, source.title, source.description,
-          source.release_year, source.language_id, source.rental_duration, source.rental_rate,
-          source.length, source.replacement_cost, source.rating, source.last_update,
-          source.special_features, source.fulltext)}
+      fun create(source: DvdRental.film) = film(source.description, source.film_id, source.fulltext,
+          source.language_id, source.last_update, source.length, source.rating, source.release_year,
+          source.rental_duration, source.rental_rate, source.replacement_cost,
+          source.special_features, source.title)}
   }
 
   @Serializable
@@ -178,8 +178,8 @@ interface DvdRentalDto {
       final val header: String = "category_id\tfilm_id\tlast_update"
 
 
-      fun create(source: DvdRental.film_category) = film_category(source.film_id,
-          source.category_id, source.last_update)}
+      fun create(source: DvdRental.film_category) = film_category(source.category_id,
+          source.film_id, source.last_update)}
   }
 
   @Serializable
@@ -195,8 +195,8 @@ interface DvdRentalDto {
       final val header: String = "film_id\tinventory_id\tlast_update\tstore_id"
 
 
-      fun create(source: DvdRental.inventory) = inventory(source.inventory_id, source.film_id,
-          source.store_id, source.last_update)}
+      fun create(source: DvdRental.inventory) = inventory(source.film_id, source.inventory_id,
+          source.last_update, source.store_id)}
   }
 
   @Serializable
@@ -211,8 +211,8 @@ interface DvdRentalDto {
       final val header: String = "language_id\tlast_update\tname"
 
 
-      fun create(source: DvdRental.language) = language(source.language_id, source.name,
-          source.last_update)}
+      fun create(source: DvdRental.language) = language(source.language_id, source.last_update,
+          source.name)}
   }
 
   @Serializable
@@ -231,8 +231,8 @@ interface DvdRentalDto {
           "amount\tcustomer_id\tpayment_date\tpayment_id\trental_id\tstaff_id"
 
 
-      fun create(source: DvdRental.payment) = payment(source.payment_id, source.customer_id,
-          source.staff_id, source.rental_id, source.amount, source.payment_date)}
+      fun create(source: DvdRental.payment) = payment(source.amount, source.customer_id,
+          source.payment_date, source.payment_id, source.rental_id, source.staff_id)}
   }
 
   @Serializable
@@ -252,9 +252,9 @@ interface DvdRentalDto {
           "customer_id\tinventory_id\tlast_update\trental_date\trental_id\treturn_date\tstaff_id"
 
 
-      fun create(source: DvdRental.rental) = rental(source.rental_id, source.rental_date,
-          source.inventory_id, source.customer_id, source.return_date, source.staff_id,
-          source.last_update)}
+      fun create(source: DvdRental.rental) = rental(source.customer_id, source.inventory_id,
+          source.last_update, source.rental_date, source.rental_id, source.return_date,
+          source.staff_id)}
   }
 
   @Serializable
@@ -262,8 +262,8 @@ interface DvdRentalDto {
     override val active: Int,
     override val address_id: Int,
     override val email: Int,
-    override val first_name: Int,
-    override val last_name: Int,
+    override val first_name: String,
+    override val last_name: String,
     override val last_update: String,
     override val password: String,
     override val picture: Int,
@@ -278,9 +278,9 @@ interface DvdRentalDto {
           "active\taddress_id\temail\tfirst_name\tlast_name\tlast_update\tpassword\tpicture\tstaff_id\tstore_id\tusername"
 
 
-      fun create(source: DvdRental.staff) = staff(source.staff_id, source.first_name,
-          source.last_name, source.address_id, source.email, source.store_id, source.active,
-          source.username, source.password, source.last_update, source.picture)}
+      fun create(source: DvdRental.staff) = staff(source.active, source.address_id, source.email,
+          source.first_name, source.last_name, source.last_update, source.password, source.picture,
+          source.staff_id, source.store_id, source.username)}
   }
 
   @Serializable
@@ -296,7 +296,7 @@ interface DvdRentalDto {
       final val header: String = "address_id\tlast_update\tmanager_staff_id\tstore_id"
 
 
-      fun create(source: DvdRental.store) = store(source.store_id, source.manager_staff_id,
-          source.address_id, source.last_update)}
+      fun create(source: DvdRental.store) = store(source.address_id, source.last_update,
+          source.manager_staff_id, source.store_id)}
   }
 }

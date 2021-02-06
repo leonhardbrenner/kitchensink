@@ -133,8 +133,8 @@ model("Manifest") {
         //COPY public.staff (staff_id, first_name, last_name, address_id, email, store_id, active, username, password, last_update, picture) FROM '$$PATH$$/3079.dat';
         x("staff") {
             x("staff_id", Int::class) // integer DEFAULT nextval("public.staff_staff_id_seq"::regclass) NOT NULL,
-            x("first_name", Int::class) // character varying(45) NOT NULL,
-            x("last_name", Int::class) // character varying(45) NOT NULL,
+            x("first_name", String::class) // character varying(45) NOT NULL,
+            x("last_name", String::class) // character varying(45) NOT NULL,
             x("address_id", Int::class) // smallint NOT NULL,
             x("email", Int::class) // character varying(50),
             x("store_id", Int::class) // smallint NOT NULL,

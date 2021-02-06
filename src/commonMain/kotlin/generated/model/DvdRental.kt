@@ -181,9 +181,9 @@ interface DvdRental {
 
     val email: Int
 
-    val first_name: Int
+    val first_name: String
 
-    val last_name: Int
+    val last_name: String
 
     val last_update: String
 

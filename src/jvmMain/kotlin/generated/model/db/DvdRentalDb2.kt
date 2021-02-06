@@ -15,7 +15,7 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-object DvdRentalDb {
+object DvdRentalDb2 {
   object actor {
     fun create(source: ResultRow) = DvdRentalDto.actor(source[Table.actor_id],
         source[Table.first_name], source[Table.last_name], source[Table.last_update])

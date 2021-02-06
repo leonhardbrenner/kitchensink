@@ -50,8 +50,8 @@ class Namespace(val name: String, block: Namespace.() -> Unit) {
 
     init { block() }
 
-    fun complexType(name: String, block: ComplexType.() -> Unit): ComplexType {
-        val complexType = ComplexType(this, null, name, block)
+    fun complexType(name: String, nullable: Boolean = false, block: ComplexType.() -> Unit): ComplexType {
+        val complexType = ComplexType(this, null, name, nullable, block)
         complexTypeMap[name] = complexType
         typeMap[name] = complexType
         return complexType
@@ -64,13 +64,11 @@ class Namespace(val name: String, block: Namespace.() -> Unit) {
         typeMap[name] = simpleType
     }
 
-    fun element(name: String, typeRef: String? = null, block: (ComplexType.() -> Unit)? = null) {
-        Element(this, null, name, typeRef, block)
+    fun element(name: String, typeRef: String? = null, nullable: Boolean = false, block: (ComplexType.() -> Unit)? = null) {
+        Element(this, null, name, nullable, typeRef, block)
     }
 
-
     //fun qname(name: String) = Qname(this, name)
-
 }
 
 class Qname(val namespace: Namespace, val name: String)
@@ -79,6 +77,7 @@ open class Element(
     val namespace: Namespace,
     val parent: ComplexType?,
     val name: String,
+    val nullable: Boolean = false, //XXX - this should either be on element or type.
     typeRef: String?,
     val block: (ComplexType.() -> Unit)? = null
 ) {
@@ -89,7 +88,7 @@ open class Element(
         null
 
     val type: Type get() = if (block != null)
-        complexType(name, block)
+        complexType(name, nullable, block)
     else
         typeRef!! //TODO - xor assert and ^^^ XXX actually I think we can assume a simple type here
 
@@ -113,11 +112,11 @@ open class Element(
             }
         }
     }
-    fun complexType(name: String, block: ComplexType.() -> Unit): ComplexType {
+    fun complexType(name: String, nullable: Boolean = false, block: ComplexType.() -> Unit): ComplexType {
         return if (parent != null)
             parent.complexType(name, block)
         else
-            namespace.complexType(name, block)
+            namespace.complexType(name, nullable, block)
     }
     fun asPropertySpec(mutable: Boolean, vararg modifiers: KModifier) = PropertySpec.builder(
         name,
@@ -136,10 +135,11 @@ interface Type {
     val parent: ComplexType?
     val name: String
     val typeName: TypeName
+    val qualifiedName: String get() = name
     val packageName: String
+    val nullable: Boolean
     val path: String
-        get() = if (parent == null) "" else "${parent!!.path}/$name"
-
+        get() = if (parent == null) "/${namespace.name}/$name" else "${parent!!.path}/$name"
 }
 
 class TypeRef(
@@ -147,6 +147,7 @@ class TypeRef(
     override val name: String //This may be a local or qualified reference to a type.
 ): Type {
     override val parent: ComplexType? = null
+
     override val typeName: TypeName
         get() = let {
             val indexOfColon = name.indexOf(":")
@@ -156,21 +157,37 @@ class TypeRef(
                     ClassName("", "SomethingWeirdHappend")
                 }
             } else if (namespace.typeMap.containsKey(name)) {
-                //XXX - I think there is a third option where the type is contained in the parent
                 namespace.typeMap[name]!!.typeName
             } else {
                 ClassName("", "")
             }
         }
+    override val nullable: Boolean
+        get() = let {
+            val indexOfColon = name.indexOf(":")
+            return if (indexOfColon > 0) {
+                try {
+                    Manifest.namespaceMap[name.substring(0, indexOfColon)]!!
+                        .typeMap[name.substring(indexOfColon + 1)]!!.nullable
+                } catch(ex: Exception) {
+                    false
+                }
+            } else if (namespace.typeMap.containsKey(name)) {
+                namespace.typeMap[name]!!.nullable
+            } else {
+                false
+            }
+        }
+
     override val packageName: String
         get() = if (namespace.name == "builtin") "" else namespace.name
-
 }
 
 open class ComplexType(
     override val namespace: Namespace,
     override val parent: ComplexType?,
     override val name: String,
+    override val nullable: Boolean = false,
     block: ComplexType.() -> Unit
 ): Type {
     val typeMap = HashMap<String, Type>()
@@ -186,7 +203,7 @@ open class ComplexType(
         namespace.complexTypeMap[name] = this
     }
     fun complexType(name: String, block: ComplexType.() -> Unit): ComplexType {
-        val complexType = ComplexType(namespace, this, name, block)
+        val complexType = ComplexType(namespace, this, name, nullable, block)
         complexTypeMap[name] = complexType
         typeMap[name] = complexType
         return complexType
@@ -194,19 +211,18 @@ open class ComplexType(
     fun attribute(name: String, typeRef: String? = null) =
         Attribute(namespace, this, name, typeRef)
     fun element(name: String, typeRef: String? = null, block: (ComplexType.() -> Unit)? = null) {
-        Element(namespace, this, name, typeRef, block)
+        Element(namespace, this, name, nullable, typeRef, block)
     }
     override val typeName get() = ClassName("", name)
 }
 
 //TODO - We could think of SimpleType as an extension of typeRef with a restriction on the number of children.
-//
 open class SimpleType(
     override val namespace: Namespace,
     override val parent: ComplexType?,
     override val name: String,
     val kclass: KClass<*>?,
-    val nullable: Boolean = false,
+    override val nullable: Boolean = false,
     block: SimpleType.() -> Unit
 ): Type {
     init {
@@ -217,4 +233,6 @@ open class SimpleType(
     override val typeName get() = kclass!!.asTypeName().copy(nullable = nullable)
     override val packageName: String
         get() = if (namespace.name == "builtin") "" else namespace.name
+    override val qualifiedName: String
+        get() = kclass?.qualifiedName?:name
 }

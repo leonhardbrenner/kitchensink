@@ -72,7 +72,7 @@ object DbGenerator: Generator {
         get() = FunSpec.builder("create")
             .addParameter("source", ClassName("org.jetbrains.exposed.sql", "ResultRow"))
             .addCode("return %LDto.%L(%L)",
-                parent!!.name, name!!, children.map { "source[Table.${it.name}]" }.joinToString(", "))
+                parent!!.name, name!!, slots.map { "source[Table.${it.name}]" }.joinToString(", "))
             .build()
 
     val ElementOld.Model.Type.entity
@@ -153,22 +153,22 @@ object DbGenerator2: Generator {
         file.writeTo(writer)
     }
 
-    //val Element.propertySpec
-    //    get() = PropertySpec.builder(
-    //        name,
-    //        ClassName("org.jetbrains.exposed.sql", "Column")
-    //            .parameterizedBy(type!!.asTypeName().copy(nullable = nullable))
-    //    )
-    //        .initializer("${
-    //            when (type!!.qualifiedName) {
-    //                "kotlin.String" -> "text"
-    //                "kotlin.Int" -> "integer"
-    //                "kotlin.Double" -> "double"
-    //                "kotlin.Boolean" -> "bool"
-    //                else -> "text"
-    //            }
-    //        }(\"${name}\")${if (nullable) ".nullable()" else ""}")
-    //        .build()
+    val Element.propertySpec
+        get() = PropertySpec.builder(
+            name,
+            ClassName("org.jetbrains.exposed.sql", "Column")
+                .parameterizedBy(type.typeName)
+        )
+            .initializer("${
+                when (type.qualifiedName) {
+                    "builtin:string" -> "text"
+                    "builtin:int" -> "integer"
+                    "builtin:double" -> "double"
+                    "builtin:boolean" -> "bool"
+                    else -> "text"
+                }
+            }(\"${name}\")${if (type.nullable) ".nullable()" else ""}")
+            .build()
 
     val ComplexType.table
         get() = TypeSpec.objectBuilder("Table")
@@ -176,7 +176,7 @@ object DbGenerator2: Generator {
             .addSuperclassConstructorParameter("%S", name)
             .apply {
                 elements.forEach { element ->
-                    //addProperty(element.propertySpec) //XXX - bring me back.
+                    addProperty(element.propertySpec) //XXX - bring me back.
                 }
             }.build()
 

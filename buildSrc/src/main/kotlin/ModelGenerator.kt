@@ -12,18 +12,16 @@ open class ModelGenerator : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        //XXX - when we are done we will delete the lower setup
         listOf(dvdRentalsNew).forEach { namespace ->
-            println("Generating faces of: " + namespace!!.name)
             InterfaceGenerator.generate2(namespace)
             DtoGenerator.generate2(namespace)
-            //DbGenerator2.generate(namespace)
-            //CsvLoaderGenerator.generateCsvLoader2(namespace)
+            DbGenerator2.generate(namespace)
+            CsvLoaderGenerator.generate2(namespace)
         }
         listOf(johnnySeeds, dvdRental).forEach { manifest ->
             InterfaceGenerator.generate(manifest)
             DtoGenerator.generate(manifest)
-            CsvLoaderGenerator.generateCsvLoader(manifest)
+            CsvLoaderGenerator.generate(manifest)
             DbGenerator.generate(manifest)
         }
 

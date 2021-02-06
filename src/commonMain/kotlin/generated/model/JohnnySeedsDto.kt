@@ -19,8 +19,8 @@ interface JohnnySeedsDto {
       final val header: String = "description\timage\tlink\tmaturity\tname\tsecondary_name"
 
 
-      fun create(source: JohnnySeeds.DetailedSeeds) = DetailedSeeds(source.name, source.maturity,
-          source.secondary_name, source.description, source.image, source.link)}
+      fun create(source: JohnnySeeds.DetailedSeeds) = DetailedSeeds(source.description,
+          source.image, source.link, source.maturity, source.name, source.secondary_name)}
   }
 
   @Serializable
@@ -35,7 +35,7 @@ interface JohnnySeedsDto {
       final val header: String = "image\tlink\tname"
 
 
-      fun create(source: JohnnySeeds.Category) = Category(source.name, source.image, source.link)}
+      fun create(source: JohnnySeeds.Category) = Category(source.image, source.link, source.name)}
   }
 
   @Serializable
@@ -52,8 +52,8 @@ interface JohnnySeedsDto {
       final val header: String = "description\timage\tlink\tname\tsecondary_name"
 
 
-      fun create(source: JohnnySeeds.BasicSeed) = BasicSeed(source.name, source.secondary_name,
-          source.description, source.image, source.link)}
+      fun create(source: JohnnySeeds.BasicSeed) = BasicSeed(source.description, source.image,
+          source.link, source.name, source.secondary_name)}
   }
 
   @Serializable
@@ -68,7 +68,7 @@ interface JohnnySeedsDto {
       final val header: String = "facts\tmaturity\tname"
 
 
-      fun create(source: JohnnySeeds.SeedFacts) = SeedFacts(source.name, source.facts,
-          source.maturity)}
+      fun create(source: JohnnySeeds.SeedFacts) = SeedFacts(source.facts, source.maturity,
+          source.name)}
   }
 }

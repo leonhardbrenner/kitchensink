@@ -15,9 +15,9 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object JohnnySeedsDb {
   object DetailedSeeds {
-    fun create(source: ResultRow) = JohnnySeedsDto.DetailedSeeds(source[Table.name],
-        source[Table.maturity], source[Table.secondary_name], source[Table.description],
-        source[Table.image], source[Table.link])
+    fun create(source: ResultRow) = JohnnySeedsDto.DetailedSeeds(source[Table.description],
+        source[Table.image], source[Table.link], source[Table.maturity], source[Table.name],
+        source[Table.secondary_name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("DetailedSeeds") {
       val description: Column<String?> = text("description").nullable()
@@ -64,8 +64,8 @@ object JohnnySeedsDb {
   }
 
   object Category {
-    fun create(source: ResultRow) = JohnnySeedsDto.Category(source[Table.name], source[Table.image],
-        source[Table.link])
+    fun create(source: ResultRow) = JohnnySeedsDto.Category(source[Table.image], source[Table.link],
+        source[Table.name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Category") {
       val image: Column<String> = text("image")
@@ -97,9 +97,8 @@ object JohnnySeedsDb {
   }
 
   object BasicSeed {
-    fun create(source: ResultRow) = JohnnySeedsDto.BasicSeed(source[Table.name],
-        source[Table.secondary_name], source[Table.description], source[Table.image],
-        source[Table.link])
+    fun create(source: ResultRow) = JohnnySeedsDto.BasicSeed(source[Table.description],
+        source[Table.image], source[Table.link], source[Table.name], source[Table.secondary_name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("BasicSeed") {
       val description: Column<String?> = text("description").nullable()
@@ -141,8 +140,8 @@ object JohnnySeedsDb {
   }
 
   object SeedFacts {
-    fun create(source: ResultRow) = JohnnySeedsDto.SeedFacts(source[Table.name],
-        source[Table.facts], source[Table.maturity])
+    fun create(source: ResultRow) = JohnnySeedsDto.SeedFacts(source[Table.facts],
+        source[Table.maturity], source[Table.name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("SeedFacts") {
       val facts: Column<String?> = text("facts").nullable()

@@ -54,7 +54,7 @@ object DtoGenerator: Generator {
                                             .addCode(
                                                 "return %L(%L)",
                                                 type.name!!,
-                                                type.children.map { "source.${it.name}" }.joinToString(", ")
+                                                type.slots.map { "source.${it.name}" }.joinToString(", ")
                                             )
                                             .build()
                                     )
@@ -78,18 +78,13 @@ object DtoGenerator: Generator {
                             .addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
                             .addModifiers(KModifier.DATA)
                             .addSuperinterface(ClassName(type.packageName, type.name))
-                            //.primaryConstructor(
-                            //    FunSpec.constructorBuilder().apply {
-                            //        type.elements.forEach { element ->
-                            //            with (element) {
-                            //                addParameter(
-                            //                    name,
-                            //                    type!!.asTypeName().copy(nullable = type.nullable)
-                            //                ).build()
-                            //            }
-                            //        }
-                            //    }.build()
-                            //)
+                            .primaryConstructor(
+                                FunSpec.constructorBuilder().apply {
+                                    type.elements.forEach { element ->
+                                        addParameter(element.name, element.type.typeName).build()
+                                    }
+                                }.build()
+                            )
                             .apply {
                                 type.elements.forEach { element ->
                                     addProperty(
@@ -106,11 +101,11 @@ object DtoGenerator: Generator {
                                         //.mutable(true)
                                         .build()
                                     addProperty(propertySpec)
-                                    //addProperty(
-                                    //    PropertySpec.builder("header", String::class, KModifier.FINAL)
-                                    //        .initializer("%S\n", type.slots.map { it.columnName }.joinToString("\t"))
-                                    //        .build()
-                                    //)
+                                    addProperty(
+                                        PropertySpec.builder("header", String::class, KModifier.FINAL)
+                                            .initializer("%S\n", type.elements.map { it.columnName }.joinToString("\t"))
+                                            .build()
+                                    )
                                     addFunction(
                                         FunSpec.builder("create")
                                             .addParameter("source", ClassName(type.packageName, type.name))
