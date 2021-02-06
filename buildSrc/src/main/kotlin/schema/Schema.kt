@@ -59,7 +59,7 @@ interface Element {
         }
         inner class Type(val namespace: Namespace, element: Element): Element by element {
             val slots by lazy {
-                children.map { Slot(it) }//.sortedBy { it.name }
+                children.map { Slot(it) }.sortedBy { it.name }
             }
             val packageName get() = parent?.path?.substring(1)?.replace("/", ".")?:""
         }

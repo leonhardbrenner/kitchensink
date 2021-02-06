@@ -82,6 +82,7 @@ open class Element(
     typeRef: String?,
     val block: (ComplexType.() -> Unit)? = null
 ) {
+    val columnName = name //XXX - this should be a parameter.
     val typeRef = if (typeRef != null)
         TypeRef(namespace, typeRef)
     else
@@ -132,14 +133,20 @@ open class Attribute(val namespace: Namespace, val parent: ComplexType?, val nam
 
 interface Type {
     val namespace: Namespace
+    val parent: ComplexType?
     val name: String
     val typeName: TypeName
+    val packageName: String
+    val path: String
+        get() = if (parent == null) "" else "${parent!!.path}/$name"
+
 }
 
 class TypeRef(
     override val namespace: Namespace,
     override val name: String //This may be a local or qualified reference to a type.
 ): Type {
+    override val parent: ComplexType? = null
     override val typeName: TypeName
         get() = let {
             val indexOfColon = name.indexOf(":")
@@ -155,11 +162,14 @@ class TypeRef(
                 ClassName("", "")
             }
         }
+    override val packageName: String
+        get() = if (namespace.name == "builtin") "" else namespace.name
+
 }
 
 open class ComplexType(
     override val namespace: Namespace,
-    val parent: ComplexType?,
+    override val parent: ComplexType?,
     override val name: String,
     block: ComplexType.() -> Unit
 ): Type {
@@ -169,6 +179,8 @@ open class ComplexType(
     val complexTypes = complexTypeMap.values
     val elementMap = HashMap<String, Element>()
     val elements get() = elementMap.values.sortedBy { it.name }.toList() //XXX - looks like not all of the geenerators are using this.
+    override val packageName: String
+        get() = namespace.name //Namespace could use a package attribute and we have generated vs handwritten.
     init {
         block()
         namespace.complexTypeMap[name] = this
@@ -187,9 +199,11 @@ open class ComplexType(
     override val typeName get() = ClassName("", name)
 }
 
+//TODO - We could think of SimpleType as an extension of typeRef with a restriction on the number of children.
+//
 open class SimpleType(
     override val namespace: Namespace,
-    val parent: ComplexType?,
+    override val parent: ComplexType?,
     override val name: String,
     val kclass: KClass<*>?,
     val nullable: Boolean = false,
@@ -201,4 +215,6 @@ open class SimpleType(
         namespace.simpleTypeMap[name] = this
     }
     override val typeName get() = kclass!!.asTypeName().copy(nullable = nullable)
+    override val packageName: String
+        get() = if (namespace.name == "builtin") "" else namespace.name
 }

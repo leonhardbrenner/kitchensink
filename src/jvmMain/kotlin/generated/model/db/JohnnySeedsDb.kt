@@ -20,43 +20,43 @@ object JohnnySeedsDb {
         source[Table.image], source[Table.link])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("DetailedSeeds") {
-      val name: Column<String> = text("name")
-
-      val maturity: Column<String?> = text("maturity").nullable()
-
-      val secondary_name: Column<String?> = text("secondary_name").nullable()
-
       val description: Column<String?> = text("description").nullable()
 
       val image: Column<String?> = text("image").nullable()
 
       val link: Column<String?> = text("link").nullable()
+
+      val maturity: Column<String?> = text("maturity").nullable()
+
+      val name: Column<String> = text("name")
+
+      val secondary_name: Column<String?> = text("secondary_name").nullable()
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.JohnnySeeds.DetailedSeeds {
-      override var name: String by Table.name
-
-      override var maturity: String? by Table.maturity
-
-      override var secondary_name: String? by Table.secondary_name
-
       override var description: String? by Table.description
 
       override var image: String? by Table.image
 
       override var link: String? by Table.link
 
+      override var maturity: String? by Table.maturity
+
+      override var name: String by Table.name
+
+      override var secondary_name: String? by Table.secondary_name
+
       companion object : IntEntityClass<Entity>(Table) {
         fun create(source: JohnnySeeds.DetailedSeeds) {
           Entity.new {
-            name = source.name
-            maturity = source.maturity
-            secondary_name = source.secondary_name
             description = source.description
             image = source.image
             link = source.link
+            maturity = source.maturity
+            name = source.name
+            secondary_name = source.secondary_name
           }
         }
       }
@@ -68,28 +68,28 @@ object JohnnySeedsDb {
         source[Table.link])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Category") {
-      val name: Column<String> = text("name")
-
       val image: Column<String> = text("image")
 
       val link: Column<String> = text("link")
+
+      val name: Column<String> = text("name")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.JohnnySeeds.Category {
-      override var name: String by Table.name
-
       override var image: String by Table.image
 
       override var link: String by Table.link
 
+      override var name: String by Table.name
+
       companion object : IntEntityClass<Entity>(Table) {
         fun create(source: JohnnySeeds.Category) {
           Entity.new {
-            name = source.name
             image = source.image
             link = source.link
+            name = source.name
           }
         }
       }
@@ -102,38 +102,38 @@ object JohnnySeedsDb {
         source[Table.link])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("BasicSeed") {
-      val name: Column<String> = text("name")
-
-      val secondary_name: Column<String> = text("secondary_name")
-
       val description: Column<String?> = text("description").nullable()
 
       val image: Column<String> = text("image")
 
       val link: Column<String> = text("link")
+
+      val name: Column<String> = text("name")
+
+      val secondary_name: Column<String> = text("secondary_name")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.JohnnySeeds.BasicSeed {
-      override var name: String by Table.name
-
-      override var secondary_name: String by Table.secondary_name
-
       override var description: String? by Table.description
 
       override var image: String by Table.image
 
       override var link: String by Table.link
 
+      override var name: String by Table.name
+
+      override var secondary_name: String by Table.secondary_name
+
       companion object : IntEntityClass<Entity>(Table) {
         fun create(source: JohnnySeeds.BasicSeed) {
           Entity.new {
-            name = source.name
-            secondary_name = source.secondary_name
             description = source.description
             image = source.image
             link = source.link
+            name = source.name
+            secondary_name = source.secondary_name
           }
         }
       }
@@ -145,28 +145,28 @@ object JohnnySeedsDb {
         source[Table.facts], source[Table.maturity])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("SeedFacts") {
-      val name: Column<String> = text("name")
-
       val facts: Column<String?> = text("facts").nullable()
 
       val maturity: Column<String?> = text("maturity").nullable()
+
+      val name: Column<String> = text("name")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.JohnnySeeds.SeedFacts {
-      override var name: String by Table.name
-
       override var facts: String? by Table.facts
 
       override var maturity: String? by Table.maturity
 
+      override var name: String by Table.name
+
       companion object : IntEntityClass<Entity>(Table) {
         fun create(source: JohnnySeeds.SeedFacts) {
           Entity.new {
-            name = source.name
             facts = source.facts
             maturity = source.maturity
+            name = source.name
           }
         }
       }

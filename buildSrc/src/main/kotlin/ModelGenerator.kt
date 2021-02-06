@@ -15,14 +15,14 @@ open class ModelGenerator : DefaultTask() {
         //XXX - when we are done we will delete the lower setup
         listOf(dvdRentalsNew).forEach { namespace ->
             println("Generating faces of: " + namespace!!.name)
-            InterfaceGenerator2.generate(namespace)
-            //DtoGenerator.generateDto(namespace)
-            //CsvLoaderGenerator.generateCsvLoader(namespace)
-            //DbGenerator.generate(namespace)
+            InterfaceGenerator.generate2(namespace)
+            DtoGenerator.generate2(namespace)
+            //DbGenerator2.generate(namespace)
+            //CsvLoaderGenerator.generateCsvLoader2(namespace)
         }
         listOf(johnnySeeds, dvdRental).forEach { manifest ->
             InterfaceGenerator.generate(manifest)
-            DtoGenerator.generateDto(manifest)
+            DtoGenerator.generate(manifest)
             CsvLoaderGenerator.generateCsvLoader(manifest)
             DbGenerator.generate(manifest)
         }

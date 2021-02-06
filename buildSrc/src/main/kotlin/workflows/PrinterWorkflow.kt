@@ -39,7 +39,6 @@ val printer = Workflow("PrintWorkflow", "INITIAL") {
         ) {
             Transition("ORMD", "")
         }
-
     }
     State(
         "ORMD"

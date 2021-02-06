@@ -31,11 +31,7 @@ object InterfaceGenerator: Generator {
         file.writeTo(writer)
     }
 
-}
-
-object InterfaceGenerator2: Generator {
-
-    fun generate(namespace: Namespace) {
+    fun generate2(namespace: Namespace) {
         val typeSpec = TypeSpec.interfaceBuilder("${namespace.name}2").apply {
             namespace.complexTypes.forEach { type ->
                     addType(
