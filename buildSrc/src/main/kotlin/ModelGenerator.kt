@@ -13,17 +13,11 @@ open class ModelGenerator : DefaultTask() {
     @TaskAction
     fun generate() {
         listOf(seeds, dvdRentalsNew).forEach { namespace ->
-            InterfaceGenerator.generate2(namespace)
-            DtoGenerator.generate2(namespace)
-            DbGenerator2.generate(namespace)
-            CsvLoaderGenerator.generate2(namespace)
-        }
-        listOf(johnnySeeds, dvdRental).forEach { manifest ->
-            InterfaceGenerator.generate(manifest)
-            DtoGenerator.generate(manifest)
-            CsvLoaderGenerator.generate(manifest)
-            DbGenerator.generate(manifest)
-        }
+            InterfaceGenerator.generate(namespace)
+            DtoGenerator.generate(namespace)
+            DbGenerator.generate(namespace)
+            CsvLoaderGenerator.generate(namespace)
 
+        }
     }
 }

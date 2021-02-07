@@ -1,43 +1,36 @@
 package models
 
-//TODO - replace this! Look at DvdRentalNew which has the syntax I am moving towards and this will make more sense.
+import schemanew.Manifest
 
-import schema.Element
-
-val johnnySeeds = Element.
-model("Manifest") {
-
-    x("JohnnySeeds") {
-
-        x("BasicSeed") {
-            x("name", String::class)
-            x("secondary_name", String::class)
-            x("description", String::class, nullable = true)
-            x("image", String::class)
-            x("link", String::class)
-        }
-
-        x("Category") {
-            x("name", String::class)
-            x("image", String::class)
-            x("link", String::class)
-        }
-
-        x("DetailedSeeds") {
-            x("name", String::class)
-            x("maturity", String::class, nullable = true)
-            x("secondary_name", String::class, nullable = true)
-            x("description", String::class, nullable = true)
-            x("image", String::class, nullable = true)
-            x("link", String::class, nullable = true)
-        }
-
-        x("SeedFacts") {
-            x("name", String::class)
-            //TODO - This should be a list
-            x("facts", String::class, nullable = true)
-            x("maturity", String::class, nullable = true)
-        }
+val seeds = Manifest.namespace("JohnnySeeds") {
+    element("BasicSeed") {
+        element("name", "builtin:string")
+        element("secondary_name", "builtin:string")
+        element("description", "builtin:nullableString")
+        element("image", "builtin:string")
+        element("link", "builtin:string")
     }
-    x("")
-}.namespaces.first()
+
+    element("Category") {
+        element("name", "builtin:string")
+        element("image", "builtin:string")
+        element("link", "builtin:string")
+    }
+
+    element("DetailedSeeds", "DetailedSeed")
+    complexType("DetailedSeeds") {
+        element("name", "builtin:string")
+        element("maturity", "builtin:nullableString")
+        element("secondary_name", "builtin:nullableString")
+        element("description", "builtin:nullableString")
+        element("image", "builtin:nullableString")
+        element("link", "builtin:nullableString")
+    }
+
+    element("SeedFacts") {
+        element("name", "builtin:string")
+        //TODO - This should be a list
+        element("facts", "builtin:nullableString")
+        element("maturity", "builtin:nullableString")
+    }
+}
