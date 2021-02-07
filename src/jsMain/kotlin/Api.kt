@@ -30,12 +30,12 @@ suspend fun deleteShoppingListItem(shoppingListItem: ShoppingListItem) {
     jsonClient.delete<Unit>(endpoint + ShoppingListItem.path + "/${shoppingListItem.id}")
 }
 
-suspend fun getSeedsDetailedSeed(): List<SeedsDto.DetailedSeeds> {
-    return jsonClient.get(endpoint + SeedsDto.DetailedSeeds.path)
+suspend fun getSeedsDetailedSeed(): List<SeedsDto.DetailedSeed> {
+    return jsonClient.get(endpoint + SeedsDto.DetailedSeed.path)
 }
 
-suspend fun getSeedsCategory(): List<SeedsDto.Category> {
-    return jsonClient.get(endpoint + SeedsDto.Category.path)
+suspend fun getSeedsCategory(): List<SeedsDto.SeedCategory> {
+    return jsonClient.get(endpoint + SeedsDto.SeedCategory.path)
 }
 
 suspend fun getSeedsBasicSeed(): List<SeedsDto.BasicSeed> {

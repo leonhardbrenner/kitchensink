@@ -9,8 +9,8 @@ import io.ktor.routing.*
 import javax.inject.Inject
 
 class SeedsService {
-    fun getDetailedSeeds() = SeedsDb.DetailedSeeds.fetchAll().subList(0, 100)
-    fun getCategories() = SeedsDb.Category.fetchAll().subList(0, 100)
+    fun getDetailedSeeds() = SeedsDb.DetailedSeed.fetchAll().subList(0, 100)
+    fun getCategories() = SeedsDb.SeedCategory.fetchAll().subList(0, 100)
     fun getBasicSeeds() = SeedsDb.BasicSeed.fetchAll().subList(0, 100)
     fun getSeedFacts() = SeedsDb.SeedFacts.fetchAll().let {
         it.subList(0, if (it.size < 100) it.size else 100)
@@ -22,12 +22,12 @@ class SeedsApplication @Inject constructor(val seedsService: SeedsService) {
     object Module : AbstractModule()
 
     fun routesFrom(routing: Routing) = routing.apply {
-        route(SeedsDto.DetailedSeeds.path) {
+        route(SeedsDto.DetailedSeed.path) {
             get {
                 call.respond(seedsService.getDetailedSeeds())
             }
         }
-        route(SeedsDto.Category.path) {
+        route(SeedsDto.SeedCategory.path) {
             get {
                 call.respond(seedsService.getCategories())
             }

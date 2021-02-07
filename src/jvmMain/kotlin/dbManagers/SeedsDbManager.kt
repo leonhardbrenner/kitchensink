@@ -22,14 +22,14 @@ class SeedsService @Inject constructor(val kMapper: ObjectMapper) {
         File(ClassLoader.getSystemResource(path).file).readText()
     )
 
-    val detailedSeeds: List<SeedsDto.DetailedSeeds>
-        get() = kMapper.readValue(
-            resourceText("seeds/detailed-seeds.json")
-        )
-
-    val categories: List<SeedsDto.Category>
+    val categories: List<SeedsDto.SeedCategory>
         get() = kMapper.readValue(
             resourceText("seeds/categories.json")
+        )
+
+    val detailedSeeds: List<SeedsDto.DetailedSeed>
+        get() = kMapper.readValue(
+            resourceText("seeds/detailed-seeds.json")
         )
 
     val basicSeeds: List<SeedsDto.BasicSeed>
@@ -48,26 +48,26 @@ object SeedsDBManager {
     val kMapper = ObjectMapper().registerModule(KotlinModule())
 
     fun drop() = transaction {
-        SchemaUtils.drop(SeedsDb.DetailedSeeds.Table)
-        SchemaUtils.drop(SeedsDb.Category.Table)
+        SchemaUtils.drop(SeedsDb.DetailedSeed.Table)
+        SchemaUtils.drop(SeedsDb.SeedCategory.Table)
         SchemaUtils.drop(SeedsDb.BasicSeed.Table)
         SchemaUtils.drop(SeedsDb.SeedFacts.Table)
     }
     fun create() = transaction {
-        SchemaUtils.create(SeedsDb.DetailedSeeds.Table)
-        SchemaUtils.create(SeedsDb.Category.Table)
+        SchemaUtils.create(SeedsDb.DetailedSeed.Table)
+        SchemaUtils.create(SeedsDb.SeedCategory.Table)
         SchemaUtils.create(SeedsDb.BasicSeed.Table)
         SchemaUtils.create(SeedsDb.SeedFacts.Table)
     }
     fun populate() = transaction {
         SeedsService(kMapper).detailedSeeds
             .forEach { source ->
-                SeedsDb.DetailedSeeds.Entity.create(source)
+                SeedsDb.DetailedSeed.Entity.create(source)
                 println("Creating ${source.name}")
             }
         SeedsService(kMapper).categories
             .forEach { source ->
-                SeedsDb.Category.Entity.create(source)
+                SeedsDb.SeedCategory.Entity.create(source)
                 println("Creating ${source.name}")
             }
         SeedsService(kMapper).basicSeeds.forEach { source ->
@@ -97,16 +97,16 @@ object DvdRentalDBManager {
         SchemaUtils.create (DvdRentalDb.category.Table)
     }
     fun populate() = transaction {
-        DvdRentalCsvLoader.actor.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3057.dat").forEach { source ->
+        DvdRentalCsvLoader.actor.loadCsv(resource("dvdrental/3057.dat")).forEach { source ->
             DvdRentalDb.actor.Entity.create(source)
             println("Creating ${source.firstName} ${source.lastName}")
         }
         //XXX
-        //DvdRentalCsvLoader.address.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3065.dat").forEach { source ->
+        //DvdRentalCsvLoader.address.loadCsv(resource("dvdrental/3065.dat")).forEach { source ->
         //    DvdRentalDb.address.Entity.create(source)
         //    println("Creating ${source.address} ${source.phone}")
         //}
-        DvdRentalCsvLoader.category.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3059.dat").forEach { source ->
+        DvdRentalCsvLoader.category.loadCsv(resource("dvdrental/3059.dat")).forEach { source ->
             DvdRentalDb.category.Entity.create(source)
             println("Creating ${source.name}")
         }

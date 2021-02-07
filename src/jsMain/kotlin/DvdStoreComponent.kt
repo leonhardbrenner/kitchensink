@@ -1,5 +1,5 @@
-import DvdStoreWindow.DisplayComponent.ComponentStyles.inline
-import DvdStoreWindow.DisplayComponent.ComponentStyles.listDiv
+import DvdRentalWindow.DisplayComponent.ComponentStyles.inline
+import DvdRentalWindow.DisplayComponent.ComponentStyles.listDiv
 import com.ccfraser.muirwik.components.*
 import com.ccfraser.muirwik.components.list.*
 import com.ccfraser.muirwik.components.menu.mMenuItem
@@ -16,9 +16,9 @@ import styled.styledDiv
 
 private val scope = MainScope()
 
-fun RBuilder.dvdStore() = child(DvdStoreWindow.Component) {}
+fun RBuilder.dvdStore() = child(DvdRentalWindow.Component) {}
 
-object DvdStoreWindow {
+object DvdRentalWindow {
 
     val Component = functionalComponent<RProps> { _ ->
         val (age, setAge) = useState<Any>(DvdRentalDto.actor.path)

@@ -1,5 +1,6 @@
 package generated.model
 
+import java.io.File
 import kotlin.Boolean
 import kotlin.Double
 import kotlin.Int
@@ -20,7 +21,7 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.actor) = actor(source.actorId, source.firstName, source.lastName,
           source.lastUpdate)
-      fun loadCsv(pathname: String) = model.loadCsv<actor>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<actor>(file, header)}
   }
 
   data class address(
@@ -43,7 +44,7 @@ interface DvdRentalCsvLoader {
       fun create(source: DvdRental.address) = address(source.address, source.address2,
           source.address_id, source.city_id, source.district, source.last_update, source.phone,
           source.postal_code)
-      fun loadCsv(pathname: String) = model.loadCsv<address>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<address>(file, header)}
   }
 
   data class category(
@@ -59,7 +60,7 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.category) = category(source.category_id, source.last_update,
           source.name)
-      fun loadCsv(pathname: String) = model.loadCsv<category>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<category>(file, header)}
   }
 
   data class city(
@@ -76,7 +77,7 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.city) = city(source.city, source.city_id, source.country_id,
           source.last_update)
-      fun loadCsv(pathname: String) = model.loadCsv<city>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<city>(file, header)}
   }
 
   data class country(
@@ -92,7 +93,7 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.country) = country(source.country, source.country_id,
           source.last_update)
-      fun loadCsv(pathname: String) = model.loadCsv<country>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<country>(file, header)}
   }
 
   data class customer(
@@ -117,7 +118,7 @@ interface DvdRentalCsvLoader {
       fun create(source: DvdRental.customer) = customer(source.active, source.activebool,
           source.address_id, source.create_date, source.customer_id, source.email,
           source.first_name, source.last_name, source.last_update, source.store_id)
-      fun loadCsv(pathname: String) = model.loadCsv<customer>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<customer>(file, header)}
   }
 
   data class film(
@@ -146,7 +147,7 @@ interface DvdRentalCsvLoader {
           source.language_id, source.last_update, source.length, source.rating, source.release_year,
           source.rental_duration, source.rental_rate, source.replacement_cost,
           source.special_features, source.title)
-      fun loadCsv(pathname: String) = model.loadCsv<film>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<film>(file, header)}
   }
 
   data class film_actor(
@@ -162,7 +163,7 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.film_actor) = film_actor(source.actor_id, source.film_id,
           source.last_update)
-      fun loadCsv(pathname: String) = model.loadCsv<film_actor>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<film_actor>(file, header)}
   }
 
   data class film_category(
@@ -178,7 +179,7 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.film_category) = film_category(source.category_id,
           source.film_id, source.last_update)
-      fun loadCsv(pathname: String) = model.loadCsv<film_category>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<film_category>(file, header)}
   }
 
   data class inventory(
@@ -195,7 +196,7 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.inventory) = inventory(source.film_id, source.inventory_id,
           source.last_update, source.store_id)
-      fun loadCsv(pathname: String) = model.loadCsv<inventory>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<inventory>(file, header)}
   }
 
   data class language(
@@ -211,7 +212,7 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.language) = language(source.language_id, source.last_update,
           source.name)
-      fun loadCsv(pathname: String) = model.loadCsv<language>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<language>(file, header)}
   }
 
   data class payment(
@@ -231,7 +232,7 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.payment) = payment(source.amount, source.customer_id,
           source.payment_date, source.payment_id, source.rental_id, source.staff_id)
-      fun loadCsv(pathname: String) = model.loadCsv<payment>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<payment>(file, header)}
   }
 
   data class rental(
@@ -253,7 +254,7 @@ interface DvdRentalCsvLoader {
       fun create(source: DvdRental.rental) = rental(source.customer_id, source.inventory_id,
           source.last_update, source.rental_date, source.rental_id, source.return_date,
           source.staff_id)
-      fun loadCsv(pathname: String) = model.loadCsv<rental>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<rental>(file, header)}
   }
 
   data class staff(
@@ -279,7 +280,7 @@ interface DvdRentalCsvLoader {
       fun create(source: DvdRental.staff) = staff(source.active, source.address_id, source.email,
           source.first_name, source.last_name, source.last_update, source.password, source.picture,
           source.staff_id, source.store_id, source.username)
-      fun loadCsv(pathname: String) = model.loadCsv<staff>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<staff>(file, header)}
   }
 
   data class store(
@@ -296,6 +297,6 @@ interface DvdRentalCsvLoader {
 
       fun create(source: DvdRental.store) = store(source.address_id, source.last_update,
           source.manager_staff_id, source.store_id)
-      fun loadCsv(pathname: String) = model.loadCsv<store>(pathname, header)}
+      fun loadCsv(file: File) = model.loadCsv<store>(file, header)}
   }
 }

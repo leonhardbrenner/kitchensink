@@ -3,7 +3,6 @@ package generated.model
 import kotlin.String
 
 interface Seeds {
-
   interface BasicSeed {
     val description: String?
 
@@ -16,15 +15,7 @@ interface Seeds {
     val secondary_name: String
   }
 
-  interface Category {
-    val image: String
-
-    val link: String
-
-    val name: String
-  }
-
-  interface DetailedSeeds {
+  interface DetailedSeed {
     val description: String?
 
     val image: String?
@@ -36,6 +27,14 @@ interface Seeds {
     val name: String
 
     val secondary_name: String?
+  }
+
+  interface SeedCategory {
+    val image: String
+
+    val link: String
+
+    val name: String
   }
 
   interface SeedFacts {

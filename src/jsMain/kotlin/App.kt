@@ -51,14 +51,14 @@ class App : RComponent<RProps, RState>() {
                 mAppBar(position = MAppBarPosition.static) {
                     mTabs(tab1Value, onChange = { _, value -> setState { tab1Value = value } }) {
                         mTab("DvdStore", "dvd-store")
-                        mTab("JohnnySeeds", "johnny-seeds")
+                        mTab("Seeds", "seeds")
                         mTab("ShoppingList", "shopping-list")
                         mTab("Material UI Demo", "material-ui-demo")
                     }
                 }
                 when (tab1Value) {
                     "dvd-store" -> { dvdStore() }
-                    "johnny-seeds" -> { seeds() }
+                    "seeds" -> { seeds() }
                     "shopping-list" -> { shoppingList() }
                     "material-ui-demo" -> { materialUIDemo() }
                 }

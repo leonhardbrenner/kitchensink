@@ -8,12 +8,12 @@ import java.io.File
 import java.io.SequenceInputStream
 
 @OptIn(ExperimentalStdlibApi::class)
-inline fun <reified T> loadCsv(pathname: String, header: String): List<T> {
+inline fun <reified T> loadCsv(file: File, header: String): List<T> {
     val header = ReaderInputStream(CharSource.wrap("$header\n").openStream());
-    val file = File(pathname).inputStream()
+    val inputStream = file.inputStream()
     val csvContents = csvReader {
         delimiter = '\t'
         skipMissMatchedRow = true //Postgres ends it's csv files with \.
-    }.readAllWithHeader(SequenceInputStream(header, file))
+    }.readAllWithHeader(SequenceInputStream(header, inputStream))
     return grass<T>().harvest(csvContents)
 }

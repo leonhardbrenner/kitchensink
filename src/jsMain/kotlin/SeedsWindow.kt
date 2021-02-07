@@ -21,21 +21,21 @@ fun RBuilder.seeds() = child(SeedsWindow.Component) {}
 object SeedsWindow {
 
     val Component = functionalComponent<RProps> { _ ->
-        val (age, setAge) = useState<Any>(SeedsDto.DetailedSeeds.path)
+        val (age, setAge) = useState<Any>(SeedsDto.DetailedSeed.path)
 
         val inputProps: RProps = jsObject { }
         inputProps.asDynamic().name = "age"
         inputProps.asDynamic().id = "age-simple"
         mSelect(age, name = "age", onChange = { event, _ -> setAge(event.targetValue) }) {
             attrs.inputProps = inputProps
-            mMenuItem("Detailed Seed", value = SeedsDto.DetailedSeeds.path)
-            mMenuItem("Category", value = SeedsDto.Category.path)
+            mMenuItem("Detailed Seed", value = SeedsDto.DetailedSeed.path)
+            mMenuItem("Category", value = SeedsDto.SeedCategory.path)
             mMenuItem("Basic Seed", value = SeedsDto.BasicSeed.path)
             mMenuItem("Seed Fact", value = SeedsDto.SeedFacts.path)
         }
         when (age) {
-            SeedsDto.DetailedSeeds.path -> detailedSeed {}
-            SeedsDto.Category.path -> category {}
+            SeedsDto.DetailedSeed.path -> detailedSeed {}
+            SeedsDto.SeedCategory.path -> category {}
             SeedsDto.BasicSeed.path -> basicSeed {}
             SeedsDto.SeedFacts.path -> seedFacts {}
         }
@@ -108,17 +108,17 @@ object SeedsWindow {
 
     }
 
-    private class DetailedSeed(props: Props): DisplayComponent<Seeds.DetailedSeeds>(props) {
-        override suspend fun get(): List<Seeds.DetailedSeeds> = getSeedsDetailedSeed()
-        override fun Seeds.DetailedSeeds.label() = name
-        override fun Seeds.DetailedSeeds.transform() = name
+    private class DetailedSeed(props: Props): DisplayComponent<Seeds.DetailedSeed>(props) {
+        override suspend fun get(): List<Seeds.DetailedSeed> = getSeedsDetailedSeed()
+        override fun Seeds.DetailedSeed.label() = name
+        override fun Seeds.DetailedSeed.transform() = name
     }
     fun RBuilder.detailedSeed(handler: Props.() -> Unit) = child(DetailedSeed::class) { attrs { handler() } }
 
-    private class Category(props: Props): DisplayComponent<Seeds.Category>(props) {
-        override suspend fun get(): List<Seeds.Category> = getSeedsCategory()
-        override fun Seeds.Category.label() = name
-        override fun Seeds.Category.transform() = image
+    private class Category(props: Props): DisplayComponent<Seeds.SeedCategory>(props) {
+        override suspend fun get(): List<Seeds.SeedCategory> = getSeedsCategory()
+        override fun Seeds.SeedCategory.label() = name
+        override fun Seeds.SeedCategory.transform() = image
     }
     fun RBuilder.category(handler: Props.() -> Unit) = child(Category::class) { attrs { handler() } }
 
