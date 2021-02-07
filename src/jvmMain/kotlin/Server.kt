@@ -1,5 +1,5 @@
 import applications.DvdRentalApplication
-import applications.JohnnySeedsApplication
+import applications.SeedsApplication
 import applications.ShoppingListApplication
 import com.authzee.kotlinguice4.getInstance
 import com.google.inject.Guice
@@ -17,8 +17,8 @@ fun main() {
     DatabaseFactory.init()
     val shoppingListApplication = Guice.createInjector(ShoppingListApplication.Module)
         .getInstance<ShoppingListApplication>()
-    val johnnySeedsApplication = Guice.createInjector(JohnnySeedsApplication.Module)
-        .getInstance<JohnnySeedsApplication>()
+    val johnnySeedsApplication = Guice.createInjector(SeedsApplication.Module)
+        .getInstance<SeedsApplication>()
     val dvdRentalApplication = Guice.createInjector(DvdRentalApplication.Module)
         .getInstance<DvdRentalApplication>()
 

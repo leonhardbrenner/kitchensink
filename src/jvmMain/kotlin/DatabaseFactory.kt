@@ -1,6 +1,5 @@
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
-import generated.model.db.JohnnySeedsDb
 
 import com.typesafe.config.ConfigFactory
 import com.zaxxer.hikari.HikariConfig
@@ -19,7 +18,7 @@ object DatabaseFactory {
 
     fun init() {
         Database.connect(hikari())
-        dbManagers.JohnnySeedsDBManager.apply { drop(); create(); populate() }
+        dbManagers.SeedsDBManager.apply { drop(); create(); populate() }
         dbManagers.DvdRentalDBManager.apply { drop(); create(); populate() }
     }
 

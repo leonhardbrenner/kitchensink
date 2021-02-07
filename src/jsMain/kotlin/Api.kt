@@ -1,5 +1,5 @@
 import generated.model.DvdRentalDto
-import generated.model.JohnnySeedsDto
+import generated.model.SeedsDto
 import io.ktor.http.*
 import io.ktor.client.*
 import io.ktor.client.request.*
@@ -30,20 +30,20 @@ suspend fun deleteShoppingListItem(shoppingListItem: ShoppingListItem) {
     jsonClient.delete<Unit>(endpoint + ShoppingListItem.path + "/${shoppingListItem.id}")
 }
 
-suspend fun getJohnnySeedsDetailedSeed(): List<JohnnySeedsDto.DetailedSeeds> {
-    return jsonClient.get(endpoint + JohnnySeedsDto.DetailedSeeds.path)
+suspend fun getSeedsDetailedSeed(): List<SeedsDto.DetailedSeeds> {
+    return jsonClient.get(endpoint + SeedsDto.DetailedSeeds.path)
 }
 
-suspend fun getJohnnySeedsCategory(): List<JohnnySeedsDto.Category> {
-    return jsonClient.get(endpoint + JohnnySeedsDto.Category.path)
+suspend fun getSeedsCategory(): List<SeedsDto.Category> {
+    return jsonClient.get(endpoint + SeedsDto.Category.path)
 }
 
-suspend fun getJohnnySeedsBasicSeed(): List<JohnnySeedsDto.BasicSeed> {
-    return jsonClient.get(endpoint + JohnnySeedsDto.BasicSeed.path)
+suspend fun getSeedsBasicSeed(): List<SeedsDto.BasicSeed> {
+    return jsonClient.get(endpoint + SeedsDto.BasicSeed.path)
 }
 
-suspend fun getJohnnySeedsSeedFacts(): List<JohnnySeedsDto.SeedFacts> {
-    return jsonClient.get(endpoint + JohnnySeedsDto.SeedFacts.path)
+suspend fun getSeedsSeedFacts(): List<SeedsDto.SeedFacts> {
+    return jsonClient.get(endpoint + SeedsDto.SeedFacts.path)
 }
 
 suspend fun getDvdRentalActor(): List<DvdRentalDto.actor> {

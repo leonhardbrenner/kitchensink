@@ -9,19 +9,19 @@ import kotlinx.serialization.Serializable
 interface DvdRentalDto {
   @Serializable
   data class actor(
-    override val actor_id: Int,
-    override val first_name: String,
-    override val last_name: String,
-    override val last_update: String
+    override val actorId: Int,
+    override val firstName: String,
+    override val lastName: String,
+    override val lastUpdate: String
   ) : DvdRental.actor {
     companion object {
       final val path: String = "/DvdRental/actor"
 
-      final val header: String = "actor_id\tfirst_name\tlast_name\tlast_update"
+      final val header: String = "actorId\tfirstName\tlastName\tlastUpdate"
 
 
-      fun create(source: DvdRental.actor) = actor(source.actor_id, source.first_name,
-          source.last_name, source.last_update)}
+      fun create(source: DvdRental.actor) = actor(source.actorId, source.firstName, source.lastName,
+          source.lastUpdate)}
   }
 
   @Serializable

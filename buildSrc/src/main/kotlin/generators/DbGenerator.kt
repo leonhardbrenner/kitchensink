@@ -23,8 +23,7 @@ object DbGenerator: Generator {
                         val typeSpec = TypeSpec.objectBuilder(complexType.name)
                             .addType(complexType.table)
                             .addType(complexType.entity)
-                            .addFunction(complexType.create
-                            )
+                            .addFunction(complexType.create)
                             .addFunction(
                                 FunSpec.builder("fetchAll")
                                     .addCode(
@@ -54,7 +53,7 @@ object DbGenerator: Generator {
                     "builtin:boolean" -> "bool"
                     else -> "text"
                 }
-            }(\"${name}\")${if (type.nullable) ".nullable()" else ""}")
+            }(\"${dbName}\")${if (type.nullable) ".nullable()" else ""}")
             .build()
 
     val ComplexType.table

@@ -17,37 +17,37 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object DvdRentalDb {
   object actor {
-    fun create(source: ResultRow) = DvdRentalDto.actor(source[Table.actor_id],
-        source[Table.first_name], source[Table.last_name], source[Table.last_update])
+    fun create(source: ResultRow) = DvdRentalDto.actor(source[Table.actorId],
+        source[Table.firstName], source[Table.lastName], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("actor") {
-      val actor_id: Column<Int> = integer("actor_id")
+      val actorId: Column<Int> = integer("actor_id")
 
-      val first_name: Column<String> = text("first_name")
+      val firstName: Column<String> = text("first_name")
 
-      val last_name: Column<String> = text("last_name")
+      val lastName: Column<String> = text("last_name")
 
-      val last_update: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("last_update")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.actor {
-      override var actor_id: Int by Table.actor_id
+      override var actorId: Int by Table.actorId
 
-      override var first_name: String by Table.first_name
+      override var firstName: String by Table.firstName
 
-      override var last_name: String by Table.last_name
+      override var lastName: String by Table.lastName
 
-      override var last_update: String by Table.last_update
+      override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
         fun create(source: DvdRental.actor) {
           Entity.new {
-            actor_id = source.actor_id
-            first_name = source.first_name
-            last_name = source.last_name
-            last_update = source.last_update
+            actorId = source.actorId
+            firstName = source.firstName
+            lastName = source.lastName
+            lastUpdate = source.lastUpdate
           }
         }
       }

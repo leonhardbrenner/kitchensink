@@ -6,16 +6,16 @@ val dvdRentalsNew = Manifest.namespace("DvdRental") {
     //COPY public.actor (actor_id, first_name, last_name, last_update) FROM '$$PATH$$/3057.dat';
     //This causes a stacktrace and what is below does not actually make entries into our complexTypeMap.
     complexType("actor") {
-        element("actor_id", "builtin:int") {
+        element("actorId", "builtin:int") {
             db("actor_id", "integer DEFAULT nextval(\"public.actor_actor_id_seq\"::regclass) NOT NULL")
         }
-        element("first_name", "builtin:string") {
+        element("firstName", "builtin:string") {
             db("first_name", "character varying(45) NOT NULL")
         }
-        element("last_name", "builtin:string") {
+        element("lastName", "builtin:string") {
             db("last_name", "character varying(45) NOT NULL")
         }
-        element("last_update", "builtin:string") {
+        element("lastUpdate", "builtin:string") {
             db("last_update", "timestamp without time zone DEFAULT now() NOT NULL")
         }
     }

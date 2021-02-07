@@ -108,8 +108,8 @@ object DvdStoreWindow {
 
     private class Actor(props: Props): DisplayComponent<DvdRental.actor>(props) {
         override suspend fun get(): List<DvdRental.actor> = getDvdRentalActor()
-        override fun DvdRental.actor.label() = "$first_name $last_name"
-        override fun DvdRental.actor.transform() = actor_id.toString()
+        override fun DvdRental.actor.label() = "$firstName $lastName"
+        override fun DvdRental.actor.transform() = actorId.toString()
     }
     fun RBuilder.actor(handler: Props.() -> Unit) = child(Actor::class) { attrs { handler() } }
 

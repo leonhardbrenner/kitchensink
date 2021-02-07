@@ -101,11 +101,12 @@ open class Element(
     class Db(val name: String, val schema: String)
     fun db(name: String, schema: String) = Db(name, schema).let { db = it }
 
-    //val type get() = block?.let { block -> ComplexType(namespace, parent, name, block) }?:typeRef!! //TODO add xor assert
+    val dbName get() = db?.name?:name
+
     init {
         if (parent != null) {
             parent.elementMap[name] = this
-            type?.let { it ->
+            type.let { it ->
                 parent.typeMap[name] = it
                 if (it is ComplexType) { //TODO - Encapsulate this
                     parent.complexTypeMap[name] = it
@@ -113,7 +114,7 @@ open class Element(
             }
         } else {
             namespace.elementMap[name] = this
-            type?.let { it ->
+            type.let { it ->
                 namespace.typeMap[name] = it
                 if (it is ComplexType) { //TODO - Encapsulate this
                     namespace.complexTypeMap[name] = it

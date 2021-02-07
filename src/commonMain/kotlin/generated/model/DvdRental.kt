@@ -7,13 +7,13 @@ import kotlin.String
 
 interface DvdRental {
   interface actor {
-    val actor_id: Int
+    val actorId: Int
 
-    val first_name: String
+    val firstName: String
 
-    val last_name: String
+    val lastName: String
 
-    val last_update: String
+    val lastUpdate: String
   }
 
   interface address {

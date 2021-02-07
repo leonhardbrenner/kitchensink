@@ -2,7 +2,8 @@ package generated.model
 
 import kotlin.String
 
-interface JohnnySeeds {
+interface Seeds {
+
   interface BasicSeed {
     val description: String?
 

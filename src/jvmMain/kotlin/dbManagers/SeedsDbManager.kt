@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.KotlinModule
 import com.fasterxml.jackson.module.kotlin.readValue
 import generated.model.DvdRentalCsvLoader
-import generated.model.JohnnySeedsDto
+import generated.model.SeedsDto
 import generated.model.db.DvdRentalDb
-import generated.model.db.JohnnySeedsDb
+import generated.model.db.SeedsDb
 import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.io.File
@@ -15,68 +15,68 @@ import javax.inject.Inject
 fun resource(path: String) = File(ClassLoader.getSystemResource(path).file)
 fun resourceText(path: String) = resource(path).readText()
 
-class JohnnySeedsService @Inject constructor(val kMapper: ObjectMapper) {
+class SeedsService @Inject constructor(val kMapper: ObjectMapper) {
 
     //TODO - get this working
     inline fun <reified T> fromJson(path: String): List<T> = kMapper.readValue(
         File(ClassLoader.getSystemResource(path).file).readText()
     )
 
-    val detailedSeeds: List<JohnnySeedsDto.DetailedSeeds>
+    val detailedSeeds: List<SeedsDto.DetailedSeeds>
         get() = kMapper.readValue(
-            resourceText("johnnyseeds/detailed-seeds.json")
+            resourceText("seeds/detailed-seeds.json")
         )
 
-    val categories: List<JohnnySeedsDto.Category>
+    val categories: List<SeedsDto.Category>
         get() = kMapper.readValue(
-            resourceText("johnnyseeds/categories.json")
+            resourceText("seeds/categories.json")
         )
 
-    val basicSeeds: List<JohnnySeedsDto.BasicSeed>
+    val basicSeeds: List<SeedsDto.BasicSeed>
         get() = kMapper.readValue(
-            resourceText("johnnyseeds/basic-seeds.json")
+            resourceText("seeds/basic-seeds.json")
         )
 
-    val seedFacts: List<JohnnySeedsDto.SeedFacts>
+    val seedFacts: List<SeedsDto.SeedFacts>
         get() = kMapper.readValue(
-            resourceText("johnnyseeds/strawberry-seeds.json")
+            resourceText("seeds/strawberry-seeds.json")
         )
 
 }
 
-object JohnnySeedsDBManager {
+object SeedsDBManager {
     val kMapper = ObjectMapper().registerModule(KotlinModule())
 
     fun drop() = transaction {
-        SchemaUtils.drop(JohnnySeedsDb.DetailedSeeds.Table)
-        SchemaUtils.drop(JohnnySeedsDb.Category.Table)
-        SchemaUtils.drop(JohnnySeedsDb.BasicSeed.Table)
-        SchemaUtils.drop(JohnnySeedsDb.SeedFacts.Table)
+        SchemaUtils.drop(SeedsDb.DetailedSeeds.Table)
+        SchemaUtils.drop(SeedsDb.Category.Table)
+        SchemaUtils.drop(SeedsDb.BasicSeed.Table)
+        SchemaUtils.drop(SeedsDb.SeedFacts.Table)
     }
     fun create() = transaction {
-        SchemaUtils.create(JohnnySeedsDb.DetailedSeeds.Table)
-        SchemaUtils.create(JohnnySeedsDb.Category.Table)
-        SchemaUtils.create(JohnnySeedsDb.BasicSeed.Table)
-        SchemaUtils.create(JohnnySeedsDb.SeedFacts.Table)
+        SchemaUtils.create(SeedsDb.DetailedSeeds.Table)
+        SchemaUtils.create(SeedsDb.Category.Table)
+        SchemaUtils.create(SeedsDb.BasicSeed.Table)
+        SchemaUtils.create(SeedsDb.SeedFacts.Table)
     }
     fun populate() = transaction {
-        JohnnySeedsService(kMapper).detailedSeeds
+        SeedsService(kMapper).detailedSeeds
             .forEach { source ->
-                JohnnySeedsDb.DetailedSeeds.Entity.create(source)
+                SeedsDb.DetailedSeeds.Entity.create(source)
                 println("Creating ${source.name}")
             }
-        JohnnySeedsService(kMapper).categories
+        SeedsService(kMapper).categories
             .forEach { source ->
-                JohnnySeedsDb.Category.Entity.create(source)
+                SeedsDb.Category.Entity.create(source)
                 println("Creating ${source.name}")
             }
-        JohnnySeedsService(kMapper).basicSeeds.forEach { source ->
-            JohnnySeedsDb.BasicSeed.Entity.create(source)
+        SeedsService(kMapper).basicSeeds.forEach { source ->
+            SeedsDb.BasicSeed.Entity.create(source)
             println("Creating ${source.name}")
         }
         //XXX - bring this back when you get List<> working.
-        //JohnnySeedsService(getKMapper).seedFacts.forEach { //source ->
-        //    JohnnySeedsDb.SeedFacts.Entity.create(source)
+        //SeedsService(getKMapper).seedFacts.forEach { //source ->
+        //    SeedsDb.SeedFacts.Entity.create(source)
         //}
     }
 }
@@ -99,7 +99,7 @@ object DvdRentalDBManager {
     fun populate() = transaction {
         DvdRentalCsvLoader.actor.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3057.dat").forEach { source ->
             DvdRentalDb.actor.Entity.create(source)
-            println("Creating ${source.first_name} ${source.last_name}")
+            println("Creating ${source.firstName} ${source.lastName}")
         }
         //XXX
         //DvdRentalCsvLoader.address.loadCsv("/home/lbrenner/projects/kitchensink/dvdrental/3065.dat").forEach { source ->

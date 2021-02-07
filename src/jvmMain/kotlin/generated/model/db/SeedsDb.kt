@@ -1,7 +1,7 @@
 package generated.model.db
 
-import generated.model.JohnnySeeds
-import generated.model.JohnnySeedsDto
+import generated.model.Seeds
+import generated.model.SeedsDto
 import kotlin.Int
 import kotlin.String
 import org.jetbrains.exposed.dao.IntEntity
@@ -13,9 +13,10 @@ import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-object JohnnySeedsDb {
+object SeedsDb {
+
   object BasicSeed {
-    fun create(source: ResultRow) = JohnnySeedsDto.BasicSeed(source[Table.description],
+    fun create(source: ResultRow) = SeedsDto.BasicSeed(source[Table.description],
         source[Table.image], source[Table.link], source[Table.name], source[Table.secondary_name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("BasicSeed") {
@@ -32,7 +33,7 @@ object JohnnySeedsDb {
 
     class Entity(
       id: EntityID<Int>
-    ) : IntEntity(id), generated.model.JohnnySeeds.BasicSeed {
+    ) : IntEntity(id), generated.model.Seeds.BasicSeed {
       override var description: String? by Table.description
 
       override var image: String by Table.image
@@ -44,7 +45,7 @@ object JohnnySeedsDb {
       override var secondary_name: String by Table.secondary_name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: JohnnySeeds.BasicSeed) {
+        fun create(source: Seeds.BasicSeed) {
           Entity.new {
             description = source.description
             image = source.image
@@ -58,7 +59,7 @@ object JohnnySeedsDb {
   }
 
   object Category {
-    fun create(source: ResultRow) = JohnnySeedsDto.Category(source[Table.image], source[Table.link],
+    fun create(source: ResultRow) = SeedsDto.Category(source[Table.image], source[Table.link],
         source[Table.name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Category") {
@@ -71,7 +72,7 @@ object JohnnySeedsDb {
 
     class Entity(
       id: EntityID<Int>
-    ) : IntEntity(id), generated.model.JohnnySeeds.Category {
+    ) : IntEntity(id), generated.model.Seeds.Category {
       override var image: String by Table.image
 
       override var link: String by Table.link
@@ -79,7 +80,7 @@ object JohnnySeedsDb {
       override var name: String by Table.name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: JohnnySeeds.Category) {
+        fun create(source: Seeds.Category) {
           Entity.new {
             image = source.image
             link = source.link
@@ -91,7 +92,7 @@ object JohnnySeedsDb {
   }
 
   object DetailedSeeds {
-    fun create(source: ResultRow) = JohnnySeedsDto.DetailedSeeds(source[Table.description],
+    fun create(source: ResultRow) = SeedsDto.DetailedSeeds(source[Table.description],
         source[Table.image], source[Table.link], source[Table.maturity], source[Table.name],
         source[Table.secondary_name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
@@ -111,7 +112,7 @@ object JohnnySeedsDb {
 
     class Entity(
       id: EntityID<Int>
-    ) : IntEntity(id), generated.model.JohnnySeeds.DetailedSeeds {
+    ) : IntEntity(id), generated.model.Seeds.DetailedSeeds {
       override var description: String? by Table.description
 
       override var image: String? by Table.image
@@ -125,7 +126,7 @@ object JohnnySeedsDb {
       override var secondary_name: String? by Table.secondary_name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: JohnnySeeds.DetailedSeeds) {
+        fun create(source: Seeds.DetailedSeeds) {
           Entity.new {
             description = source.description
             image = source.image
@@ -140,7 +141,7 @@ object JohnnySeedsDb {
   }
 
   object SeedFacts {
-    fun create(source: ResultRow) = JohnnySeedsDto.SeedFacts(source[Table.facts],
+    fun create(source: ResultRow) = SeedsDto.SeedFacts(source[Table.facts],
         source[Table.maturity], source[Table.name])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("SeedFacts") {
@@ -153,7 +154,7 @@ object JohnnySeedsDb {
 
     class Entity(
       id: EntityID<Int>
-    ) : IntEntity(id), generated.model.JohnnySeeds.SeedFacts {
+    ) : IntEntity(id), generated.model.Seeds.SeedFacts {
       override var facts: String? by Table.facts
 
       override var maturity: String? by Table.maturity
@@ -161,7 +162,7 @@ object JohnnySeedsDb {
       override var name: String by Table.name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: JohnnySeeds.SeedFacts) {
+        fun create(source: Seeds.SeedFacts) {
           Entity.new {
             facts = source.facts
             maturity = source.maturity

@@ -58,7 +58,7 @@ class App : RComponent<RProps, RState>() {
                 }
                 when (tab1Value) {
                     "dvd-store" -> { dvdStore() }
-                    "johnny-seeds" -> { johnnySeeds() }
+                    "johnny-seeds" -> { seeds() }
                     "shopping-list" -> { shoppingList() }
                     "material-ui-demo" -> { materialUIDemo() }
                 }
