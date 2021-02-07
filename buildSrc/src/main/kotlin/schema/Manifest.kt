@@ -1,9 +1,11 @@
 package schemanew
 
 import com.squareup.kotlinpoet.*
+import org.codehaus.groovy.runtime.DefaultGroovyMethods.printf
 import kotlin.collections.HashMap
 import kotlin.reflect.KClass
 
+//TODO - put this behind an interface.
 object Manifest {
 
     val namespaceMap = HashMap<String, Namespace>()
@@ -64,7 +66,7 @@ class Namespace(val name: String, block: Namespace.() -> Unit) {
         typeMap[name] = simpleType
     }
 
-    fun element(name: String, typeRef: String? = null, nullable: Boolean = false, block: (ComplexType.() -> Unit)? = null) {
+    fun element(name: String, typeRef: String? = null, nullable: Boolean = false, block: Element.() -> Unit = {}) {
         Element(this, null, name, nullable, typeRef, block)
     }
 
@@ -79,18 +81,25 @@ open class Element(
     val name: String,
     val nullable: Boolean = false, //XXX - this should either be on element or type.
     typeRef: String?,
-    val block: (ComplexType.() -> Unit)? = null
+    val block: Element.() -> Unit = {}
 ) {
+
+    init {
+        block()
+    }
+
     val columnName = name //XXX - this should be a parameter.
+
     val typeRef = if (typeRef != null)
         TypeRef(namespace, typeRef)
     else
         null
 
-    val type: Type get() = if (block != null)
-        complexType(name, nullable, block)
-    else
-        typeRef!! //TODO - xor assert and ^^^ XXX actually I think we can assume a simple type here
+    val type: Type get() = typeRef!! //TODO - xor assert and ^^^ XXX actually I think we can assume a simple type here
+
+    var db: Db? = null
+    class Db(val name: String, val schema: String)
+    fun db(name: String, schema: String) = Db(name, schema).let { db = it }
 
     //val type get() = block?.let { block -> ComplexType(namespace, parent, name, block) }?:typeRef!! //TODO add xor assert
     init {
@@ -112,12 +121,14 @@ open class Element(
             }
         }
     }
+
     fun complexType(name: String, nullable: Boolean = false, block: ComplexType.() -> Unit): ComplexType {
         return if (parent != null)
             parent.complexType(name, block)
         else
             namespace.complexType(name, nullable, block)
     }
+
     fun asPropertySpec(mutable: Boolean, vararg modifiers: KModifier) = PropertySpec.builder(
         name,
         type.typeName
@@ -126,8 +137,11 @@ open class Element(
 }
 
 open class Attribute(val namespace: Namespace, val parent: ComplexType?, val name: String, typeRef: String?) {
+
     val elements = HashMap<String, Element>()
+
     val typeRef = typeRef?.let { TypeRef(namespace, it) }
+
 }
 
 interface Type {
@@ -159,6 +173,7 @@ class TypeRef(
             } else if (namespace.typeMap.containsKey(name)) {
                 namespace.typeMap[name]!!.typeName
             } else {
+                println("We are going to blow: ${namespace.name} $name")
                 ClassName("", "")
             }
         }
@@ -210,7 +225,7 @@ open class ComplexType(
     }
     fun attribute(name: String, typeRef: String? = null) =
         Attribute(namespace, this, name, typeRef)
-    fun element(name: String, typeRef: String? = null, block: (ComplexType.() -> Unit)? = null) {
+    fun element(name: String, typeRef: String? = null, block: Element.() -> Unit = {}) {
         Element(namespace, this, name, nullable, typeRef, block)
     }
     override val typeName get() = ClassName("", name)

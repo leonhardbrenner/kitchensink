@@ -3,7 +3,7 @@ package models
 import schemanew.Manifest
 
 val seeds = Manifest.namespace("JohnnySeeds") {
-    element("BasicSeed") {
+    complexType("BasicSeed") {
         element("name", "builtin:string")
         element("secondary_name", "builtin:string")
         element("description", "builtin:nullableString")
@@ -11,13 +11,12 @@ val seeds = Manifest.namespace("JohnnySeeds") {
         element("link", "builtin:string")
     }
 
-    element("Category") {
+    complexType("Category") {
         element("name", "builtin:string")
         element("image", "builtin:string")
         element("link", "builtin:string")
     }
 
-    element("DetailedSeeds", "DetailedSeed")
     complexType("DetailedSeeds") {
         element("name", "builtin:string")
         element("maturity", "builtin:nullableString")
@@ -27,7 +26,7 @@ val seeds = Manifest.namespace("JohnnySeeds") {
         element("link", "builtin:nullableString")
     }
 
-    element("SeedFacts") {
+    complexType("SeedFacts") {
         element("name", "builtin:string")
         //TODO - This should be a list
         element("facts", "builtin:nullableString")
