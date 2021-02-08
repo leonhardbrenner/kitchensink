@@ -13,10 +13,7 @@ interface SeedsDto {
     override val secondary_name: String
   ) : Seeds.BasicSeed {
     companion object {
-      final val path: String = "/Seeds/BasicSeed"
-
-      final val header: String = "description\timage\tlink\tname\tsecondary_name"
-
+      val path: String = "/Seeds/BasicSeed"
 
       fun create(source: Seeds.BasicSeed) = BasicSeed(source.description, source.image, source.link,
           source.name, source.secondary_name)}
@@ -32,10 +29,7 @@ interface SeedsDto {
     override val secondary_name: String?
   ) : Seeds.DetailedSeed {
     companion object {
-      final val path: String = "/Seeds/DetailedSeed"
-
-      final val header: String = "description\timage\tlink\tmaturity\tname\tsecondary_name"
-
+      val path: String = "/Seeds/DetailedSeed"
 
       fun create(source: Seeds.DetailedSeed) = DetailedSeed(source.description, source.image,
           source.link, source.maturity, source.name, source.secondary_name)}
@@ -48,10 +42,7 @@ interface SeedsDto {
     override val name: String
   ) : Seeds.SeedCategory {
     companion object {
-      final val path: String = "/Seeds/SeedCategory"
-
-      final val header: String = "image\tlink\tname"
-
+      val path: String = "/Seeds/SeedCategory"
 
       fun create(source: Seeds.SeedCategory) = SeedCategory(source.image, source.link, source.name)}
   }
@@ -63,10 +54,7 @@ interface SeedsDto {
     override val name: String
   ) : Seeds.SeedFacts {
     companion object {
-      final val path: String = "/Seeds/SeedFacts"
-
-      final val header: String = "facts\tmaturity\tname"
-
+      val path: String = "/Seeds/SeedFacts"
 
       fun create(source: Seeds.SeedFacts) = SeedFacts(source.facts, source.maturity, source.name)}
   }

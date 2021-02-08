@@ -15,10 +15,7 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Actor {
     companion object {
-      final val path: String = "/DvdRental/Actor"
-
-      final val header: String = "actorId\tfirstName\tlastName\tlastUpdate"
-
+      val path: String = "/DvdRental/Actor"
 
       fun create(source: DvdRental.Actor) = Actor(source.actorId, source.firstName, source.lastName,
           source.lastUpdate)}
@@ -36,11 +33,7 @@ interface DvdRentalDto {
     override val postalCode: String?
   ) : DvdRental.Address {
     companion object {
-      final val path: String = "/DvdRental/Address"
-
-      final val header: String =
-          "address\taddress2\taddressId\tcityId\tdistrict\tlastUpdate\tphone\tpostalCode"
-
+      val path: String = "/DvdRental/Address"
 
       fun create(source: DvdRental.Address) = Address(source.address, source.address2,
           source.addressId, source.cityId, source.district, source.lastUpdate, source.phone,
@@ -54,10 +47,7 @@ interface DvdRentalDto {
     override val name: String
   ) : DvdRental.Category {
     companion object {
-      final val path: String = "/DvdRental/Category"
-
-      final val header: String = "categoryId\tlastUpdate\tname"
-
+      val path: String = "/DvdRental/Category"
 
       fun create(source: DvdRental.Category) = Category(source.categoryId, source.lastUpdate,
           source.name)}
@@ -71,10 +61,7 @@ interface DvdRentalDto {
     override val lastUpdate: Int
   ) : DvdRental.City {
     companion object {
-      final val path: String = "/DvdRental/City"
-
-      final val header: String = "city\tcityId\tcountryId\tlastUpdate"
-
+      val path: String = "/DvdRental/City"
 
       fun create(source: DvdRental.City) = City(source.city, source.cityId, source.countryId,
           source.lastUpdate)}
@@ -87,10 +74,7 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Country {
     companion object {
-      final val path: String = "/DvdRental/Country"
-
-      final val header: String = "country\tcountryId\tlastUpdate"
-
+      val path: String = "/DvdRental/Country"
 
       fun create(source: DvdRental.Country) = Country(source.country, source.countryId,
           source.lastUpdate)}
@@ -110,11 +94,7 @@ interface DvdRentalDto {
     override val storeId: Int
   ) : DvdRental.Customer {
     companion object {
-      final val path: String = "/DvdRental/Customer"
-
-      final val header: String =
-          "active\tactivebool\taddressId\tcreateDate\tcustomerId\temail\tfirstName\tlastName\tlastUpdate\tstoreId"
-
+      val path: String = "/DvdRental/Customer"
 
       fun create(source: DvdRental.Customer) = Customer(source.active, source.activebool,
           source.addressId, source.createDate, source.customerId, source.email, source.firstName,
@@ -138,11 +118,7 @@ interface DvdRentalDto {
     override val title: String
   ) : DvdRental.Film {
     companion object {
-      final val path: String = "/DvdRental/Film"
-
-      final val header: String =
-          "description\tfilmId\tfullText\tlanguageId\tlastUpdate\tlength\trating\treleaseYear\trentalDuration\trentalRate\treplacementCost\tspecialFeatures\ttitle"
-
+      val path: String = "/DvdRental/Film"
 
       fun create(source: DvdRental.Film) = Film(source.description, source.filmId, source.fullText,
           source.languageId, source.lastUpdate, source.length, source.rating, source.releaseYear,
@@ -157,10 +133,7 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.FilmActor {
     companion object {
-      final val path: String = "/DvdRental/FilmActor"
-
-      final val header: String = "actorId\tfilmId\tlastUpdate"
-
+      val path: String = "/DvdRental/FilmActor"
 
       fun create(source: DvdRental.FilmActor) = FilmActor(source.actorId, source.filmId,
           source.lastUpdate)}
@@ -173,10 +146,7 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.FilmCategory {
     companion object {
-      final val path: String = "/DvdRental/FilmCategory"
-
-      final val header: String = "categoryId\tfilmId\tlastUpdate"
-
+      val path: String = "/DvdRental/FilmCategory"
 
       fun create(source: DvdRental.FilmCategory) = FilmCategory(source.categoryId, source.filmId,
           source.lastUpdate)}
@@ -190,10 +160,7 @@ interface DvdRentalDto {
     override val storeId: Int
   ) : DvdRental.Inventory {
     companion object {
-      final val path: String = "/DvdRental/Inventory"
-
-      final val header: String = "filmId\tinventoryId\tlastUpdate\tstoreId"
-
+      val path: String = "/DvdRental/Inventory"
 
       fun create(source: DvdRental.Inventory) = Inventory(source.filmId, source.inventoryId,
           source.lastUpdate, source.storeId)}
@@ -206,10 +173,7 @@ interface DvdRentalDto {
     override val name: String
   ) : DvdRental.Language {
     companion object {
-      final val path: String = "/DvdRental/Language"
-
-      final val header: String = "languageId\tlastUpdate\tname"
-
+      val path: String = "/DvdRental/Language"
 
       fun create(source: DvdRental.Language) = Language(source.languageId, source.lastUpdate,
           source.name)}
@@ -225,10 +189,7 @@ interface DvdRentalDto {
     override val staffId: Int
   ) : DvdRental.Payment {
     companion object {
-      final val path: String = "/DvdRental/Payment"
-
-      final val header: String = "amount\tcustomerId\tpaymentDate\tpaymentId\trentalId\tstaffId"
-
+      val path: String = "/DvdRental/Payment"
 
       fun create(source: DvdRental.Payment) = Payment(source.amount, source.customerId,
           source.paymentDate, source.paymentId, source.rentalId, source.staffId)}
@@ -245,11 +206,7 @@ interface DvdRentalDto {
     override val staffId: Int
   ) : DvdRental.Rental {
     companion object {
-      final val path: String = "/DvdRental/Rental"
-
-      final val header: String =
-          "customerId\tinventoryId\tlastUpdate\trentalDate\trentalId\treturnDate\tstaffId"
-
+      val path: String = "/DvdRental/Rental"
 
       fun create(source: DvdRental.Rental) = Rental(source.customerId, source.inventoryId,
           source.lastUpdate, source.rentalDate, source.rentalId, source.returnDate, source.staffId)}
@@ -270,11 +227,7 @@ interface DvdRentalDto {
     override val username: String
   ) : DvdRental.Staff {
     companion object {
-      final val path: String = "/DvdRental/Staff"
-
-      final val header: String =
-          "active\taddressId\temail\tfirstName\tlastName\tlastUpdate\tpassword\tpicture\tstaffId\tstoreId\tusername"
-
+      val path: String = "/DvdRental/Staff"
 
       fun create(source: DvdRental.Staff) = Staff(source.active, source.addressId, source.email,
           source.firstName, source.lastName, source.lastUpdate, source.password, source.picture,
@@ -289,10 +242,7 @@ interface DvdRentalDto {
     override val storeId: Int
   ) : DvdRental.Store {
     companion object {
-      final val path: String = "/DvdRental/Store"
-
-      final val header: String = "addressId\tlastUpdate\tmanagerStaffId\tstoreId"
-
+      val path: String = "/DvdRental/Store"
 
       fun create(source: DvdRental.Store) = Store(source.addressId, source.lastUpdate,
           source.managerStaffId, source.storeId)}

@@ -44,7 +44,7 @@ object SeedsDb {
       override var secondary_name: String by Table.secondary_name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: Seeds.BasicSeed) {
+        fun insert(source: Seeds.BasicSeed) {
           Entity.new {
             description = source.description
             image = source.image
@@ -92,7 +92,7 @@ object SeedsDb {
       override var secondary_name: String? by Table.secondary_name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: Seeds.DetailedSeed) {
+        fun insert(source: Seeds.DetailedSeed) {
           Entity.new {
             description = source.description
             image = source.image
@@ -128,7 +128,7 @@ object SeedsDb {
       override var name: String by Table.name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: Seeds.SeedCategory) {
+        fun insert(source: Seeds.SeedCategory) {
           Entity.new {
             image = source.image
             link = source.link
@@ -161,7 +161,7 @@ object SeedsDb {
       override var name: String by Table.name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: Seeds.SeedFacts) {
+        fun insert(source: Seeds.SeedFacts) {
           Entity.new {
             facts = source.facts
             maturity = source.maturity

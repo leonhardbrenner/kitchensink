@@ -62,16 +62,16 @@ object SeedsDBManager {
     fun populate() = transaction {
         SeedsService(kMapper).detailedSeeds
             .forEach { source ->
-                SeedsDb.DetailedSeed.Entity.create(source)
+                SeedsDb.DetailedSeed.Entity.insert(source)
                 println("Creating ${source.name}")
             }
         SeedsService(kMapper).categories
             .forEach { source ->
-                SeedsDb.SeedCategory.Entity.create(source)
+                SeedsDb.SeedCategory.Entity.insert(source)
                 println("Creating ${source.name}")
             }
         SeedsService(kMapper).basicSeeds.forEach { source ->
-            SeedsDb.BasicSeed.Entity.create(source)
+            SeedsDb.BasicSeed.Entity.insert(source)
             println("Creating ${source.name}")
         }
         //XXX - bring this back when you get List<> working.
@@ -98,7 +98,7 @@ object DvdRentalDBManager {
     }
     fun populate() = transaction {
         DvdRentalCsvLoader.Actor.loadCsv(resource("dvdrental/3057.dat")).forEach { source ->
-            DvdRentalDb.Actor.Entity.create(source)
+            DvdRentalDb.Actor.Entity.insert(source)
             println("Creating ${source.firstName} ${source.lastName}")
         }
         //XXX
@@ -107,7 +107,7 @@ object DvdRentalDBManager {
         //    println("Creating ${source.address} ${source.phone}")
         //}
         DvdRentalCsvLoader.Category.loadCsv(resource("dvdrental/3059.dat")).forEach { source ->
-            DvdRentalDb.Category.Entity.create(source)
+            DvdRentalDb.Category.Entity.insert(source)
             println("Creating ${source.name}")
         }
     }

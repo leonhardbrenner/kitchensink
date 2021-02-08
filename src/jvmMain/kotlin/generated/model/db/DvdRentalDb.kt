@@ -42,7 +42,7 @@ object DvdRentalDb {
       override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Actor) {
+        fun insert(source: DvdRental.Actor) {
           Entity.new {
             actorId = source.actorId
             firstName = source.firstName
@@ -98,7 +98,7 @@ object DvdRentalDb {
       override var postalCode: String? by Table.postalCode
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Address) {
+        fun insert(source: DvdRental.Address) {
           Entity.new {
             address = source.address
             address2 = source.address2
@@ -136,7 +136,7 @@ object DvdRentalDb {
       override var name: String by Table.name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Category) {
+        fun insert(source: DvdRental.Category) {
           Entity.new {
             categoryId = source.categoryId
             lastUpdate = source.lastUpdate
@@ -173,7 +173,7 @@ object DvdRentalDb {
       override var lastUpdate: Int by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.City) {
+        fun insert(source: DvdRental.City) {
           Entity.new {
             city = source.city
             cityId = source.cityId
@@ -207,7 +207,7 @@ object DvdRentalDb {
       override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Country) {
+        fun insert(source: DvdRental.Country) {
           Entity.new {
             country = source.country
             countryId = source.countryId
@@ -270,7 +270,7 @@ object DvdRentalDb {
       override var storeId: Int by Table.storeId
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Customer) {
+        fun insert(source: DvdRental.Customer) {
           Entity.new {
             active = source.active
             activebool = source.activebool
@@ -353,7 +353,7 @@ object DvdRentalDb {
       override var title: String by Table.title
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Film) {
+        fun insert(source: DvdRental.Film) {
           Entity.new {
             description = source.description
             filmId = source.filmId
@@ -396,7 +396,7 @@ object DvdRentalDb {
       override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.FilmActor) {
+        fun insert(source: DvdRental.FilmActor) {
           Entity.new {
             actorId = source.actorId
             filmId = source.filmId
@@ -429,7 +429,7 @@ object DvdRentalDb {
       override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.FilmCategory) {
+        fun insert(source: DvdRental.FilmCategory) {
           Entity.new {
             categoryId = source.categoryId
             filmId = source.filmId
@@ -466,7 +466,7 @@ object DvdRentalDb {
       override var storeId: Int by Table.storeId
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Inventory) {
+        fun insert(source: DvdRental.Inventory) {
           Entity.new {
             filmId = source.filmId
             inventoryId = source.inventoryId
@@ -500,7 +500,7 @@ object DvdRentalDb {
       override var name: String by Table.name
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Language) {
+        fun insert(source: DvdRental.Language) {
           Entity.new {
             languageId = source.languageId
             lastUpdate = source.lastUpdate
@@ -546,7 +546,7 @@ object DvdRentalDb {
       override var staffId: Int by Table.staffId
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Payment) {
+        fun insert(source: DvdRental.Payment) {
           Entity.new {
             amount = source.amount
             customerId = source.customerId
@@ -599,7 +599,7 @@ object DvdRentalDb {
       override var staffId: Int by Table.staffId
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Rental) {
+        fun insert(source: DvdRental.Rental) {
           Entity.new {
             customerId = source.customerId
             inventoryId = source.inventoryId
@@ -670,7 +670,7 @@ object DvdRentalDb {
       override var username: String by Table.username
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Staff) {
+        fun insert(source: DvdRental.Staff) {
           Entity.new {
             active = source.active
             addressId = source.addressId
@@ -715,7 +715,7 @@ object DvdRentalDb {
       override var storeId: Int by Table.storeId
 
       companion object : IntEntityClass<Entity>(Table) {
-        fun create(source: DvdRental.Store) {
+        fun insert(source: DvdRental.Store) {
           Entity.new {
             addressId = source.addressId
             lastUpdate = source.lastUpdate

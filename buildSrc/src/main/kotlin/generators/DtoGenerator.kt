@@ -33,16 +33,10 @@ object DtoGenerator: Generator {
                             }
                             .addType(
                                 TypeSpec.companionObjectBuilder().apply {
-                                    val propertySpec = PropertySpec.builder("path", String::class, KModifier.FINAL)
+                                    val propertySpec = PropertySpec.builder("path", String::class)
                                         .initializer("\"${type.path}\"")
-                                        //.mutable(true)
                                         .build()
                                     addProperty(propertySpec)
-                                    addProperty(
-                                        PropertySpec.builder("header", String::class, KModifier.FINAL)
-                                            .initializer("%S\n", type.elements.map { it.columnName }.joinToString("\t"))
-                                            .build()
-                                    )
                                     addFunction(
                                         FunSpec.builder("create")
                                             .addParameter("source", ClassName(type.packageName, type.name))

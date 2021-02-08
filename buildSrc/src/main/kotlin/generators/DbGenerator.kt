@@ -96,7 +96,7 @@ object DbGenerator: Generator {
                     )
                     .addSuperclassConstructorParameter("Table")
                     .addFunction(
-                        FunSpec.builder("create")
+                        FunSpec.builder("insert")
                             .addParameter(
                                 ParameterSpec("source", ClassName(packageName, name))
                             )
