@@ -87,18 +87,18 @@ object SeedsDBManager {
 //use x everywhere. Play tribute to XmlSchema and go SimpleType and ComplexType. :+2
 object DvdRentalDBManager {
     fun drop() = transaction {
-        SchemaUtils.drop(DvdRentalDb.actor.Table)
-        SchemaUtils.drop(DvdRentalDb.address.Table)
-        SchemaUtils.drop(DvdRentalDb.category.Table)
+        SchemaUtils.drop(DvdRentalDb.Actor.Table)
+        SchemaUtils.drop(DvdRentalDb.Address.Table)
+        SchemaUtils.drop(DvdRentalDb.Category.Table)
     }
     fun create() = transaction {
-        SchemaUtils.create (DvdRentalDb.actor.Table)
-        SchemaUtils.create (DvdRentalDb.address.Table)
-        SchemaUtils.create (DvdRentalDb.category.Table)
+        SchemaUtils.create (DvdRentalDb.Actor.Table)
+        SchemaUtils.create (DvdRentalDb.Address.Table)
+        SchemaUtils.create (DvdRentalDb.Category.Table)
     }
     fun populate() = transaction {
-        DvdRentalCsvLoader.actor.loadCsv(resource("dvdrental/3057.dat")).forEach { source ->
-            DvdRentalDb.actor.Entity.create(source)
+        DvdRentalCsvLoader.Actor.loadCsv(resource("dvdrental/3057.dat")).forEach { source ->
+            DvdRentalDb.Actor.Entity.create(source)
             println("Creating ${source.firstName} ${source.lastName}")
         }
         //XXX
@@ -106,8 +106,8 @@ object DvdRentalDBManager {
         //    DvdRentalDb.address.Entity.create(source)
         //    println("Creating ${source.address} ${source.phone}")
         //}
-        DvdRentalCsvLoader.category.loadCsv(resource("dvdrental/3059.dat")).forEach { source ->
-            DvdRentalDb.category.Entity.create(source)
+        DvdRentalCsvLoader.Category.loadCsv(resource("dvdrental/3059.dat")).forEach { source ->
+            DvdRentalDb.Category.Entity.create(source)
             println("Creating ${source.name}")
         }
     }

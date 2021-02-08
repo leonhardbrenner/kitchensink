@@ -7,296 +7,294 @@ import kotlin.Int
 import kotlin.String
 
 interface DvdRentalCsvLoader {
-  data class actor(
+  data class Actor(
     override val actorId: Int,
     override val firstName: String,
     override val lastName: String,
     override val lastUpdate: String
-  ) : DvdRental.actor {
+  ) : DvdRental.Actor {
     companion object {
-      final val path: String = "/DvdRental/actor"
+      final val path: String = "/DvdRental/Actor"
 
       final val header: String = "actorId\tfirstName\tlastName\tlastUpdate"
 
 
-      fun create(source: DvdRental.actor) = actor(source.actorId, source.firstName, source.lastName,
+      fun create(source: DvdRental.Actor) = Actor(source.actorId, source.firstName, source.lastName,
           source.lastUpdate)
-      fun loadCsv(file: File) = model.loadCsv<actor>(file, header)}
+      fun loadCsv(file: File) = model.loadCsv<Actor>(file, header)}
   }
 
-  data class address(
+  data class Address(
     override val address: String,
     override val address2: String?,
-    override val address_id: Int,
-    override val city_id: Int,
+    override val addressId: Int,
+    override val cityId: Int,
     override val district: String?,
-    override val last_update: String,
+    override val lastUpdate: String,
     override val phone: String?,
-    override val postal_code: String?
-  ) : DvdRental.address {
+    override val postalCode: String?
+  ) : DvdRental.Address {
     companion object {
-      final val path: String = "/DvdRental/address"
+      final val path: String = "/DvdRental/Address"
 
       final val header: String =
-          "address\taddress2\taddress_id\tcity_id\tdistrict\tlast_update\tphone\tpostal_code"
+          "address\taddress2\taddressId\tcityId\tdistrict\tlastUpdate\tphone\tpostalCode"
 
 
-      fun create(source: DvdRental.address) = address(source.address, source.address2,
-          source.address_id, source.city_id, source.district, source.last_update, source.phone,
-          source.postal_code)
-      fun loadCsv(file: File) = model.loadCsv<address>(file, header)}
+      fun create(source: DvdRental.Address) = Address(source.address, source.address2,
+          source.addressId, source.cityId, source.district, source.lastUpdate, source.phone,
+          source.postalCode)
+      fun loadCsv(file: File) = model.loadCsv<Address>(file, header)}
   }
 
-  data class category(
-    override val category_id: Int,
-    override val last_update: String,
+  data class Category(
+    override val categoryId: Int,
+    override val lastUpdate: String,
     override val name: String
-  ) : DvdRental.category {
+  ) : DvdRental.Category {
     companion object {
-      final val path: String = "/DvdRental/category"
+      final val path: String = "/DvdRental/Category"
 
-      final val header: String = "category_id\tlast_update\tname"
+      final val header: String = "categoryId\tlastUpdate\tname"
 
 
-      fun create(source: DvdRental.category) = category(source.category_id, source.last_update,
+      fun create(source: DvdRental.Category) = Category(source.categoryId, source.lastUpdate,
           source.name)
-      fun loadCsv(file: File) = model.loadCsv<category>(file, header)}
+      fun loadCsv(file: File) = model.loadCsv<Category>(file, header)}
   }
 
-  data class city(
+  data class City(
     override val city: String,
-    override val city_id: Int,
-    override val country_id: Int,
-    override val last_update: Int
-  ) : DvdRental.city {
+    override val cityId: Int,
+    override val countryId: Int,
+    override val lastUpdate: Int
+  ) : DvdRental.City {
     companion object {
-      final val path: String = "/DvdRental/city"
+      final val path: String = "/DvdRental/City"
 
-      final val header: String = "city\tcity_id\tcountry_id\tlast_update"
+      final val header: String = "city\tcityId\tcountryId\tlastUpdate"
 
 
-      fun create(source: DvdRental.city) = city(source.city, source.city_id, source.country_id,
-          source.last_update)
-      fun loadCsv(file: File) = model.loadCsv<city>(file, header)}
+      fun create(source: DvdRental.City) = City(source.city, source.cityId, source.countryId,
+          source.lastUpdate)
+      fun loadCsv(file: File) = model.loadCsv<City>(file, header)}
   }
 
-  data class country(
+  data class Country(
     override val country: String,
-    override val country_id: Int,
-    override val last_update: String
-  ) : DvdRental.country {
+    override val countryId: Int,
+    override val lastUpdate: String
+  ) : DvdRental.Country {
     companion object {
-      final val path: String = "/DvdRental/country"
+      final val path: String = "/DvdRental/Country"
 
-      final val header: String = "country\tcountry_id\tlast_update"
+      final val header: String = "country\tcountryId\tlastUpdate"
 
 
-      fun create(source: DvdRental.country) = country(source.country, source.country_id,
-          source.last_update)
-      fun loadCsv(file: File) = model.loadCsv<country>(file, header)}
+      fun create(source: DvdRental.Country) = Country(source.country, source.countryId,
+          source.lastUpdate)
+      fun loadCsv(file: File) = model.loadCsv<Country>(file, header)}
   }
 
-  data class customer(
+  data class Customer(
     override val active: Int,
     override val activebool: Boolean,
-    override val address_id: Int,
-    override val create_date: String,
-    override val customer_id: Int,
+    override val addressId: Int,
+    override val createDate: String,
+    override val customerId: Int,
     override val email: String,
-    override val first_name: String,
-    override val last_name: String,
-    override val last_update: String,
-    override val store_id: Int
-  ) : DvdRental.customer {
+    override val firstName: String,
+    override val lastName: String,
+    override val lastUpdate: String,
+    override val storeId: Int
+  ) : DvdRental.Customer {
     companion object {
-      final val path: String = "/DvdRental/customer"
+      final val path: String = "/DvdRental/Customer"
 
       final val header: String =
-          "active\tactivebool\taddress_id\tcreate_date\tcustomer_id\temail\tfirst_name\tlast_name\tlast_update\tstore_id"
+          "active\tactivebool\taddressId\tcreateDate\tcustomerId\temail\tfirstName\tlastName\tlastUpdate\tstoreId"
 
 
-      fun create(source: DvdRental.customer) = customer(source.active, source.activebool,
-          source.address_id, source.create_date, source.customer_id, source.email,
-          source.first_name, source.last_name, source.last_update, source.store_id)
-      fun loadCsv(file: File) = model.loadCsv<customer>(file, header)}
+      fun create(source: DvdRental.Customer) = Customer(source.active, source.activebool,
+          source.addressId, source.createDate, source.customerId, source.email, source.firstName,
+          source.lastName, source.lastUpdate, source.storeId)
+      fun loadCsv(file: File) = model.loadCsv<Customer>(file, header)}
   }
 
-  data class film(
+  data class Film(
     override val description: String,
-    override val film_id: Int,
-    override val fulltext: String,
-    override val language_id: Int,
-    override val last_update: String,
+    override val filmId: Int,
+    override val fullText: String,
+    override val languageId: Int,
+    override val lastUpdate: String,
     override val length: Int,
     override val rating: String,
-    override val release_year: Int,
-    override val rental_duration: Int,
-    override val rental_rate: Double,
-    override val replacement_cost: Double,
-    override val special_features: String,
+    override val releaseYear: Int,
+    override val rentalDuration: Int,
+    override val rentalRate: Double,
+    override val replacementCost: Double,
+    override val specialFeatures: String,
     override val title: String
-  ) : DvdRental.film {
+  ) : DvdRental.Film {
     companion object {
-      final val path: String = "/DvdRental/film"
+      final val path: String = "/DvdRental/Film"
 
       final val header: String =
-          "description\tfilm_id\tfulltext\tlanguage_id\tlast_update\tlength\trating\trelease_year\trental_duration\trental_rate\treplacement_cost\tspecial_features\ttitle"
+          "description\tfilmId\tfullText\tlanguageId\tlastUpdate\tlength\trating\treleaseYear\trentalDuration\trentalRate\treplacementCost\tspecialFeatures\ttitle"
 
 
-      fun create(source: DvdRental.film) = film(source.description, source.film_id, source.fulltext,
-          source.language_id, source.last_update, source.length, source.rating, source.release_year,
-          source.rental_duration, source.rental_rate, source.replacement_cost,
-          source.special_features, source.title)
-      fun loadCsv(file: File) = model.loadCsv<film>(file, header)}
+      fun create(source: DvdRental.Film) = Film(source.description, source.filmId, source.fullText,
+          source.languageId, source.lastUpdate, source.length, source.rating, source.releaseYear,
+          source.rentalDuration, source.rentalRate, source.replacementCost, source.specialFeatures,
+          source.title)
+      fun loadCsv(file: File) = model.loadCsv<Film>(file, header)}
   }
 
-  data class film_actor(
-    override val actor_id: Int,
-    override val film_id: Int,
-    override val last_update: String
-  ) : DvdRental.film_actor {
+  data class FilmActor(
+    override val actorId: Int,
+    override val filmId: Int,
+    override val lastUpdate: String
+  ) : DvdRental.FilmActor {
     companion object {
-      final val path: String = "/DvdRental/film_actor"
+      final val path: String = "/DvdRental/FilmActor"
 
-      final val header: String = "actor_id\tfilm_id\tlast_update"
+      final val header: String = "actorId\tfilmId\tlastUpdate"
 
 
-      fun create(source: DvdRental.film_actor) = film_actor(source.actor_id, source.film_id,
-          source.last_update)
-      fun loadCsv(file: File) = model.loadCsv<film_actor>(file, header)}
+      fun create(source: DvdRental.FilmActor) = FilmActor(source.actorId, source.filmId,
+          source.lastUpdate)
+      fun loadCsv(file: File) = model.loadCsv<FilmActor>(file, header)}
   }
 
-  data class film_category(
-    override val category_id: Int,
-    override val film_id: Int,
-    override val last_update: String
-  ) : DvdRental.film_category {
+  data class FilmCategory(
+    override val categoryId: Int,
+    override val filmId: Int,
+    override val lastUpdate: String
+  ) : DvdRental.FilmCategory {
     companion object {
-      final val path: String = "/DvdRental/film_category"
+      final val path: String = "/DvdRental/FilmCategory"
 
-      final val header: String = "category_id\tfilm_id\tlast_update"
+      final val header: String = "categoryId\tfilmId\tlastUpdate"
 
 
-      fun create(source: DvdRental.film_category) = film_category(source.category_id,
-          source.film_id, source.last_update)
-      fun loadCsv(file: File) = model.loadCsv<film_category>(file, header)}
+      fun create(source: DvdRental.FilmCategory) = FilmCategory(source.categoryId, source.filmId,
+          source.lastUpdate)
+      fun loadCsv(file: File) = model.loadCsv<FilmCategory>(file, header)}
   }
 
-  data class inventory(
-    override val film_id: Int,
-    override val inventory_id: Int,
-    override val last_update: String,
-    override val store_id: Int
-  ) : DvdRental.inventory {
+  data class Inventory(
+    override val filmId: Int,
+    override val inventoryId: Int,
+    override val lastUpdate: String,
+    override val storeId: Int
+  ) : DvdRental.Inventory {
     companion object {
-      final val path: String = "/DvdRental/inventory"
+      final val path: String = "/DvdRental/Inventory"
 
-      final val header: String = "film_id\tinventory_id\tlast_update\tstore_id"
+      final val header: String = "filmId\tinventoryId\tlastUpdate\tstoreId"
 
 
-      fun create(source: DvdRental.inventory) = inventory(source.film_id, source.inventory_id,
-          source.last_update, source.store_id)
-      fun loadCsv(file: File) = model.loadCsv<inventory>(file, header)}
+      fun create(source: DvdRental.Inventory) = Inventory(source.filmId, source.inventoryId,
+          source.lastUpdate, source.storeId)
+      fun loadCsv(file: File) = model.loadCsv<Inventory>(file, header)}
   }
 
-  data class language(
-    override val language_id: Int,
-    override val last_update: String,
+  data class Language(
+    override val languageId: Int,
+    override val lastUpdate: String,
     override val name: String
-  ) : DvdRental.language {
+  ) : DvdRental.Language {
     companion object {
-      final val path: String = "/DvdRental/language"
+      final val path: String = "/DvdRental/Language"
 
-      final val header: String = "language_id\tlast_update\tname"
+      final val header: String = "languageId\tlastUpdate\tname"
 
 
-      fun create(source: DvdRental.language) = language(source.language_id, source.last_update,
+      fun create(source: DvdRental.Language) = Language(source.languageId, source.lastUpdate,
           source.name)
-      fun loadCsv(file: File) = model.loadCsv<language>(file, header)}
+      fun loadCsv(file: File) = model.loadCsv<Language>(file, header)}
   }
 
-  data class payment(
+  data class Payment(
     override val amount: Double,
-    override val customer_id: Int,
-    override val payment_date: String,
-    override val payment_id: Int,
-    override val rental_id: Int,
-    override val staff_id: Int
-  ) : DvdRental.payment {
+    override val customerId: Int,
+    override val paymentDate: String,
+    override val paymentId: Int,
+    override val rentalId: Int,
+    override val staffId: Int
+  ) : DvdRental.Payment {
     companion object {
-      final val path: String = "/DvdRental/payment"
+      final val path: String = "/DvdRental/Payment"
 
-      final val header: String =
-          "amount\tcustomer_id\tpayment_date\tpayment_id\trental_id\tstaff_id"
+      final val header: String = "amount\tcustomerId\tpaymentDate\tpaymentId\trentalId\tstaffId"
 
 
-      fun create(source: DvdRental.payment) = payment(source.amount, source.customer_id,
-          source.payment_date, source.payment_id, source.rental_id, source.staff_id)
-      fun loadCsv(file: File) = model.loadCsv<payment>(file, header)}
+      fun create(source: DvdRental.Payment) = Payment(source.amount, source.customerId,
+          source.paymentDate, source.paymentId, source.rentalId, source.staffId)
+      fun loadCsv(file: File) = model.loadCsv<Payment>(file, header)}
   }
 
-  data class rental(
-    override val customer_id: Int,
-    override val inventory_id: Int,
-    override val last_update: String,
-    override val rental_date: Int,
-    override val rental_id: Int,
-    override val return_date: String,
-    override val staff_id: Int
-  ) : DvdRental.rental {
+  data class Rental(
+    override val customerId: Int,
+    override val inventoryId: Int,
+    override val lastUpdate: String,
+    override val rentalDate: Int,
+    override val rentalId: Int,
+    override val returnDate: String,
+    override val staffId: Int
+  ) : DvdRental.Rental {
     companion object {
-      final val path: String = "/DvdRental/rental"
+      final val path: String = "/DvdRental/Rental"
 
       final val header: String =
-          "customer_id\tinventory_id\tlast_update\trental_date\trental_id\treturn_date\tstaff_id"
+          "customerId\tinventoryId\tlastUpdate\trentalDate\trentalId\treturnDate\tstaffId"
 
 
-      fun create(source: DvdRental.rental) = rental(source.customer_id, source.inventory_id,
-          source.last_update, source.rental_date, source.rental_id, source.return_date,
-          source.staff_id)
-      fun loadCsv(file: File) = model.loadCsv<rental>(file, header)}
+      fun create(source: DvdRental.Rental) = Rental(source.customerId, source.inventoryId,
+          source.lastUpdate, source.rentalDate, source.rentalId, source.returnDate, source.staffId)
+      fun loadCsv(file: File) = model.loadCsv<Rental>(file, header)}
   }
 
-  data class staff(
+  data class Staff(
     override val active: Int,
-    override val address_id: Int,
+    override val addressId: Int,
     override val email: Int,
-    override val first_name: String,
-    override val last_name: String,
-    override val last_update: String,
+    override val firstName: String,
+    override val lastName: String,
+    override val lastUpdate: String,
     override val password: String,
     override val picture: Int,
-    override val staff_id: Int,
-    override val store_id: Int,
+    override val staffId: Int,
+    override val storeId: Int,
     override val username: String
-  ) : DvdRental.staff {
+  ) : DvdRental.Staff {
     companion object {
-      final val path: String = "/DvdRental/staff"
+      final val path: String = "/DvdRental/Staff"
 
       final val header: String =
-          "active\taddress_id\temail\tfirst_name\tlast_name\tlast_update\tpassword\tpicture\tstaff_id\tstore_id\tusername"
+          "active\taddressId\temail\tfirstName\tlastName\tlastUpdate\tpassword\tpicture\tstaffId\tstoreId\tusername"
 
 
-      fun create(source: DvdRental.staff) = staff(source.active, source.address_id, source.email,
-          source.first_name, source.last_name, source.last_update, source.password, source.picture,
-          source.staff_id, source.store_id, source.username)
-      fun loadCsv(file: File) = model.loadCsv<staff>(file, header)}
+      fun create(source: DvdRental.Staff) = Staff(source.active, source.addressId, source.email,
+          source.firstName, source.lastName, source.lastUpdate, source.password, source.picture,
+          source.staffId, source.storeId, source.username)
+      fun loadCsv(file: File) = model.loadCsv<Staff>(file, header)}
   }
 
-  data class store(
-    override val address_id: Int,
-    override val last_update: String,
-    override val manager_staff_id: Int,
-    override val store_id: Int
-  ) : DvdRental.store {
+  data class Store(
+    override val addressId: Int,
+    override val lastUpdate: String,
+    override val managerStaffId: Int,
+    override val storeId: Int
+  ) : DvdRental.Store {
     companion object {
-      final val path: String = "/DvdRental/store"
+      final val path: String = "/DvdRental/Store"
 
-      final val header: String = "address_id\tlast_update\tmanager_staff_id\tstore_id"
+      final val header: String = "addressId\tlastUpdate\tmanagerStaffId\tstoreId"
 
 
-      fun create(source: DvdRental.store) = store(source.address_id, source.last_update,
-          source.manager_staff_id, source.store_id)
-      fun loadCsv(file: File) = model.loadCsv<store>(file, header)}
+      fun create(source: DvdRental.Store) = Store(source.addressId, source.lastUpdate,
+          source.managerStaffId, source.storeId)
+      fun loadCsv(file: File) = model.loadCsv<Store>(file, header)}
   }
 }

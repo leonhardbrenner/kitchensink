@@ -46,14 +46,14 @@ suspend fun getSeedsSeedFacts(): List<SeedsDto.SeedFacts> {
     return jsonClient.get(endpoint + SeedsDto.SeedFacts.path)
 }
 
-suspend fun getDvdRentalActor(): List<DvdRentalDto.actor> {
-    return jsonClient.get(endpoint + DvdRentalDto.actor.path)
+suspend fun getDvdRentalActor(): List<DvdRentalDto.Actor> {
+    return jsonClient.get(endpoint + DvdRentalDto.Actor.path)
 }
 
-suspend fun getDvdRentalAddress(): List<DvdRentalDto.address> {
-    return jsonClient.get(endpoint + DvdRentalDto.address.path)
+suspend fun getDvdRentalAddress(): List<DvdRentalDto.Address> {
+    return jsonClient.get(endpoint + DvdRentalDto.Address.path)
 }
 
-suspend fun getDvdRentalCategory(): List<DvdRentalDto.category> {
-    return jsonClient.get(endpoint + DvdRentalDto.category.path)
+suspend fun getDvdRentalCategory(): List<DvdRentalDto.Category> {
+    return jsonClient.get(endpoint + DvdRentalDto.Category.path)
 }

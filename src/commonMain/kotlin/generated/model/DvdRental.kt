@@ -6,7 +6,7 @@ import kotlin.Int
 import kotlin.String
 
 interface DvdRental {
-  interface actor {
+  interface Actor {
     val actorId: Int
 
     val firstName: String
@@ -16,195 +16,195 @@ interface DvdRental {
     val lastUpdate: String
   }
 
-  interface address {
+  interface Address {
     val address: String
 
     val address2: String?
 
-    val address_id: Int
+    val addressId: Int
 
-    val city_id: Int
+    val cityId: Int
 
     val district: String?
 
-    val last_update: String
+    val lastUpdate: String
 
     val phone: String?
 
-    val postal_code: String?
+    val postalCode: String?
   }
 
-  interface category {
-    val category_id: Int
+  interface Category {
+    val categoryId: Int
 
-    val last_update: String
+    val lastUpdate: String
 
     val name: String
   }
 
-  interface city {
+  interface City {
     val city: String
 
-    val city_id: Int
+    val cityId: Int
 
-    val country_id: Int
+    val countryId: Int
 
-    val last_update: Int
+    val lastUpdate: Int
   }
 
-  interface country {
+  interface Country {
     val country: String
 
-    val country_id: Int
+    val countryId: Int
 
-    val last_update: String
+    val lastUpdate: String
   }
 
-  interface customer {
+  interface Customer {
     val active: Int
 
     val activebool: Boolean
 
-    val address_id: Int
+    val addressId: Int
 
-    val create_date: String
+    val createDate: String
 
-    val customer_id: Int
+    val customerId: Int
 
     val email: String
 
-    val first_name: String
+    val firstName: String
 
-    val last_name: String
+    val lastName: String
 
-    val last_update: String
+    val lastUpdate: String
 
-    val store_id: Int
+    val storeId: Int
   }
 
-  interface film {
+  interface Film {
     val description: String
 
-    val film_id: Int
+    val filmId: Int
 
-    val fulltext: String
+    val fullText: String
 
-    val language_id: Int
+    val languageId: Int
 
-    val last_update: String
+    val lastUpdate: String
 
     val length: Int
 
     val rating: String
 
-    val release_year: Int
+    val releaseYear: Int
 
-    val rental_duration: Int
+    val rentalDuration: Int
 
-    val rental_rate: Double
+    val rentalRate: Double
 
-    val replacement_cost: Double
+    val replacementCost: Double
 
-    val special_features: String
+    val specialFeatures: String
 
     val title: String
   }
 
-  interface film_actor {
-    val actor_id: Int
+  interface FilmActor {
+    val actorId: Int
 
-    val film_id: Int
+    val filmId: Int
 
-    val last_update: String
+    val lastUpdate: String
   }
 
-  interface film_category {
-    val category_id: Int
+  interface FilmCategory {
+    val categoryId: Int
 
-    val film_id: Int
+    val filmId: Int
 
-    val last_update: String
+    val lastUpdate: String
   }
 
-  interface inventory {
-    val film_id: Int
+  interface Inventory {
+    val filmId: Int
 
-    val inventory_id: Int
+    val inventoryId: Int
 
-    val last_update: String
+    val lastUpdate: String
 
-    val store_id: Int
+    val storeId: Int
   }
 
-  interface language {
-    val language_id: Int
+  interface Language {
+    val languageId: Int
 
-    val last_update: String
+    val lastUpdate: String
 
     val name: String
   }
 
-  interface payment {
+  interface Payment {
     val amount: Double
 
-    val customer_id: Int
+    val customerId: Int
 
-    val payment_date: String
+    val paymentDate: String
 
-    val payment_id: Int
+    val paymentId: Int
 
-    val rental_id: Int
+    val rentalId: Int
 
-    val staff_id: Int
+    val staffId: Int
   }
 
-  interface rental {
-    val customer_id: Int
+  interface Rental {
+    val customerId: Int
 
-    val inventory_id: Int
+    val inventoryId: Int
 
-    val last_update: String
+    val lastUpdate: String
 
-    val rental_date: Int
+    val rentalDate: Int
 
-    val rental_id: Int
+    val rentalId: Int
 
-    val return_date: String
+    val returnDate: String
 
-    val staff_id: Int
+    val staffId: Int
   }
 
-  interface staff {
+  interface Staff {
     val active: Int
 
-    val address_id: Int
+    val addressId: Int
 
     val email: Int
 
-    val first_name: String
+    val firstName: String
 
-    val last_name: String
+    val lastName: String
 
-    val last_update: String
+    val lastUpdate: String
 
     val password: String
 
     val picture: Int
 
-    val staff_id: Int
+    val staffId: Int
 
-    val store_id: Int
+    val storeId: Int
 
     val username: String
   }
 
-  interface store {
-    val address_id: Int
+  interface Store {
+    val addressId: Int
 
-    val last_update: String
+    val lastUpdate: String
 
-    val manager_staff_id: Int
+    val managerStaffId: Int
 
-    val store_id: Int
+    val storeId: Int
   }
 }

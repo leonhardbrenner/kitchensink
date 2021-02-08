@@ -9,21 +9,21 @@ import io.ktor.routing.*
 import javax.inject.Inject
 
 class DvdRentalService {
-    val actors get() = DvdRentalDb.actor.fetchAll()
-    val addresses get() = DvdRentalDb.address.fetchAll()
-    val category get() = DvdRentalDb.category.fetchAll()
-    val city get() = DvdRentalDb.city.fetchAll()
-    val country get() = DvdRentalDb.country.fetchAll()
-    val customer get() = DvdRentalDb.customer.fetchAll()
-    val film get() = DvdRentalDb.film.fetchAll()
-    val film_actor get() = DvdRentalDb.film_actor.fetchAll()
-    val film_category get() = DvdRentalDb.film_category.fetchAll()
-    val inventory get() = DvdRentalDb.inventory.fetchAll()
-    val language get() = DvdRentalDb.language.fetchAll()
-    val payment get() = DvdRentalDb.payment.fetchAll()
-    val rental get() = DvdRentalDb.rental.fetchAll()
-    val staff get() = DvdRentalDb.staff.fetchAll()
-    val store get() = DvdRentalDb.store.fetchAll()
+    val actors get() = DvdRentalDb.Actor.fetchAll()
+    val addresses get() = DvdRentalDb.Address.fetchAll()
+    val category get() = DvdRentalDb.Category.fetchAll()
+    val city get() = DvdRentalDb.City.fetchAll()
+    val country get() = DvdRentalDb.Country.fetchAll()
+    val customer get() = DvdRentalDb.Customer.fetchAll()
+    val film get() = DvdRentalDb.Film.fetchAll()
+    val filmActor get() = DvdRentalDb.FilmActor.fetchAll()
+    val filmCategory get() = DvdRentalDb.FilmCategory.fetchAll()
+    val inventory get() = DvdRentalDb.Inventory.fetchAll()
+    val language get() = DvdRentalDb.Language.fetchAll()
+    val payment get() = DvdRentalDb.Payment.fetchAll()
+    val rental get() = DvdRentalDb.Rental.fetchAll()
+    val staff get() = DvdRentalDb.Staff.fetchAll()
+    val store get() = DvdRentalDb.Store.fetchAll()
 }
 
 class DvdRentalApplication @Inject constructor(val dvdRentalService: DvdRentalService) {
@@ -32,78 +32,77 @@ class DvdRentalApplication @Inject constructor(val dvdRentalService: DvdRentalSe
 
     fun routesFrom(routing: Routing) = routing.apply {
 
-        route(DvdRentalDto.actor.path) {
+        route(DvdRentalDto.Actor.path) {
             get {
                 call.respond(dvdRentalService.actors)
             }
         }
-
-        route(DvdRentalDto.address.path) {
+        route(DvdRentalDto.Address.path) {
             get {
                 call.respond(dvdRentalService.addresses)
             }
         }
-        route(DvdRentalDto.category.path) {
+        route(DvdRentalDto.Category.path) {
             get {
                 call.respond(dvdRentalService.category)
             }
         }
-        route(DvdRentalDto.city.path) {
+        route(DvdRentalDto.City.path) {
             get {
                 call.respond(dvdRentalService.city)
             }
         }
-        route(DvdRentalDto.country.path) {
+        route(DvdRentalDto.Country.path) {
             get {
                 call.respond(dvdRentalService.country)
             }
         }
-        route(DvdRentalDto.customer.path) {
+        route(DvdRentalDto.Customer.path) {
             get {
                 call.respond(dvdRentalService.customer)
             }
         }
-        route(DvdRentalDto.film.path) {
+        route(DvdRentalDto.Film.path) {
             get {
                 call.respond(dvdRentalService.film)
             }
         }
-        route(DvdRentalDto.film_actor.path) {
+        route(DvdRentalDto.FilmActor.path) {
             get {
-                call.respond(dvdRentalService.film_actor)
+                call.respond(dvdRentalService.filmActor)
             }
         }
-        route(DvdRentalDto.film_category.path) {
+        route(DvdRentalDto.FilmCategory.path) {
             get {
-                call.respond(dvdRentalService.film_category)
+                call.respond(dvdRentalService.filmCategory)
             }
         }
-        route(DvdRentalDto.inventory.path) {
+        route(DvdRentalDto.Inventory.path) {
             get {
                 call.respond(dvdRentalService.inventory)
             }
         }
-        route(DvdRentalDto.language.path) {
+        route(DvdRentalDto.Language.path) {
             get {
                 call.respond(dvdRentalService.language)
             }
         }
-        route(DvdRentalDto.payment.path) {
+        route(DvdRentalDto.Payment.path) {
             get {
                 call.respond(dvdRentalService.payment)
             }
         }
-        route(DvdRentalDto.rental.path) {
+        route(DvdRentalDto.Rental.path) {
             get {
                 call.respond(dvdRentalService.rental)
             }
         }
-        route(DvdRentalDto.staff.path) {
+        route(DvdRentalDto.Staff.path) {
             get {
                 call.respond(dvdRentalService.staff)
             }
         }
-        route(DvdRentalDto.store.path) {
+        route(DvdRentalDto.Store.path) {
             get {
                 call.respond(dvdRentalService.store)
             }

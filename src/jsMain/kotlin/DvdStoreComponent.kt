@@ -21,21 +21,21 @@ fun RBuilder.dvdStore() = child(DvdRentalWindow.Component) {}
 object DvdRentalWindow {
 
     val Component = functionalComponent<RProps> { _ ->
-        val (age, setAge) = useState<Any>(DvdRentalDto.actor.path)
+        val (age, setAge) = useState<Any>(DvdRentalDto.Actor.path)
 
         val inputProps: RProps = jsObject { }
         inputProps.asDynamic().name = "age"
         inputProps.asDynamic().id = "age-simple"
         mSelect(age, name = "age", onChange = { event, _ -> setAge(event.targetValue) }) {
             attrs.inputProps = inputProps
-            mMenuItem("Actor", value = DvdRentalDto.actor.path)
-            mMenuItem("Address", value = DvdRentalDto.address.path)
-            mMenuItem("Category", value = DvdRentalDto.category.path)
+            mMenuItem("Actor", value = DvdRentalDto.Actor.path)
+            mMenuItem("Address", value = DvdRentalDto.Address.path)
+            mMenuItem("Category", value = DvdRentalDto.Category.path)
         }
         when (age) {
-            DvdRentalDto.actor.path -> actor {}
-            DvdRentalDto.address.path -> address {}
-            DvdRentalDto.category.path -> category {}
+            DvdRentalDto.Actor.path -> actor {}
+            DvdRentalDto.Address.path -> address {}
+            DvdRentalDto.Category.path -> category {}
         }
 
     }
@@ -106,24 +106,24 @@ object DvdRentalWindow {
 
     }
 
-    private class Actor(props: Props): DisplayComponent<DvdRental.actor>(props) {
-        override suspend fun get(): List<DvdRental.actor> = getDvdRentalActor()
-        override fun DvdRental.actor.label() = "$firstName $lastName"
-        override fun DvdRental.actor.transform() = actorId.toString()
+    private class Actor(props: Props): DisplayComponent<DvdRental.Actor>(props) {
+        override suspend fun get(): List<DvdRental.Actor> = getDvdRentalActor()
+        override fun DvdRental.Actor.label() = "$firstName $lastName"
+        override fun DvdRental.Actor.transform() = actorId.toString()
     }
     fun RBuilder.actor(handler: Props.() -> Unit) = child(Actor::class) { attrs { handler() } }
 
-    private class Address(props: Props): DisplayComponent<DvdRental.address>(props) {
-        override suspend fun get(): List<DvdRental.address> = getDvdRentalAddress()
-        override fun DvdRental.address.label() = "$address $phone"
-        override fun DvdRental.address.transform() = address_id.toString()
+    private class Address(props: Props): DisplayComponent<DvdRental.Address>(props) {
+        override suspend fun get(): List<DvdRental.Address> = getDvdRentalAddress()
+        override fun DvdRental.Address.label() = "$address $phone"
+        override fun DvdRental.Address.transform() = addressId.toString()
     }
     fun RBuilder.address(handler: Props.() -> Unit) = child(Address::class) { attrs { handler() } }
 
-    private class Category(props: Props): DisplayComponent<DvdRental.category>(props) {
-        override suspend fun get(): List<DvdRental.category> = getDvdRentalCategory()
-        override fun DvdRental.category.label() = "$name"
-        override fun DvdRental.category.transform() = category_id.toString()
+    private class Category(props: Props): DisplayComponent<DvdRental.Category>(props) {
+        override suspend fun get(): List<DvdRental.Category> = getDvdRentalCategory()
+        override fun DvdRental.Category.label() = "$name"
+        override fun DvdRental.Category.transform() = categoryId.toString()
     }
     fun RBuilder.category(handler: Props.() -> Unit) = child(Category::class) { attrs { handler() } }
 }
