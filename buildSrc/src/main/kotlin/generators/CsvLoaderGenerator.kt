@@ -4,7 +4,10 @@ import com.squareup.kotlinpoet.*
 import java.io.File
 import schemanew.Namespace
 
-//TODO - try to make this go away. Seed not on why we deleted Serializable below.
+/* This is will generate another Dto(data class) for what ever reason @Serializable polutes the data class with:
+   seen1 and serializerConstructor:(
+*/
+//TODO - try to just the DTO we may need to apply Serializable differently.
 object CsvLoaderGenerator: Generator {
 
     fun generate(namespace: Namespace) {
@@ -13,8 +16,6 @@ object CsvLoaderGenerator: Generator {
                 TypeSpec.interfaceBuilder("${namespace.name}CsvLoader").apply {
                     namespace.complexTypes.forEach { type ->
                         val typeSpec = TypeSpec.classBuilder(type.name)
-                            //This is all that is different between Dto and Dto2 for what ever reason @Serializable polutes the data class with seen1 and serializerConstructor:(
-                            //.addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
                             .addModifiers(KModifier.DATA)
                             .addSuperinterface(ClassName(type.packageName, type.name))
                             .primaryConstructor(
@@ -38,25 +39,9 @@ object CsvLoaderGenerator: Generator {
                             }
                             .addType(
                                 TypeSpec.companionObjectBuilder().apply {
-                                    val propertySpec = PropertySpec.builder("path", String::class, KModifier.FINAL)
-                                        .initializer("\"${type.path}\"")
-                                        //.mutable(true)
-                                        .build()
-                                    addProperty(propertySpec)
                                     addProperty(
-                                        PropertySpec.builder("header", String::class, KModifier.FINAL)
-                                            .initializer("%S\n", type.elements.map { it.name }.joinToString("\t"))
-                                            .build()
-                                    )
-                                    addFunction(
-                                        FunSpec.builder("create")
-                                            .addParameter("source", ClassName(type.packageName, type.name))
-                                            //Look at CodeBlock.addArgument and you will see L stands for literal
-                                            .addCode(
-                                                "return %L(%L)",
-                                                type.name!!,
-                                                type.elements.map { "source.${it.name}" }.joinToString(", ")
-                                            )
+                                        PropertySpec.builder("header", String::class)
+                                            .initializer("%S", type.elements.map { it.name }.joinToString("\t"))
                                             .build()
                                     )
                                     addFunction(

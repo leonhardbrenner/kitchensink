@@ -102,8 +102,8 @@ object DvdRentalDBManager {
             println("Creating ${source.firstName} ${source.lastName}")
         }
         //XXX
-        //DvdRentalCsvLoader.address.loadCsv(resource("dvdrental/3065.dat")).forEach { source ->
-        //    DvdRentalDb.address.Entity.create(source)
+        //DvdRentalCsvLoader.Address.loadCsv(resource("dvdrental/3065.dat")).forEach { source ->
+        //    DvdRentalDb.Address.Entity.insert(source)
         //    println("Creating ${source.address} ${source.phone}")
         //}
         DvdRentalCsvLoader.Category.loadCsv(resource("dvdrental/3059.dat")).forEach { source ->
