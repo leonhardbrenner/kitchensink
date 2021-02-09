@@ -38,7 +38,7 @@ And our simple interface has a simple generator:
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/buildSrc/src/main/kotlin/generators/InterfaceGenerator.kt
 
-the rest of the generators are in the same directory. This is actually a full stack demo with a bunch of neat tricks which I will explain in a series of Medium articles.
+the rest of the generators are in the same directory. This is actually a full stack demo with a bunch of neat tricks hence kitchen sink which I will explain in a series of Medium articles. This is part of a Stone soup project to bring goodness to everyone.
 
 Basic setup on Ubuntu:
 
