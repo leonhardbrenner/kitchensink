@@ -16,6 +16,7 @@ open class ModelGenerator : DefaultTask() {
             InterfaceGenerator.generate(namespace)
             DtoGenerator.generate(namespace)
             DbGenerator.generate(namespace)
+            BuilderGenerator.generate(namespace)
         }
         CsvLoaderGenerator.generate(dvdRentalsNew)
     }
