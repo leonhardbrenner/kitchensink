@@ -109,28 +109,28 @@ object SeedsWindow {
     }
 
     private class DetailedSeed(props: Props): DisplayComponent<Seeds.DetailedSeed>(props) {
-        override suspend fun get(): List<Seeds.DetailedSeed> = getSeedsDetailedSeed()
+        override suspend fun get(): List<Seeds.DetailedSeed> = SeedsApi.getDetailedSeed()
         override fun Seeds.DetailedSeed.label() = name
         override fun Seeds.DetailedSeed.transform() = name
     }
     fun RBuilder.detailedSeed(handler: Props.() -> Unit) = child(DetailedSeed::class) { attrs { handler() } }
 
     private class Category(props: Props): DisplayComponent<Seeds.SeedCategory>(props) {
-        override suspend fun get(): List<Seeds.SeedCategory> = getSeedsCategory()
+        override suspend fun get(): List<Seeds.SeedCategory> = SeedsApi.getCategory()
         override fun Seeds.SeedCategory.label() = name
         override fun Seeds.SeedCategory.transform() = image
     }
     fun RBuilder.category(handler: Props.() -> Unit) = child(Category::class) { attrs { handler() } }
 
     private class BasicSeed(props: Props): DisplayComponent<Seeds.BasicSeed>(props) {
-        override suspend fun get(): List<Seeds.BasicSeed> = getSeedsBasicSeed()
+        override suspend fun get(): List<Seeds.BasicSeed> = SeedsApi.getBasicSeed()
         override fun Seeds.BasicSeed.label() = name
         override fun Seeds.BasicSeed.transform() = image
     }
     fun RBuilder.basicSeed(handler: Props.() -> Unit) = child(BasicSeed::class) { attrs { handler() } }
 
     private class SeedFacts(props: Props): DisplayComponent<Seeds.SeedFacts>(props) {
-        override suspend fun get(): List<Seeds.SeedFacts> = getSeedsSeedFacts()
+        override suspend fun get(): List<Seeds.SeedFacts> = SeedsApi.getSeedFacts()
         override fun Seeds.SeedFacts.label() = name
         override fun Seeds.SeedFacts.transform() = maturity!!
     }

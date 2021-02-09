@@ -1,6 +1,7 @@
 package model
 
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import com.google.common.io.CharSource
 import com.vhl.blackmo.grass.dsl.grass
 import org.postgresql.util.ReaderInputStream
@@ -15,5 +16,6 @@ inline fun <reified T> loadCsv(file: File, header: String): List<T> {
         delimiter = '\t'
         skipMissMatchedRow = true //Postgres ends it's csv files with \.
     }.readAllWithHeader(SequenceInputStream(header, inputStream))
-    return grass<T>().harvest(csvContents)
+    return grass<T> {
+    }.harvest(csvContents)
 }

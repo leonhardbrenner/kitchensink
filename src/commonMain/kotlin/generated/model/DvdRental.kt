@@ -17,97 +17,97 @@ interface DvdRental {
   }
 
   interface Address {
+    val addressId: Int
+
     val address: String
 
     val address2: String?
 
-    val addressId: Int
+    val district: String?
 
     val cityId: Int
 
-    val district: String?
-
-    val lastUpdate: String
+    val postalCode: String?
 
     val phone: String?
 
-    val postalCode: String?
+    val lastUpdate: String
   }
 
   interface Category {
     val categoryId: Int
 
-    val lastUpdate: String
-
     val name: String
+
+    val lastUpdate: String
   }
 
   interface City {
-    val city: String
-
     val cityId: Int
+
+    val city: String
 
     val countryId: Int
 
-    val lastUpdate: Int
+    val lastUpdate: String
   }
 
   interface Country {
-    val country: String
-
     val countryId: Int
+
+    val country: String
 
     val lastUpdate: String
   }
 
   interface Customer {
-    val active: Int
-
-    val activebool: Boolean
-
-    val addressId: Int
-
-    val createDate: String
-
     val customerId: Int
 
-    val email: String
+    val storeId: Int
 
     val firstName: String
 
     val lastName: String
 
+    val email: String
+
+    val addressId: Int
+
+    val activebool: Boolean
+
+    val createDate: String
+
     val lastUpdate: String
 
-    val storeId: Int
+    val active: Int
   }
 
   interface Film {
-    val description: String
-
     val filmId: Int
 
-    val fullText: String
+    val title: String
 
-    val languageId: Int
-
-    val lastUpdate: String
-
-    val length: Int
-
-    val rating: String
+    val description: String
 
     val releaseYear: Int
+
+    val languageId: Int
 
     val rentalDuration: Int
 
     val rentalRate: Double
 
+    val length: Int
+
     val replacementCost: Double
+
+    val rating: String
+
+    val lastUpdate: String
 
     val specialFeatures: String
 
-    val title: String
+    val fullText: String
   }
 
   interface FilmActor {
@@ -119,92 +119,92 @@ interface DvdRental {
   }
 
   interface FilmCategory {
-    val categoryId: Int
-
     val filmId: Int
+
+    val categoryId: Int
 
     val lastUpdate: String
   }
 
   interface Inventory {
-    val filmId: Int
-
     val inventoryId: Int
 
-    val lastUpdate: String
+    val filmId: Int
 
     val storeId: Int
+
+    val lastUpdate: String
   }
 
   interface Language {
     val languageId: Int
 
-    val lastUpdate: String
-
     val name: String
+
+    val lastUpdate: String
   }
 
   interface Payment {
-    val amount: Double
+    val paymentId: Int
 
     val customerId: Int
 
-    val paymentDate: String
-
-    val paymentId: Int
+    val staffId: Int
 
     val rentalId: Int
 
-    val staffId: Int
+    val amount: Double
+
+    val paymentDate: String
   }
 
   interface Rental {
-    val customerId: Int
+    val rentalId: Int
+
+    val rentalDate: String
 
     val inventoryId: Int
 
-    val lastUpdate: String
-
-    val rentalDate: Int
-
-    val rentalId: Int
+    val customerId: Int
 
     val returnDate: String
 
     val staffId: Int
+
+    val lastUpdate: String
   }
 
   interface Staff {
-    val active: Int
-
-    val addressId: Int
-
-    val email: Int
+    val staffId: Int
 
     val firstName: String
 
     val lastName: String
 
-    val lastUpdate: String
+    val addressId: Int
+
+    val email: String
+
+    val storeId: Int
+
+    val active: String
+
+    val username: String
 
     val password: String
 
-    val picture: Int
+    val lastUpdate: String
 
-    val staffId: Int
-
-    val storeId: Int
-
-    val username: String
+    val picture: String
   }
 
   interface Store {
-    val addressId: Int
-
-    val lastUpdate: String
+    val storeId: Int
 
     val managerStaffId: Int
 
-    val storeId: Int
+    val addressId: Int
+
+    val lastUpdate: String
   }
 }

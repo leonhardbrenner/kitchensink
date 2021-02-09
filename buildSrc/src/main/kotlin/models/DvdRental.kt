@@ -51,7 +51,7 @@ val dvdRentalsNew = Manifest.namespace("DvdRental") {
         element("categoryId", "builtin:int") {
             db("category_id", "integer DEFAULT nextval(\"public.category_category_id_seq\"::regclass) NOT NULL")
         }
-        element("name", "builtin:string") {
+        element("name", "builtin:string") { //TODO - to be consistent this should be category also I think it avoids name intersections in joins.
             db("name", "character varying(25) NOT NULL")
         }
         element("lastUpdate", "builtin:string") {
@@ -69,7 +69,7 @@ val dvdRentalsNew = Manifest.namespace("DvdRental") {
         element("countryId", "builtin:int") {
             db("country_id", "smallint NOT NULL")
         }
-        element("lastUpdate", "builtin:int") {
+        element("lastUpdate", "builtin:string") {
             db("last_update", "timestamp without time zone DEFAULT now() NOT NULL")
         }
     }
@@ -237,7 +237,7 @@ val dvdRentalsNew = Manifest.namespace("DvdRental") {
         element("rentalId", "builtin:int") {
             db("rental_id", "integer DEFAULT nextval(\"public.rental_rental_id_seq\"::regclass) NOT NULL")
         }
-        element("rentalDate", "builtin:int") {
+        element("rentalDate", "builtin:string") {
             db("rental_date", "timestamp without time zone NOT NULL")
         }
         element("inventoryId", "builtin:int") {
@@ -270,13 +270,13 @@ val dvdRentalsNew = Manifest.namespace("DvdRental") {
         element("addressId", "builtin:int") {
             db("address_id", "smallint NOT NULL")
         }
-        element("email", "builtin:int") {
+        element("email", "builtin:string") {
             db("email", "character varying(50)")
         }
         element("storeId", "builtin:int") {
             db("store_id", "smallint NOT NULL")
         }
-        element("active", "builtin:int") {
+        element("active", "builtin:string") {
             db("active", "boolean DEFAULT true NOT NULL")
         }
         element("username", "builtin:string") {
@@ -288,7 +288,7 @@ val dvdRentalsNew = Manifest.namespace("DvdRental") {
         element("lastUpdate", "builtin:string") {
             db("last_update", "timestamp without time zone DEFAULT now() NOT NULL")
         }
-        element("picture", "builtin:int") {
+        element("picture", "builtin:string") {
             db("picture", "bytea")
         }
     }

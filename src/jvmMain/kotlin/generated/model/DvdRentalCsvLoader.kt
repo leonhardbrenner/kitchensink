@@ -20,93 +20,93 @@ interface DvdRentalCsvLoader {
   }
 
   data class Address(
+    override val addressId: Int,
     override val address: String,
     override val address2: String?,
-    override val addressId: Int,
-    override val cityId: Int,
     override val district: String?,
-    override val lastUpdate: String,
+    override val cityId: Int,
+    override val postalCode: String?,
     override val phone: String?,
-    override val postalCode: String?
+    override val lastUpdate: String
   ) : DvdRental.Address {
     companion object {
       val header: String =
-          "address\taddress2\taddressId\tcityId\tdistrict\tlastUpdate\tphone\tpostalCode"
+          "addressId\taddress\taddress2\tdistrict\tcityId\tpostalCode\tphone\tlastUpdate"
 
       fun loadCsv(file: File) = model.loadCsv<Address>(file, header)}
   }
 
   data class Category(
     override val categoryId: Int,
-    override val lastUpdate: String,
-    override val name: String
+    override val name: String,
+    override val lastUpdate: String
   ) : DvdRental.Category {
     companion object {
-      val header: String = "categoryId\tlastUpdate\tname"
+      val header: String = "categoryId\tname\tlastUpdate"
 
       fun loadCsv(file: File) = model.loadCsv<Category>(file, header)}
   }
 
   data class City(
-    override val city: String,
     override val cityId: Int,
+    override val city: String,
     override val countryId: Int,
-    override val lastUpdate: Int
+    override val lastUpdate: String
   ) : DvdRental.City {
     companion object {
-      val header: String = "city\tcityId\tcountryId\tlastUpdate"
+      val header: String = "cityId\tcity\tcountryId\tlastUpdate"
 
       fun loadCsv(file: File) = model.loadCsv<City>(file, header)}
   }
 
   data class Country(
-    override val country: String,
     override val countryId: Int,
+    override val country: String,
     override val lastUpdate: String
   ) : DvdRental.Country {
     companion object {
-      val header: String = "country\tcountryId\tlastUpdate"
+      val header: String = "countryId\tcountry\tlastUpdate"
 
       fun loadCsv(file: File) = model.loadCsv<Country>(file, header)}
   }
 
   data class Customer(
-    override val active: Int,
-    override val activebool: Boolean,
-    override val addressId: Int,
-    override val createDate: String,
     override val customerId: Int,
-    override val email: String,
+    override val storeId: Int,
     override val firstName: String,
     override val lastName: String,
+    override val email: String,
+    override val addressId: Int,
+    override val activebool: Boolean,
+    override val createDate: String,
     override val lastUpdate: String,
-    override val storeId: Int
+    override val active: Int
   ) : DvdRental.Customer {
     companion object {
       val header: String =
-          "active\tactivebool\taddressId\tcreateDate\tcustomerId\temail\tfirstName\tlastName\tlastUpdate\tstoreId"
+          "customerId\tstoreId\tfirstName\tlastName\temail\taddressId\tactivebool\tcreateDate\tlastUpdate\tactive"
 
       fun loadCsv(file: File) = model.loadCsv<Customer>(file, header)}
   }
 
   data class Film(
-    override val description: String,
     override val filmId: Int,
-    override val fullText: String,
-    override val languageId: Int,
-    override val lastUpdate: String,
-    override val length: Int,
-    override val rating: String,
+    override val title: String,
+    override val description: String,
     override val releaseYear: Int,
+    override val languageId: Int,
     override val rentalDuration: Int,
     override val rentalRate: Double,
+    override val length: Int,
     override val replacementCost: Double,
+    override val rating: String,
+    override val lastUpdate: String,
     override val specialFeatures: String,
-    override val title: String
+    override val fullText: String
   ) : DvdRental.Film {
     companion object {
       val header: String =
-          "description\tfilmId\tfullText\tlanguageId\tlastUpdate\tlength\trating\treleaseYear\trentalDuration\trentalRate\treplacementCost\tspecialFeatures\ttitle"
+          "filmId\ttitle\tdescription\treleaseYear\tlanguageId\trentalDuration\trentalRate\tlength\treplacementCost\trating\tlastUpdate\tspecialFeatures\tfullText"
 
       fun loadCsv(file: File) = model.loadCsv<Film>(file, header)}
   }
@@ -123,97 +123,97 @@ interface DvdRentalCsvLoader {
   }
 
   data class FilmCategory(
-    override val categoryId: Int,
     override val filmId: Int,
+    override val categoryId: Int,
     override val lastUpdate: String
   ) : DvdRental.FilmCategory {
     companion object {
-      val header: String = "categoryId\tfilmId\tlastUpdate"
+      val header: String = "filmId\tcategoryId\tlastUpdate"
 
       fun loadCsv(file: File) = model.loadCsv<FilmCategory>(file, header)}
   }
 
   data class Inventory(
-    override val filmId: Int,
     override val inventoryId: Int,
-    override val lastUpdate: String,
-    override val storeId: Int
+    override val filmId: Int,
+    override val storeId: Int,
+    override val lastUpdate: String
   ) : DvdRental.Inventory {
     companion object {
-      val header: String = "filmId\tinventoryId\tlastUpdate\tstoreId"
+      val header: String = "inventoryId\tfilmId\tstoreId\tlastUpdate"
 
       fun loadCsv(file: File) = model.loadCsv<Inventory>(file, header)}
   }
 
   data class Language(
     override val languageId: Int,
-    override val lastUpdate: String,
-    override val name: String
+    override val name: String,
+    override val lastUpdate: String
   ) : DvdRental.Language {
     companion object {
-      val header: String = "languageId\tlastUpdate\tname"
+      val header: String = "languageId\tname\tlastUpdate"
 
       fun loadCsv(file: File) = model.loadCsv<Language>(file, header)}
   }
 
   data class Payment(
-    override val amount: Double,
-    override val customerId: Int,
-    override val paymentDate: String,
     override val paymentId: Int,
+    override val customerId: Int,
+    override val staffId: Int,
     override val rentalId: Int,
-    override val staffId: Int
+    override val amount: Double,
+    override val paymentDate: String
   ) : DvdRental.Payment {
     companion object {
-      val header: String = "amount\tcustomerId\tpaymentDate\tpaymentId\trentalId\tstaffId"
+      val header: String = "paymentId\tcustomerId\tstaffId\trentalId\tamount\tpaymentDate"
 
       fun loadCsv(file: File) = model.loadCsv<Payment>(file, header)}
   }
 
   data class Rental(
-    override val customerId: Int,
-    override val inventoryId: Int,
-    override val lastUpdate: String,
-    override val rentalDate: Int,
     override val rentalId: Int,
+    override val rentalDate: String,
+    override val inventoryId: Int,
+    override val customerId: Int,
     override val returnDate: String,
-    override val staffId: Int
+    override val staffId: Int,
+    override val lastUpdate: String
   ) : DvdRental.Rental {
     companion object {
       val header: String =
-          "customerId\tinventoryId\tlastUpdate\trentalDate\trentalId\treturnDate\tstaffId"
+          "rentalId\trentalDate\tinventoryId\tcustomerId\treturnDate\tstaffId\tlastUpdate"
 
       fun loadCsv(file: File) = model.loadCsv<Rental>(file, header)}
   }
 
   data class Staff(
-    override val active: Int,
-    override val addressId: Int,
-    override val email: Int,
+    override val staffId: Int,
     override val firstName: String,
     override val lastName: String,
-    override val lastUpdate: String,
-    override val password: String,
-    override val picture: Int,
-    override val staffId: Int,
+    override val addressId: Int,
+    override val email: String,
     override val storeId: Int,
-    override val username: String
+    override val active: String,
+    override val username: String,
+    override val password: String,
+    override val lastUpdate: String,
+    override val picture: String
   ) : DvdRental.Staff {
     companion object {
       val header: String =
-          "active\taddressId\temail\tfirstName\tlastName\tlastUpdate\tpassword\tpicture\tstaffId\tstoreId\tusername"
+          "staffId\tfirstName\tlastName\taddressId\temail\tstoreId\tactive\tusername\tpassword\tlastUpdate\tpicture"
 
       fun loadCsv(file: File) = model.loadCsv<Staff>(file, header)}
   }
 
   data class Store(
-    override val addressId: Int,
-    override val lastUpdate: String,
+    override val storeId: Int,
     override val managerStaffId: Int,
-    override val storeId: Int
+    override val addressId: Int,
+    override val lastUpdate: String
   ) : DvdRental.Store {
     companion object {
-      val header: String = "addressId\tlastUpdate\tmanagerStaffId\tstoreId"
+      val header: String = "storeId\tmanagerStaffId\taddressId\tlastUpdate"
 
       fun loadCsv(file: File) = model.loadCsv<Store>(file, header)}
   }

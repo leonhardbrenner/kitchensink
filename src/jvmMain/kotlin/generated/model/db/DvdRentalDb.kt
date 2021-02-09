@@ -55,59 +55,58 @@ object DvdRentalDb {
   }
 
   object Address {
-    fun create(source: ResultRow) = DvdRentalDto.Address(source[Table.address],
-        source[Table.address2], source[Table.addressId], source[Table.cityId],
-        source[Table.district], source[Table.lastUpdate], source[Table.phone],
-        source[Table.postalCode])
+    fun create(source: ResultRow) = DvdRentalDto.Address(source[Table.addressId],
+        source[Table.address], source[Table.address2], source[Table.district], source[Table.cityId],
+        source[Table.postalCode], source[Table.phone], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Address") {
+      val addressId: Column<Int> = integer("address_id")
+
       val address: Column<String> = text("address")
 
       val address2: Column<String?> = text("address2").nullable()
 
-      val addressId: Column<Int> = integer("address_id")
+      val district: Column<String?> = text("district").nullable()
 
       val cityId: Column<Int> = integer("city_id")
 
-      val district: Column<String?> = text("district").nullable()
-
-      val lastUpdate: Column<String> = text("last_update")
+      val postalCode: Column<String?> = text("postal_code").nullable()
 
       val phone: Column<String?> = text("phone").nullable()
 
-      val postalCode: Column<String?> = text("postal_code").nullable()
+      val lastUpdate: Column<String> = text("last_update")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.Address {
+      override var addressId: Int by Table.addressId
+
       override var address: String by Table.address
 
       override var address2: String? by Table.address2
 
-      override var addressId: Int by Table.addressId
+      override var district: String? by Table.district
 
       override var cityId: Int by Table.cityId
 
-      override var district: String? by Table.district
-
-      override var lastUpdate: String by Table.lastUpdate
+      override var postalCode: String? by Table.postalCode
 
       override var phone: String? by Table.phone
 
-      override var postalCode: String? by Table.postalCode
+      override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Address) {
           Entity.new {
+            addressId = source.addressId
             address = source.address
             address2 = source.address2
-            addressId = source.addressId
-            cityId = source.cityId
             district = source.district
-            lastUpdate = source.lastUpdate
-            phone = source.phone
+            cityId = source.cityId
             postalCode = source.postalCode
+            phone = source.phone
+            lastUpdate = source.lastUpdate
           }
         }
       }
@@ -116,14 +115,14 @@ object DvdRentalDb {
 
   object Category {
     fun create(source: ResultRow) = DvdRentalDto.Category(source[Table.categoryId],
-        source[Table.lastUpdate], source[Table.name])
+        source[Table.name], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Category") {
       val categoryId: Column<Int> = integer("category_id")
 
-      val lastUpdate: Column<String> = text("last_update")
-
       val name: Column<String> = text("name")
+
+      val lastUpdate: Column<String> = text("last_update")
     }
 
     class Entity(
@@ -131,16 +130,16 @@ object DvdRentalDb {
     ) : IntEntity(id), generated.model.DvdRental.Category {
       override var categoryId: Int by Table.categoryId
 
-      override var lastUpdate: String by Table.lastUpdate
-
       override var name: String by Table.name
+
+      override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Category) {
           Entity.new {
             categoryId = source.categoryId
-            lastUpdate = source.lastUpdate
             name = source.name
+            lastUpdate = source.lastUpdate
           }
         }
       }
@@ -148,35 +147,35 @@ object DvdRentalDb {
   }
 
   object City {
-    fun create(source: ResultRow) = DvdRentalDto.City(source[Table.city], source[Table.cityId],
+    fun create(source: ResultRow) = DvdRentalDto.City(source[Table.cityId], source[Table.city],
         source[Table.countryId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("City") {
-      val city: Column<String> = text("city")
-
       val cityId: Column<Int> = integer("city_id")
+
+      val city: Column<String> = text("city")
 
       val countryId: Column<Int> = integer("country_id")
 
-      val lastUpdate: Column<Int> = integer("last_update")
+      val lastUpdate: Column<String> = text("last_update")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.City {
-      override var city: String by Table.city
-
       override var cityId: Int by Table.cityId
+
+      override var city: String by Table.city
 
       override var countryId: Int by Table.countryId
 
-      override var lastUpdate: Int by Table.lastUpdate
+      override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.City) {
           Entity.new {
-            city = source.city
             cityId = source.cityId
+            city = source.city
             countryId = source.countryId
             lastUpdate = source.lastUpdate
           }
@@ -186,13 +185,13 @@ object DvdRentalDb {
   }
 
   object Country {
-    fun create(source: ResultRow) = DvdRentalDto.Country(source[Table.country],
-        source[Table.countryId], source[Table.lastUpdate])
+    fun create(source: ResultRow) = DvdRentalDto.Country(source[Table.countryId],
+        source[Table.country], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Country") {
-      val country: Column<String> = text("country")
-
       val countryId: Column<Int> = integer("country_id")
+
+      val country: Column<String> = text("country")
 
       val lastUpdate: Column<String> = text("last_update")
     }
@@ -200,17 +199,17 @@ object DvdRentalDb {
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.Country {
-      override var country: String by Table.country
-
       override var countryId: Int by Table.countryId
+
+      override var country: String by Table.country
 
       override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Country) {
           Entity.new {
-            country = source.country
             countryId = source.countryId
+            country = source.country
             lastUpdate = source.lastUpdate
           }
         }
@@ -219,69 +218,69 @@ object DvdRentalDb {
   }
 
   object Customer {
-    fun create(source: ResultRow) = DvdRentalDto.Customer(source[Table.active],
-        source[Table.activebool], source[Table.addressId], source[Table.createDate],
-        source[Table.customerId], source[Table.email], source[Table.firstName],
-        source[Table.lastName], source[Table.lastUpdate], source[Table.storeId])
+    fun create(source: ResultRow) = DvdRentalDto.Customer(source[Table.customerId],
+        source[Table.storeId], source[Table.firstName], source[Table.lastName], source[Table.email],
+        source[Table.addressId], source[Table.activebool], source[Table.createDate],
+        source[Table.lastUpdate], source[Table.active])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Customer") {
-      val active: Column<Int> = integer("active")
-
-      val activebool: Column<Boolean> = bool("activebool")
-
-      val addressId: Column<Int> = integer("address_id")
-
-      val createDate: Column<String> = text("create_date")
-
       val customerId: Column<Int> = integer("customer_id")
 
-      val email: Column<String> = text("email")
+      val storeId: Column<Int> = integer("store_id")
 
       val firstName: Column<String> = text("first_name")
 
       val lastName: Column<String> = text("last_name")
 
+      val email: Column<String> = text("email")
+
+      val addressId: Column<Int> = integer("address_id")
+
+      val activebool: Column<Boolean> = bool("activebool")
+
+      val createDate: Column<String> = text("create_date")
+
       val lastUpdate: Column<String> = text("last_update")
 
-      val storeId: Column<Int> = integer("store_id")
+      val active: Column<Int> = integer("active")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.Customer {
-      override var active: Int by Table.active
-
-      override var activebool: Boolean by Table.activebool
-
-      override var addressId: Int by Table.addressId
-
-      override var createDate: String by Table.createDate
-
       override var customerId: Int by Table.customerId
 
-      override var email: String by Table.email
+      override var storeId: Int by Table.storeId
 
       override var firstName: String by Table.firstName
 
       override var lastName: String by Table.lastName
 
+      override var email: String by Table.email
+
+      override var addressId: Int by Table.addressId
+
+      override var activebool: Boolean by Table.activebool
+
+      override var createDate: String by Table.createDate
+
       override var lastUpdate: String by Table.lastUpdate
 
-      override var storeId: Int by Table.storeId
+      override var active: Int by Table.active
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Customer) {
           Entity.new {
-            active = source.active
-            activebool = source.activebool
-            addressId = source.addressId
-            createDate = source.createDate
             customerId = source.customerId
-            email = source.email
+            storeId = source.storeId
             firstName = source.firstName
             lastName = source.lastName
+            email = source.email
+            addressId = source.addressId
+            activebool = source.activebool
+            createDate = source.createDate
             lastUpdate = source.lastUpdate
-            storeId = source.storeId
+            active = source.active
           }
         }
       }
@@ -289,85 +288,85 @@ object DvdRentalDb {
   }
 
   object Film {
-    fun create(source: ResultRow) = DvdRentalDto.Film(source[Table.description],
-        source[Table.filmId], source[Table.fullText], source[Table.languageId],
-        source[Table.lastUpdate], source[Table.length], source[Table.rating],
-        source[Table.releaseYear], source[Table.rentalDuration], source[Table.rentalRate],
-        source[Table.replacementCost], source[Table.specialFeatures], source[Table.title])
+    fun create(source: ResultRow) = DvdRentalDto.Film(source[Table.filmId], source[Table.title],
+        source[Table.description], source[Table.releaseYear], source[Table.languageId],
+        source[Table.rentalDuration], source[Table.rentalRate], source[Table.length],
+        source[Table.replacementCost], source[Table.rating], source[Table.lastUpdate],
+        source[Table.specialFeatures], source[Table.fullText])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Film") {
-      val description: Column<String> = text("description")
-
       val filmId: Column<Int> = integer("film_id")
 
-      val fullText: Column<String> = text("fulltext")
+      val title: Column<String> = text("title")
 
-      val languageId: Column<Int> = integer("language_id")
-
-      val lastUpdate: Column<String> = text("last_update")
-
-      val length: Column<Int> = integer("length")
-
-      val rating: Column<String> = text("rating")
+      val description: Column<String> = text("description")
 
       val releaseYear: Column<Int> = integer("release_year")
+
+      val languageId: Column<Int> = integer("language_id")
 
       val rentalDuration: Column<Int> = integer("rental_duration")
 
       val rentalRate: Column<Double> = double("rental_rate")
 
+      val length: Column<Int> = integer("length")
+
       val replacementCost: Column<Double> = double("replacement_cost")
+
+      val rating: Column<String> = text("rating")
+
+      val lastUpdate: Column<String> = text("last_update")
 
       val specialFeatures: Column<String> = text("special_features")
 
-      val title: Column<String> = text("title")
+      val fullText: Column<String> = text("fulltext")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.Film {
-      override var description: String by Table.description
-
       override var filmId: Int by Table.filmId
 
-      override var fullText: String by Table.fullText
+      override var title: String by Table.title
 
-      override var languageId: Int by Table.languageId
-
-      override var lastUpdate: String by Table.lastUpdate
-
-      override var length: Int by Table.length
-
-      override var rating: String by Table.rating
+      override var description: String by Table.description
 
       override var releaseYear: Int by Table.releaseYear
+
+      override var languageId: Int by Table.languageId
 
       override var rentalDuration: Int by Table.rentalDuration
 
       override var rentalRate: Double by Table.rentalRate
 
+      override var length: Int by Table.length
+
       override var replacementCost: Double by Table.replacementCost
+
+      override var rating: String by Table.rating
+
+      override var lastUpdate: String by Table.lastUpdate
 
       override var specialFeatures: String by Table.specialFeatures
 
-      override var title: String by Table.title
+      override var fullText: String by Table.fullText
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Film) {
           Entity.new {
-            description = source.description
             filmId = source.filmId
-            fullText = source.fullText
-            languageId = source.languageId
-            lastUpdate = source.lastUpdate
-            length = source.length
-            rating = source.rating
+            title = source.title
+            description = source.description
             releaseYear = source.releaseYear
+            languageId = source.languageId
             rentalDuration = source.rentalDuration
             rentalRate = source.rentalRate
+            length = source.length
             replacementCost = source.replacementCost
+            rating = source.rating
+            lastUpdate = source.lastUpdate
             specialFeatures = source.specialFeatures
-            title = source.title
+            fullText = source.fullText
           }
         }
       }
@@ -408,13 +407,13 @@ object DvdRentalDb {
   }
 
   object FilmCategory {
-    fun create(source: ResultRow) = DvdRentalDto.FilmCategory(source[Table.categoryId],
-        source[Table.filmId], source[Table.lastUpdate])
+    fun create(source: ResultRow) = DvdRentalDto.FilmCategory(source[Table.filmId],
+        source[Table.categoryId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("FilmCategory") {
-      val categoryId: Column<Int> = integer("category_id")
-
       val filmId: Column<Int> = integer("film_id")
+
+      val categoryId: Column<Int> = integer("category_id")
 
       val lastUpdate: Column<String> = text("last_update")
     }
@@ -422,17 +421,17 @@ object DvdRentalDb {
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.FilmCategory {
-      override var categoryId: Int by Table.categoryId
-
       override var filmId: Int by Table.filmId
+
+      override var categoryId: Int by Table.categoryId
 
       override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.FilmCategory) {
           Entity.new {
-            categoryId = source.categoryId
             filmId = source.filmId
+            categoryId = source.categoryId
             lastUpdate = source.lastUpdate
           }
         }
@@ -441,37 +440,37 @@ object DvdRentalDb {
   }
 
   object Inventory {
-    fun create(source: ResultRow) = DvdRentalDto.Inventory(source[Table.filmId],
-        source[Table.inventoryId], source[Table.lastUpdate], source[Table.storeId])
+    fun create(source: ResultRow) = DvdRentalDto.Inventory(source[Table.inventoryId],
+        source[Table.filmId], source[Table.storeId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Inventory") {
-      val filmId: Column<Int> = integer("film_id")
-
       val inventoryId: Column<Int> = integer("inventory_id")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val filmId: Column<Int> = integer("film_id")
 
       val storeId: Column<Int> = integer("store_id")
+
+      val lastUpdate: Column<String> = text("last_update")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.Inventory {
-      override var filmId: Int by Table.filmId
-
       override var inventoryId: Int by Table.inventoryId
 
-      override var lastUpdate: String by Table.lastUpdate
+      override var filmId: Int by Table.filmId
 
       override var storeId: Int by Table.storeId
+
+      override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Inventory) {
           Entity.new {
-            filmId = source.filmId
             inventoryId = source.inventoryId
-            lastUpdate = source.lastUpdate
+            filmId = source.filmId
             storeId = source.storeId
+            lastUpdate = source.lastUpdate
           }
         }
       }
@@ -480,14 +479,14 @@ object DvdRentalDb {
 
   object Language {
     fun create(source: ResultRow) = DvdRentalDto.Language(source[Table.languageId],
-        source[Table.lastUpdate], source[Table.name])
+        source[Table.name], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Language") {
       val languageId: Column<Int> = integer("language_id")
 
-      val lastUpdate: Column<String> = text("last_update")
-
       val name: Column<String> = text("name")
+
+      val lastUpdate: Column<String> = text("last_update")
     }
 
     class Entity(
@@ -495,16 +494,16 @@ object DvdRentalDb {
     ) : IntEntity(id), generated.model.DvdRental.Language {
       override var languageId: Int by Table.languageId
 
-      override var lastUpdate: String by Table.lastUpdate
-
       override var name: String by Table.name
+
+      override var lastUpdate: String by Table.lastUpdate
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Language) {
           Entity.new {
             languageId = source.languageId
-            lastUpdate = source.lastUpdate
             name = source.name
+            lastUpdate = source.lastUpdate
           }
         }
       }
@@ -512,48 +511,48 @@ object DvdRentalDb {
   }
 
   object Payment {
-    fun create(source: ResultRow) = DvdRentalDto.Payment(source[Table.amount],
-        source[Table.customerId], source[Table.paymentDate], source[Table.paymentId],
-        source[Table.rentalId], source[Table.staffId])
+    fun create(source: ResultRow) = DvdRentalDto.Payment(source[Table.paymentId],
+        source[Table.customerId], source[Table.staffId], source[Table.rentalId],
+        source[Table.amount], source[Table.paymentDate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Payment") {
-      val amount: Column<Double> = double("amount")
+      val paymentId: Column<Int> = integer("payment_id")
 
       val customerId: Column<Int> = integer("customer_id")
 
-      val paymentDate: Column<String> = text("payment_date")
-
-      val paymentId: Column<Int> = integer("payment_id")
+      val staffId: Column<Int> = integer("staff_id")
 
       val rentalId: Column<Int> = integer("rental_id")
 
-      val staffId: Column<Int> = integer("staff_id")
+      val amount: Column<Double> = double("amount")
+
+      val paymentDate: Column<String> = text("payment_date")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.Payment {
-      override var amount: Double by Table.amount
+      override var paymentId: Int by Table.paymentId
 
       override var customerId: Int by Table.customerId
 
-      override var paymentDate: String by Table.paymentDate
-
-      override var paymentId: Int by Table.paymentId
+      override var staffId: Int by Table.staffId
 
       override var rentalId: Int by Table.rentalId
 
-      override var staffId: Int by Table.staffId
+      override var amount: Double by Table.amount
+
+      override var paymentDate: String by Table.paymentDate
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Payment) {
           Entity.new {
-            amount = source.amount
-            customerId = source.customerId
-            paymentDate = source.paymentDate
             paymentId = source.paymentId
-            rentalId = source.rentalId
+            customerId = source.customerId
             staffId = source.staffId
+            rentalId = source.rentalId
+            amount = source.amount
+            paymentDate = source.paymentDate
           }
         }
       }
@@ -561,53 +560,53 @@ object DvdRentalDb {
   }
 
   object Rental {
-    fun create(source: ResultRow) = DvdRentalDto.Rental(source[Table.customerId],
-        source[Table.inventoryId], source[Table.lastUpdate], source[Table.rentalDate],
-        source[Table.rentalId], source[Table.returnDate], source[Table.staffId])
+    fun create(source: ResultRow) = DvdRentalDto.Rental(source[Table.rentalId],
+        source[Table.rentalDate], source[Table.inventoryId], source[Table.customerId],
+        source[Table.returnDate], source[Table.staffId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Rental") {
-      val customerId: Column<Int> = integer("customer_id")
+      val rentalId: Column<Int> = integer("rental_id")
+
+      val rentalDate: Column<String> = text("rental_date")
 
       val inventoryId: Column<Int> = integer("inventory_id")
 
-      val lastUpdate: Column<String> = text("last_update")
-
-      val rentalDate: Column<Int> = integer("rental_date")
-
-      val rentalId: Column<Int> = integer("rental_id")
+      val customerId: Column<Int> = integer("customer_id")
 
       val returnDate: Column<String> = text("return_date")
 
       val staffId: Column<Int> = integer("staff_id")
+
+      val lastUpdate: Column<String> = text("last_update")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.Rental {
-      override var customerId: Int by Table.customerId
+      override var rentalId: Int by Table.rentalId
+
+      override var rentalDate: String by Table.rentalDate
 
       override var inventoryId: Int by Table.inventoryId
 
-      override var lastUpdate: String by Table.lastUpdate
-
-      override var rentalDate: Int by Table.rentalDate
-
-      override var rentalId: Int by Table.rentalId
+      override var customerId: Int by Table.customerId
 
       override var returnDate: String by Table.returnDate
 
       override var staffId: Int by Table.staffId
 
+      override var lastUpdate: String by Table.lastUpdate
+
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Rental) {
           Entity.new {
-            customerId = source.customerId
-            inventoryId = source.inventoryId
-            lastUpdate = source.lastUpdate
-            rentalDate = source.rentalDate
             rentalId = source.rentalId
+            rentalDate = source.rentalDate
+            inventoryId = source.inventoryId
+            customerId = source.customerId
             returnDate = source.returnDate
             staffId = source.staffId
+            lastUpdate = source.lastUpdate
           }
         }
       }
@@ -615,74 +614,74 @@ object DvdRentalDb {
   }
 
   object Staff {
-    fun create(source: ResultRow) = DvdRentalDto.Staff(source[Table.active],
-        source[Table.addressId], source[Table.email], source[Table.firstName],
-        source[Table.lastName], source[Table.lastUpdate], source[Table.password],
-        source[Table.picture], source[Table.staffId], source[Table.storeId], source[Table.username])
+    fun create(source: ResultRow) = DvdRentalDto.Staff(source[Table.staffId],
+        source[Table.firstName], source[Table.lastName], source[Table.addressId],
+        source[Table.email], source[Table.storeId], source[Table.active], source[Table.username],
+        source[Table.password], source[Table.lastUpdate], source[Table.picture])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Staff") {
-      val active: Column<Int> = integer("active")
-
-      val addressId: Column<Int> = integer("address_id")
-
-      val email: Column<Int> = integer("email")
+      val staffId: Column<Int> = integer("staff_id")
 
       val firstName: Column<String> = text("first_name")
 
       val lastName: Column<String> = text("last_name")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val addressId: Column<Int> = integer("address_id")
 
-      val password: Column<String> = text("password")
-
-      val picture: Column<Int> = integer("picture")
-
-      val staffId: Column<Int> = integer("staff_id")
+      val email: Column<String> = text("email")
 
       val storeId: Column<Int> = integer("store_id")
 
+      val active: Column<String> = text("active")
+
       val username: Column<String> = text("username")
+
+      val password: Column<String> = text("password")
+
+      val lastUpdate: Column<String> = text("last_update")
+
+      val picture: Column<String> = text("picture")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.Staff {
-      override var active: Int by Table.active
-
-      override var addressId: Int by Table.addressId
-
-      override var email: Int by Table.email
+      override var staffId: Int by Table.staffId
 
       override var firstName: String by Table.firstName
 
       override var lastName: String by Table.lastName
 
-      override var lastUpdate: String by Table.lastUpdate
+      override var addressId: Int by Table.addressId
 
-      override var password: String by Table.password
-
-      override var picture: Int by Table.picture
-
-      override var staffId: Int by Table.staffId
+      override var email: String by Table.email
 
       override var storeId: Int by Table.storeId
 
+      override var active: String by Table.active
+
       override var username: String by Table.username
+
+      override var password: String by Table.password
+
+      override var lastUpdate: String by Table.lastUpdate
+
+      override var picture: String by Table.picture
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Staff) {
           Entity.new {
-            active = source.active
-            addressId = source.addressId
-            email = source.email
+            staffId = source.staffId
             firstName = source.firstName
             lastName = source.lastName
-            lastUpdate = source.lastUpdate
-            password = source.password
-            picture = source.picture
-            staffId = source.staffId
+            addressId = source.addressId
+            email = source.email
             storeId = source.storeId
+            active = source.active
             username = source.username
+            password = source.password
+            lastUpdate = source.lastUpdate
+            picture = source.picture
           }
         }
       }
@@ -690,37 +689,37 @@ object DvdRentalDb {
   }
 
   object Store {
-    fun create(source: ResultRow) = DvdRentalDto.Store(source[Table.addressId],
-        source[Table.lastUpdate], source[Table.managerStaffId], source[Table.storeId])
+    fun create(source: ResultRow) = DvdRentalDto.Store(source[Table.storeId],
+        source[Table.managerStaffId], source[Table.addressId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Store") {
-      val addressId: Column<Int> = integer("address_id")
-
-      val lastUpdate: Column<String> = text("last_update")
+      val storeId: Column<Int> = integer("store_id")
 
       val managerStaffId: Column<Int> = integer("manager_staff_id")
 
-      val storeId: Column<Int> = integer("store_id")
+      val addressId: Column<Int> = integer("address_id")
+
+      val lastUpdate: Column<String> = text("last_update")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.DvdRental.Store {
+      override var storeId: Int by Table.storeId
+
+      override var managerStaffId: Int by Table.managerStaffId
+
       override var addressId: Int by Table.addressId
 
       override var lastUpdate: String by Table.lastUpdate
 
-      override var managerStaffId: Int by Table.managerStaffId
-
-      override var storeId: Int by Table.storeId
-
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: DvdRental.Store) {
           Entity.new {
+            storeId = source.storeId
+            managerStaffId = source.managerStaffId
             addressId = source.addressId
             lastUpdate = source.lastUpdate
-            managerStaffId = source.managerStaffId
-            storeId = source.storeId
           }
         }
       }

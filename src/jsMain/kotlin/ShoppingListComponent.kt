@@ -11,7 +11,7 @@ val ShoppingListComponent = functionalComponent<RProps> { _ ->
 
     useEffect(dependencies = listOf()) {
         scope.launch {
-            setShoppingList(getShoppingList())
+            setShoppingList(ShoppingListApi.get())
         }
     }
 
@@ -21,8 +21,8 @@ val ShoppingListComponent = functionalComponent<RProps> { _ ->
                 key = item.toString()
                 attrs.onClickFunction = {
                     scope.launch {
-                        deleteShoppingListItem(item)
-                        setShoppingList(getShoppingList())
+                        ShoppingListApi.delete(item)
+                        setShoppingList(ShoppingListApi.get())
                     }
                 }
                 +"[${item.priority}] ${item.desc} "
@@ -34,8 +34,8 @@ val ShoppingListComponent = functionalComponent<RProps> { _ ->
         onSubmit = { input ->
             val cartItem = ShoppingListItem(input.replace("!", ""), input.count { it == '!' })
             scope.launch {
-                addShoppingListItem(cartItem)
-                setShoppingList(getShoppingList())
+                ShoppingListApi.addItem(cartItem)
+                setShoppingList(ShoppingListApi.get())
             }
         }
     }

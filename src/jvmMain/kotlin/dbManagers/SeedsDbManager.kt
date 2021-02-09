@@ -80,35 +80,3 @@ object SeedsDBManager {
         //}
     }
 }
-
-//Look across at dvd rentals the copy * from should be handled as a dsl off which loads
-//the values in the order they appear in the type and inserts them just as we did above but this
-//we are loading from a DSL. This seems like a good time to clean up code above. Also don't
-//use x everywhere. Play tribute to XmlSchema and go SimpleType and ComplexType. :+2
-object DvdRentalDBManager {
-    fun drop() = transaction {
-        SchemaUtils.drop(DvdRentalDb.Actor.Table)
-        SchemaUtils.drop(DvdRentalDb.Address.Table)
-        SchemaUtils.drop(DvdRentalDb.Category.Table)
-    }
-    fun create() = transaction {
-        SchemaUtils.create (DvdRentalDb.Actor.Table)
-        SchemaUtils.create (DvdRentalDb.Address.Table)
-        SchemaUtils.create (DvdRentalDb.Category.Table)
-    }
-    fun populate() = transaction {
-        DvdRentalCsvLoader.Actor.loadCsv(resource("dvdrental/3057.dat")).forEach { source ->
-            DvdRentalDb.Actor.Entity.insert(source)
-            println("Creating ${source.firstName} ${source.lastName}")
-        }
-        //XXX
-        //DvdRentalCsvLoader.Address.loadCsv(resource("dvdrental/3065.dat")).forEach { source ->
-        //    DvdRentalDb.Address.Entity.insert(source)
-        //    println("Creating ${source.address} ${source.phone}")
-        //}
-        DvdRentalCsvLoader.Category.loadCsv(resource("dvdrental/3059.dat")).forEach { source ->
-            DvdRentalDb.Category.Entity.insert(source)
-            println("Creating ${source.name}")
-        }
-    }
-}

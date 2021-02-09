@@ -38,16 +38,16 @@ object Manifest {
 }
 
 class Namespace(val name: String, block: Namespace.() -> Unit) {
-    val simpleTypeMap = HashMap<String, SimpleType>()
+    val simpleTypeMap = LinkedHashMap<String, SimpleType>()
     val simpleTypes get() = simpleTypeMap.values
 
-    val complexTypeMap = HashMap<String, ComplexType>()
+    val complexTypeMap = LinkedHashMap<String, ComplexType>()
     val complexTypes get() = complexTypeMap.values.sortedBy { it.name }
 
-    val typeMap = HashMap<String, Type>()
+    val typeMap = LinkedHashMap<String, Type>()
     val types get() = typeMap.values
 
-    val elementMap = HashMap<String, Element>()
+    val elementMap = LinkedHashMap<String, Element>()
     val elements get() = elementMap.values
 
     init { block() }
@@ -206,12 +206,12 @@ open class ComplexType(
     override val nullable: Boolean = false,
     block: ComplexType.() -> Unit
 ): Type {
-    val typeMap = HashMap<String, Type>()
+    val typeMap = LinkedHashMap<String, Type>()
     val types get() = typeMap.values
-    val complexTypeMap = HashMap<String, ComplexType>()
+    val complexTypeMap = LinkedHashMap<String, ComplexType>()
     val complexTypes = complexTypeMap.values
-    val elementMap = HashMap<String, Element>()
-    val elements get() = elementMap.values.sortedBy { it.name }.toList() //XXX - looks like not all of the geenerators are using this.
+    val elementMap = LinkedHashMap<String, Element>()
+    val elements get() = elementMap.values //XXX - looks like not all of the geenerators are using this.
     override val packageName: String
         get() = namespace.name //Namespace could use a package attribute and we have generated vs handwritten.
     init {

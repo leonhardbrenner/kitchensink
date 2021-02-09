@@ -4,44 +4,44 @@ import kotlin.String
 
 interface Seeds {
   interface BasicSeed {
+    val name: String
+
+    val secondary_name: String
+
     val description: String?
 
     val image: String
 
     val link: String
-
-    val name: String
-
-    val secondary_name: String
   }
 
   interface DetailedSeed {
+    val name: String
+
+    val maturity: String?
+
+    val secondary_name: String?
+
     val description: String?
 
     val image: String?
 
     val link: String?
-
-    val maturity: String?
-
-    val name: String
-
-    val secondary_name: String?
   }
 
   interface SeedCategory {
+    val name: String
+
     val image: String
 
     val link: String
-
-    val name: String
   }
 
   interface SeedFacts {
+    val name: String
+
     val facts: String?
 
     val maturity: String?
-
-    val name: String
   }
 }
