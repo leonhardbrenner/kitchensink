@@ -65,16 +65,16 @@ open class ModelGenerator : DefaultTask() {
 
     @TaskAction
     fun generate() {
-        //val fancy = Namespace(Fancy::class)
+        val fancy = Namespace(Fancy::class)
         //output(fancy)
         //InterfaceGenerator2.generate(fancy)
-        //DtoGenerator2.generate(fancy)
-        listOf(seeds, dvdRentalsNew).forEach { namespace ->
-            InterfaceGenerator.generate(namespace)
-            DtoGenerator.generate(namespace)
-            DbGenerator.generate(namespace)
-            BuilderGenerator.generate(namespace)
-        }
-        CsvLoaderGenerator.generate(dvdRentalsNew)
+        DtoGenerator2.generate(fancy)
+        //listOf(seeds, dvdRentalsNew).forEach { namespace ->
+        //    InterfaceGenerator.generate(namespace)
+        //    DtoGenerator.generate(namespace)
+        //    DbGenerator.generate(namespace)
+        //    BuilderGenerator.generate(namespace)
+        //}
+        //CsvLoaderGenerator.generate(dvdRentalsNew)
     }
 }

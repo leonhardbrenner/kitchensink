@@ -96,7 +96,7 @@ object DtoGenerator2: Generator {
         TypeSpec.classBuilder(type.name)
             .addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
             .addModifiers(KModifier.DATA)
-            .addSuperinterface(ClassName(type.packageName, type.dotPath()))
+            .addSuperinterface(ClassName("generated.model", type.dotPath()))
             .primaryConstructor(
                 FunSpec.constructorBuilder().apply {
                     type.elements.forEach { element ->
@@ -121,20 +121,20 @@ object DtoGenerator2: Generator {
                     addProperty(propertySpec)
                     addFunction(
                         FunSpec.builder("create")
-                            .addParameter("source", ClassName("", type.dotPath()))
+                            .addParameter("source", ClassName("generated.model", type.dotPath()))
                             //Look at CodeBlock.addArgument and you will see L stands for literal
                             .addCode(
-                                "return %L(%L)",
+                                "return %T(%L)",
                                 type.dotPath("Dto"),
                                 type.elements.map { "source.${it.name}" }.joinToString(", ")
                             )
                             .build()
                     )
-                    type.types.forEach {
-                        generateType(it)
-                    }
                 }.build()
-            )
-            .build()
+            ).apply {
+                type.types.forEach {
+                    generateType(it)
+                }
+            }.build()
     )
 }

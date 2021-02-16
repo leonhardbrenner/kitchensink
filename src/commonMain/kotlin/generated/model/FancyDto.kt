@@ -1,5 +1,6 @@
 package generated.model
 
+import Fancy
 import kotlin.Int
 import kotlin.String
 import kotlinx.serialization.Serializable
@@ -15,26 +16,25 @@ interface FancyDto {
     override val nullableListOfNullableB: Fancy.A.B?
   ) : Fancy.A {
     companion object {
-      val path: String = "A"
+      val path: String = "/Fancy/A"
 
-      fun create(source: A) = A(source.b, source.listOfB, source.listOfNullableB, source.nullableB,
-          source.nullableListOfB, source.nullableListOfNullableB)
-      @Serializable
-      data class B(
-        override val c: Fancy.C,
-        override val listOfC: Fancy.C,
-        override val listOfNullableC: Fancy.C?,
-        override val nullableC: Fancy.C?,
-        override val nullableListOfC: Fancy.C,
-        override val nullableListOfNullableC: Fancy.C?
-      ) : Fancy.A.B {
-        companion object {
-          val path: String = "Fancy/A/B"
+      fun create(source: Fancy.A) = Fancy.A(source.b, source.listOfB, source.listOfNullableB,
+          source.nullableB, source.nullableListOfB, source.nullableListOfNullableB)}
 
-          fun create(source: Fancy.A.B) = B(source.c, source.listOfC,
-              source.listOfNullableC, source.nullableC, source.nullableListOfC,
-              source.nullableListOfNullableC)}
-      }
+    @Serializable
+    data class B(
+      override val c: Fancy.C,
+      override val listOfC: Fancy.C,
+      override val listOfNullableC: Fancy.C?,
+      override val nullableC: Fancy.C?,
+      override val nullableListOfC: Fancy.C,
+      override val nullableListOfNullableC: Fancy.C?
+    ) : Fancy.A.B {
+      companion object {
+        val path: String = "/Fancy/A/B"
+
+        fun create(source: Fancy.A.B) = Fancy.A.B(source.c, source.listOfC, source.listOfNullableC,
+            source.nullableC, source.nullableListOfC, source.nullableListOfNullableC)}
     }
   }
 
@@ -43,8 +43,8 @@ interface FancyDto {
     override val x: Int?
   ) : Fancy.C {
     companion object {
-      val path: String = "C"
+      val path: String = "/Fancy/C"
 
-      fun create(source: C) = C(source.x)}
+      fun create(source: Fancy.C) = Fancy.C(source.x)}
   }
 }

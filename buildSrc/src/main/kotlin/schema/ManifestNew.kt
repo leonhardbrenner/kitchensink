@@ -71,11 +71,17 @@ object ManifestNew {
 
             val nullable get() = rawType.isMarkedNullable
 
-            val path = if (parent==null) name else "${namespace.name}/${parent.name}/$name"
-            //TODO - dotPath could take an aspect as a parameter
-            fun dotPath(aspect: String = "") = if (parent==null) name else "${namespace.name}$aspect.${parent.name}.$name"
+            val path: String = if (parent==null)
+                "/${namespace.name}/$name"
+            else
+                "${parent.path}/$name"
 
-            val packageName = "Fancy" //namespace.name
+            fun dotPath(aspect: String = ""): String = if (parent==null)
+                "${namespace.name}$aspect.$name".apply { print("First = $this") }
+            else
+                "${parent.dotPath(aspect)}.$name".apply { print("Second = $this") }
+
+            val packageName = namespace.name
         }
     }
 
