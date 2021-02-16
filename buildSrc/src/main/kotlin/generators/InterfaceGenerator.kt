@@ -5,6 +5,7 @@ import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import java.io.File
 import schemanew.Namespace
+import schema.ManifestNew
 
 object InterfaceGenerator: Generator {
 
@@ -34,7 +35,7 @@ object InterfaceGenerator: Generator {
 
 object InterfaceGenerator2: Generator {
 
-    fun generate(namespace: schema.ManifestNew.Namespace) {
+    fun generate(namespace: ManifestNew.Namespace) {
         val typeSpec = TypeSpec.interfaceBuilder("${namespace.name}").apply {
             namespace.types.forEach { type ->
                 generateType(type)
@@ -47,7 +48,7 @@ object InterfaceGenerator2: Generator {
         file.writeTo(writer)
     }
 
-    fun TypeSpec.Builder.generateType(type: schema.ManifestNew.Namespace.Type): TypeSpec.Builder = addType(
+    fun TypeSpec.Builder.generateType(type: ManifestNew.Namespace.Type): TypeSpec.Builder = addType(
         TypeSpec.interfaceBuilder(type.name).apply {
             type.elements.forEach { element ->
                 addProperty(

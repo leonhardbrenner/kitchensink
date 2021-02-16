@@ -31,6 +31,10 @@ object ManifestNew {
 
         class Element(val namespace: Namespace, val parent: Type?, val property: KProperty<*>) {
 
+            //XXX - I am guessing we only need one or there is more to one of these implementations.
+            val dbName = name.toLowerCase()
+            val columnName = name.toLowerCase()
+
             val name get() = property.name
 
             val type get() = Type(namespace, parent, property.returnType)
