@@ -1,7 +1,5 @@
 package generated.model
 
-import Fancy
-import kotlin.Int
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -18,7 +16,7 @@ interface FancyDto {
     companion object {
       val path: String = "/Fancy/A"
 
-      fun create(source: Fancy.A) = Fancy.A(source.b, source.listOfB, source.listOfNullableB,
+      fun create(source: Fancy.A) = FancyDto.A(source.b, source.listOfB, source.listOfNullableB,
           source.nullableB, source.nullableListOfB, source.nullableListOfNullableB)}
 
     @Serializable
@@ -33,18 +31,19 @@ interface FancyDto {
       companion object {
         val path: String = "/Fancy/A/B"
 
-        fun create(source: Fancy.A.B) = Fancy.A.B(source.c, source.listOfC, source.listOfNullableC,
-            source.nullableC, source.nullableListOfC, source.nullableListOfNullableC)}
+        fun create(source: Fancy.A.B) = FancyDto.A.B(source.c, source.listOfC,
+            source.listOfNullableC, source.nullableC, source.nullableListOfC,
+            source.nullableListOfNullableC)}
     }
   }
 
   @Serializable
   data class C(
-    override val x: Int?
+    override val x: kotlin.Int?
   ) : Fancy.C {
     companion object {
       val path: String = "/Fancy/C"
 
-      fun create(source: Fancy.C) = Fancy.C(source.x)}
+      fun create(source: Fancy.C) = FancyDto.C(source.x)}
   }
 }

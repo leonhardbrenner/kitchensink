@@ -72,8 +72,8 @@ object DtoGenerator2: Generator {
                     namespace.types.forEach { generateType(it) }
                 }.build()
             ).build()
-        val writer = File("$path/commonMain/kotlin")
-        file.writeTo(writer)
+        //val writer = File("$path/commonMain/kotlin")
+        //file.writeTo(writer)
         file.writeTo(System.out)
     }
 
@@ -100,16 +100,21 @@ object DtoGenerator2: Generator {
             .primaryConstructor(
                 FunSpec.constructorBuilder().apply {
                     type.elements.forEach { element ->
-                        addParameter(element.name, element.type.typeName).build()
+                        addParameter(element.name, ClassName("generated.model", element.type.rawType.toString())).build()
                     }
                 }.build()
             )
             .apply {
                 type.elements.forEach { element ->
                     addProperty(
-                        //TODO - make extension function
-                        element.asPropertySpec(false, KModifier.OVERRIDE)
-                            .initializer(element.name).build()
+                        PropertySpec.builder(
+                            element.name,
+                            ClassName("generated.model", element.type.rawType.toString())
+                        )
+                            .addModifiers(listOf(KModifier.OVERRIDE))
+                            .mutable(false)
+                            .initializer(element.name)
+                            .build()
                     )
                 }
             }
@@ -125,7 +130,7 @@ object DtoGenerator2: Generator {
                             //Look at CodeBlock.addArgument and you will see L stands for literal
                             .addCode(
                                 "return %T(%L)",
-                                type.dotPath("Dto"),
+                                ClassName("generated.model", type.dotPath("Dto")),
                                 type.elements.map { "source.${it.name}" }.joinToString(", ")
                             )
                             .build()

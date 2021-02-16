@@ -51,10 +51,11 @@ object ManifestNew {
             val kType: KType, val kClass: KClass<*>? = null
         ) {
 
-            val name: String get() = if (kClass==null) "UNKNOWN3" else kClass.simpleName?:"UNKNOWN2"
-
-            //val name get() = kClass?.simpleName
-            //    ?:throw Exception("No KClass for $kType")
+            //This is because we are generating: Fancy.A.`B?`,
+            val name: String get() = if (kClass==null)
+                rawType.toString().split(".").last().replace("?", "")
+            else
+                (kClass.simpleName?:"UNKNOWN2").replace("?", "")
 
             private val memberProperties get() = kClass?.memberProperties?:emptyList()
             val elements by lazy { memberProperties.map { Element(namespace, parent, it) } }
@@ -77,9 +78,9 @@ object ManifestNew {
                 "${parent.path}/$name"
 
             fun dotPath(aspect: String = ""): String = if (parent==null)
-                "${namespace.name}$aspect.$name".apply { print("First = $this") }
+                "${namespace.name}$aspect.$name"
             else
-                "${parent.dotPath(aspect)}.$name".apply { print("Second = $this") }
+                "${parent.dotPath(aspect)}.$name"
 
             val packageName = namespace.name
         }
