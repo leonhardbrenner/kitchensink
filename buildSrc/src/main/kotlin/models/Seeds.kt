@@ -1,35 +1,36 @@
 package models
 
-import schemanew.Manifest
+import schema.ManifestNew
 
-val seeds = Manifest.namespace("Seeds") {
-    complexType("BasicSeed") {
-        element("name", "builtin:string")
-        element("secondary_name", "builtin:string")
-        element("description", "builtin:nullableString")
-        element("image", "builtin:string")
-        element("link", "builtin:string")
+interface Seeds {
+    interface BasicSeed {
+        val name: String
+        val secondary_name: String
+        val description: String?
+        val image: String
+        val link: String
     }
 
-    complexType("SeedCategory") {
-        element("name", "builtin:string")
-        element("image", "builtin:string")
-        element("link", "builtin:string")
+    interface SeedCategory {
+        val name: String
+        val image: String
+        val link: String
     }
 
-    complexType("DetailedSeed") {
-        element("name", "builtin:string")
-        element("maturity", "builtin:nullableString")
-        element("secondary_name", "builtin:nullableString")
-        element("description", "builtin:nullableString")
-        element("image", "builtin:nullableString")
-        element("link", "builtin:nullableString")
+    interface DetailedSeed {
+        val name: String
+        val maturity: String?
+        val secondary_name: String?
+        val description: String?
+        val image: String?
+        val link: String?
     }
 
-    complexType("SeedFacts") {
-        element("name", "builtin:string")
+    interface SeedFacts {
+        val name: String
         //TODO - This should be a list
-        element("facts", "builtin:nullableString")
-        element("maturity", "builtin:nullableString")
+        val facts: String?
+        val maturity: String?
     }
 }
+val seeds = ManifestNew.Namespace(Seeds::class)

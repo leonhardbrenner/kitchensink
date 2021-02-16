@@ -8,6 +8,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
 import kotlin.reflect.full.createType
+import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
 
 const val UNBOUNDED = Int.MAX_VALUE
@@ -25,15 +26,15 @@ object ManifestNew {
 
         val name get() = kclass.simpleName?:"UNKNOWN $kclass"
 
-        val elements by lazy { kclass.memberProperties.map { Element(this, null, it) } }
+        val elements by lazy { kclass.declaredMemberProperties.map { Element(this, null, it) } }
 
         val types by lazy { kclass.nestedClasses.map { Type(this, null, it.createType(), it) } }
 
         class Element(val namespace: Namespace, val parent: Type?, val property: KProperty<*>) {
 
             //XXX - I am guessing we only need one or there is more to one of these implementations.
-            val dbName = name.toLowerCase()
-            val columnName = name.toLowerCase()
+            val dbName = name//.toLowerCase()
+            val columnName = name//.toLowerCase()
 
             val name get() = property.name
 
@@ -62,7 +63,7 @@ object ManifestNew {
             else
                 (kClass.simpleName?:"UNKNOWN2").replace("?", "")
 
-            private val memberProperties get() = kClass?.memberProperties?:emptyList()
+            private val memberProperties get() = kClass?.declaredMemberProperties?:emptyList()
             val elements by lazy { memberProperties.map { Element(namespace, parent, it) } }
 
             private val nestedClasses get() = kClass?.nestedClasses?:emptyList()

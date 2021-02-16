@@ -151,7 +151,7 @@ object DbGenerator2: Generator {
             ).build()
         val writer = File("$path/jvmMain/kotlin")
         file.writeTo(writer)
-        file.writeTo(System.out)
+        //file.writeTo(System.out)
     }
 
     val ManifestNew.Namespace.Element.propertySpec
@@ -167,7 +167,7 @@ object DbGenerator2: Generator {
                 when (type.kType.toString()) {
                     "kotlin.String" -> "text"
                     "kotlin.Int" -> "integer"
-                    "kotlin.Int" -> "integer"
+                    "kotlin.Double" -> "double"
                     "kotlin.Long" -> "long"
                     "kotlin.Boolean" -> "bool"
                     else -> "text"
