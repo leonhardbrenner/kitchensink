@@ -64,7 +64,7 @@ object DtoGenerator: Generator {
 }
 
 object DtoGenerator2: Generator {
-
+    //TODO: Generate the top level elements
     fun generate(namespace: ManifestNew.Namespace) {
         val file = FileSpec.builder("generated.model", "${namespace.name}Dto")
             .addType(
@@ -77,22 +77,7 @@ object DtoGenerator2: Generator {
         file.writeTo(System.out)
     }
 
-    fun TypeSpec.Builder.generateType(type: ManifestNew.Namespace.Type): TypeSpec.Builder = apply {
-        println("Building ${type.name} ${type.packageName}")
-        type.elements.forEach { element ->
-            println("\t${element.name}, ${element.type.typeName}")
-        }
-        type.types.forEach {
-            println("\tType = ${it.name} ${it.typeName}")
-            type.elements.forEach { element ->
-                println("\t${element.name}, ${element.type.typeName}")
-            }
-            it.types.forEach {
-                println("\tType = ${it.name} ${it.typeName}")
-            }
-        }
-
-    }.addType(
+    fun TypeSpec.Builder.generateType(type: ManifestNew.Namespace.Type): TypeSpec.Builder = addType(
         TypeSpec.classBuilder(type.name)
             .addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
             .addModifiers(KModifier.DATA)
@@ -100,16 +85,18 @@ object DtoGenerator2: Generator {
             .primaryConstructor(
                 FunSpec.constructorBuilder().apply {
                     type.elements.forEach { element ->
-                        addParameter(element.name, ClassName("generated.model", element.type.rawType.toString())).build()
+                        addParameter(element.name, element.type.className).build()
                     }
                 }.build()
             )
             .apply {
                 type.elements.forEach { element ->
+                    val classname = ClassName("generated.model", element.type.rawType.toString().replace("?", ""))
+                        .copy(nullable = element.type.nullable)
                     addProperty(
                         PropertySpec.builder(
                             element.name,
-                            ClassName("generated.model", element.type.rawType.toString())
+                            classname
                         )
                             .addModifiers(listOf(KModifier.OVERRIDE))
                             .mutable(false)
