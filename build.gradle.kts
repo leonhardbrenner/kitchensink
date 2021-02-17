@@ -136,14 +136,6 @@ kotlin {
     }
 }
 
-//flyway {
-//    url = System.getenv("DB_URL")
-//    user = System.getenv("DB_USER")
-//    password = System.getenv("DB_PASSWORD")
-//    baselineOnMigrate=true
-//    locations = arrayOf("filesystem:resources/db/migration")
-//}
-
 application {
     mainClassName = "ServerKt"
 }

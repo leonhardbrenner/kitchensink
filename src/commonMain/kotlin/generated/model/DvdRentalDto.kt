@@ -15,10 +15,10 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Actor {
     companion object {
-      val path: String = "/DvdRental/Actor"
+      const val path: String = "/DvdRental/Actor"
 
-      fun create(source: DvdRental.Actor) = Actor(source.actorId, source.firstName, source.lastName,
-          source.lastUpdate)}
+      fun create(source: DvdRental.Actor) = DvdRentalDto.Actor(source.actorId, source.firstName,
+          source.lastName, source.lastUpdate)}
   }
 
   @Serializable
@@ -33,9 +33,9 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Address {
     companion object {
-      val path: String = "/DvdRental/Address"
+      const val path: String = "/DvdRental/Address"
 
-      fun create(source: DvdRental.Address) = Address(source.addressId, source.address,
+      fun create(source: DvdRental.Address) = DvdRentalDto.Address(source.addressId, source.address,
           source.address2, source.district, source.cityId, source.postalCode, source.phone,
           source.lastUpdate)}
   }
@@ -47,9 +47,9 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Category {
     companion object {
-      val path: String = "/DvdRental/Category"
+      const val path: String = "/DvdRental/Category"
 
-      fun create(source: DvdRental.Category) = Category(source.categoryId, source.name,
+      fun create(source: DvdRental.Category) = DvdRentalDto.Category(source.categoryId, source.name,
           source.lastUpdate)}
   }
 
@@ -61,10 +61,10 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.City {
     companion object {
-      val path: String = "/DvdRental/City"
+      const val path: String = "/DvdRental/City"
 
-      fun create(source: DvdRental.City) = City(source.cityId, source.city, source.countryId,
-          source.lastUpdate)}
+      fun create(source: DvdRental.City) = DvdRentalDto.City(source.cityId, source.city,
+          source.countryId, source.lastUpdate)}
   }
 
   @Serializable
@@ -74,9 +74,9 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Country {
     companion object {
-      val path: String = "/DvdRental/Country"
+      const val path: String = "/DvdRental/Country"
 
-      fun create(source: DvdRental.Country) = Country(source.countryId, source.country,
+      fun create(source: DvdRental.Country) = DvdRentalDto.Country(source.countryId, source.country,
           source.lastUpdate)}
   }
 
@@ -94,11 +94,11 @@ interface DvdRentalDto {
     override val active: Int
   ) : DvdRental.Customer {
     companion object {
-      val path: String = "/DvdRental/Customer"
+      const val path: String = "/DvdRental/Customer"
 
-      fun create(source: DvdRental.Customer) = Customer(source.customerId, source.storeId,
-          source.firstName, source.lastName, source.email, source.addressId, source.activebool,
-          source.createDate, source.lastUpdate, source.active)}
+      fun create(source: DvdRental.Customer) = DvdRentalDto.Customer(source.customerId,
+          source.storeId, source.firstName, source.lastName, source.email, source.addressId,
+          source.activebool, source.createDate, source.lastUpdate, source.active)}
   }
 
   @Serializable
@@ -118,12 +118,12 @@ interface DvdRentalDto {
     override val fullText: String
   ) : DvdRental.Film {
     companion object {
-      val path: String = "/DvdRental/Film"
+      const val path: String = "/DvdRental/Film"
 
-      fun create(source: DvdRental.Film) = Film(source.filmId, source.title, source.description,
-          source.releaseYear, source.languageId, source.rentalDuration, source.rentalRate,
-          source.length, source.replacementCost, source.rating, source.lastUpdate,
-          source.specialFeatures, source.fullText)}
+      fun create(source: DvdRental.Film) = DvdRentalDto.Film(source.filmId, source.title,
+          source.description, source.releaseYear, source.languageId, source.rentalDuration,
+          source.rentalRate, source.length, source.replacementCost, source.rating,
+          source.lastUpdate, source.specialFeatures, source.fullText)}
   }
 
   @Serializable
@@ -133,10 +133,10 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.FilmActor {
     companion object {
-      val path: String = "/DvdRental/FilmActor"
+      const val path: String = "/DvdRental/FilmActor"
 
-      fun create(source: DvdRental.FilmActor) = FilmActor(source.actorId, source.filmId,
-          source.lastUpdate)}
+      fun create(source: DvdRental.FilmActor) = DvdRentalDto.FilmActor(source.actorId,
+          source.filmId, source.lastUpdate)}
   }
 
   @Serializable
@@ -146,10 +146,10 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.FilmCategory {
     companion object {
-      val path: String = "/DvdRental/FilmCategory"
+      const val path: String = "/DvdRental/FilmCategory"
 
-      fun create(source: DvdRental.FilmCategory) = FilmCategory(source.filmId, source.categoryId,
-          source.lastUpdate)}
+      fun create(source: DvdRental.FilmCategory) = DvdRentalDto.FilmCategory(source.filmId,
+          source.categoryId, source.lastUpdate)}
   }
 
   @Serializable
@@ -160,10 +160,10 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Inventory {
     companion object {
-      val path: String = "/DvdRental/Inventory"
+      const val path: String = "/DvdRental/Inventory"
 
-      fun create(source: DvdRental.Inventory) = Inventory(source.inventoryId, source.filmId,
-          source.storeId, source.lastUpdate)}
+      fun create(source: DvdRental.Inventory) = DvdRentalDto.Inventory(source.inventoryId,
+          source.filmId, source.storeId, source.lastUpdate)}
   }
 
   @Serializable
@@ -173,9 +173,9 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Language {
     companion object {
-      val path: String = "/DvdRental/Language"
+      const val path: String = "/DvdRental/Language"
 
-      fun create(source: DvdRental.Language) = Language(source.languageId, source.name,
+      fun create(source: DvdRental.Language) = DvdRentalDto.Language(source.languageId, source.name,
           source.lastUpdate)}
   }
 
@@ -189,10 +189,10 @@ interface DvdRentalDto {
     override val paymentDate: String
   ) : DvdRental.Payment {
     companion object {
-      val path: String = "/DvdRental/Payment"
+      const val path: String = "/DvdRental/Payment"
 
-      fun create(source: DvdRental.Payment) = Payment(source.paymentId, source.customerId,
-          source.staffId, source.rentalId, source.amount, source.paymentDate)}
+      fun create(source: DvdRental.Payment) = DvdRentalDto.Payment(source.paymentId,
+          source.customerId, source.staffId, source.rentalId, source.amount, source.paymentDate)}
   }
 
   @Serializable
@@ -206,9 +206,9 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Rental {
     companion object {
-      val path: String = "/DvdRental/Rental"
+      const val path: String = "/DvdRental/Rental"
 
-      fun create(source: DvdRental.Rental) = Rental(source.rentalId, source.rentalDate,
+      fun create(source: DvdRental.Rental) = DvdRentalDto.Rental(source.rentalId, source.rentalDate,
           source.inventoryId, source.customerId, source.returnDate, source.staffId,
           source.lastUpdate)}
   }
@@ -228,11 +228,11 @@ interface DvdRentalDto {
     override val picture: String
   ) : DvdRental.Staff {
     companion object {
-      val path: String = "/DvdRental/Staff"
+      const val path: String = "/DvdRental/Staff"
 
-      fun create(source: DvdRental.Staff) = Staff(source.staffId, source.firstName, source.lastName,
-          source.addressId, source.email, source.storeId, source.active, source.username,
-          source.password, source.lastUpdate, source.picture)}
+      fun create(source: DvdRental.Staff) = DvdRentalDto.Staff(source.staffId, source.firstName,
+          source.lastName, source.addressId, source.email, source.storeId, source.active,
+          source.username, source.password, source.lastUpdate, source.picture)}
   }
 
   @Serializable
@@ -243,9 +243,9 @@ interface DvdRentalDto {
     override val lastUpdate: String
   ) : DvdRental.Store {
     companion object {
-      val path: String = "/DvdRental/Store"
+      const val path: String = "/DvdRental/Store"
 
-      fun create(source: DvdRental.Store) = Store(source.storeId, source.managerStaffId,
-          source.addressId, source.lastUpdate)}
+      fun create(source: DvdRental.Store) = DvdRentalDto.Store(source.storeId,
+          source.managerStaffId, source.addressId, source.lastUpdate)}
   }
 }

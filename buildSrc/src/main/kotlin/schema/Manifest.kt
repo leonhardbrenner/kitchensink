@@ -1,254 +1,112 @@
-package schemanew
+package schema
 
-import com.squareup.kotlinpoet.*
-import org.codehaus.groovy.runtime.DefaultGroovyMethods.printf
-import kotlin.collections.HashMap
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.asTypeName
+
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
+import kotlin.reflect.KType
+import kotlin.reflect.full.createType
+import kotlin.reflect.full.declaredMemberProperties
+import kotlin.reflect.full.primaryConstructor
 
-//TODO - put this behind an interface.
+const val UNBOUNDED = Int.MAX_VALUE
+
 object Manifest {
 
     val namespaceMap = HashMap<String, Namespace>()
 
     val namespaces get() = namespaceMap.values.toList()
 
-    init {
-        namespace("builtin") {
-            //This deviates from XMLSchema which would make nullable an attribute of the type but in Kotlin we use String?
-            simpleType("boolean", Boolean::class)
-            simpleType("nullableBoolean", Boolean::class, nullable = true)
-            simpleType("string", String::class)
-            simpleType("nullableString", String::class, nullable = true)
-            simpleType("int", Int::class)
-            simpleType("nullableInt", Int::class, nullable = true)
-            simpleType("long", Long::class)
-            simpleType("nullableLong", Long::class, nullable = true)
-            simpleType("double", Double::class)
-            simpleType("nullableDouble", Double::class, nullable = true)
-            simpleType("float", Float::class)
-            simpleType("nullableLong", Float::class, nullable = true)
+    class Namespace(val kclass: KClass<*>) {
+        init {
+            namespaceMap[kclass.simpleName!!] = this
         }
-    }
 
-    fun namespace(name: String, block: Namespace.() -> Unit): Namespace {
-        return if (namespaceMap.contains(name)) namespaceMap[name]!! else {
-            Namespace(name, block).apply { namespaceMap[name] = this }
+        val name get() = kclass.simpleName?:"UNKNOWN $kclass"
+
+        val elements by lazy { kclass.declaredMemberProperties.map { Element(this, null, it) } }
+
+        val types by lazy { kclass.nestedClasses.map { Type(this, null, it.createType(), it) } }
+
+        class Element(val namespace: Namespace, val parent: Type?, val property: KProperty<*>) {
+
+            //XXX - I am guessing we only need one or there is more to one of these implementations.
+            val dbName = name//.toLowerCase()
+            val columnName = name//.toLowerCase()
+
+            val name get() = property.name
+
+            val type get() = Type(namespace, parent, property.returnType)
+
+            val minOccurs get() = if (type.rawType.isMarkedNullable) 0 else 1
+
+            val maxOccurs get() = if (property.returnType.classifier == List::class) UNBOUNDED else 1
+
+            //TODO - This should be a part of a class of generators.
+            fun asPropertySpec(mutable: Boolean, vararg modifiers: KModifier) = PropertySpec.builder(
+                name,
+                type.typeName
+            ).addModifiers(modifiers.toList() ).mutable(mutable)
+
         }
-    }
-}
 
-class Namespace(val name: String, block: Namespace.() -> Unit) {
-    val simpleTypeMap = LinkedHashMap<String, SimpleType>()
-    val simpleTypes get() = simpleTypeMap.values
+        class Type(
+            val namespace: Namespace, val parent: Type?,
+            val kType: KType, val kClass: KClass<*>? = null
+        ) {
 
-    val complexTypeMap = LinkedHashMap<String, ComplexType>()
-    val complexTypes get() = complexTypeMap.values.sortedBy { it.name }
+            val name: String get() = if (kClass==null)
+                rawType.toString().split(".").last().replace("?", "")
+            else
+                (kClass.simpleName?:"UNKNOWN2").replace("?", "")
 
-    val typeMap = LinkedHashMap<String, Type>()
-    val types get() = typeMap.values
 
-    val elementMap = LinkedHashMap<String, Element>()
-    val elements get() = elementMap.values
-
-    init { block() }
-
-    fun complexType(name: String, nullable: Boolean = false, block: ComplexType.() -> Unit): ComplexType {
-        val complexType = ComplexType(this, null, name, nullable, block)
-        complexTypeMap[name] = complexType
-        typeMap[name] = complexType
-        return complexType
-    }
-
-    fun simpleType(name: String, kclass: KClass<*>?,
-                   nullable: Boolean = false, block: SimpleType.() -> Unit = {}) {
-        val simpleType = SimpleType(this, null, name, kclass, nullable, block)
-        simpleTypeMap[name] = simpleType
-        typeMap[name] = simpleType
-    }
-
-    fun element(name: String, typeRef: String? = null, nullable: Boolean = false, block: Element.() -> Unit = {}) {
-        Element(this, null, name, nullable, typeRef, block)
-    }
-
-    //fun qname(name: String) = Qname(this, name)
-}
-
-class Qname(val namespace: Namespace, val name: String)
-
-open class Element(
-    val namespace: Namespace,
-    val parent: ComplexType?,
-    val name: String,
-    val nullable: Boolean = false, //XXX - this should either be on element or type.
-    typeRef: String?,
-    val block: Element.() -> Unit = {}
-) {
-
-    init {
-        block()
-    }
-
-    val columnName = name //XXX - this should be a parameter.
-
-    val typeRef = if (typeRef != null)
-        TypeRef(namespace, typeRef)
-    else
-        null
-
-    val type: Type get() = typeRef!! //TODO - xor assert and ^^^ XXX actually I think we can assume a simple type here
-
-    var db: Db? = null
-    class Db(val name: String, val schema: String)
-    fun db(name: String, schema: String) = Db(name, schema).let { db = it }
-
-    val dbName get() = db?.name?:name
-
-    init {
-        if (parent != null) {
-            parent.elementMap[name] = this
-            type.let { it ->
-                parent.typeMap[name] = it
-                if (it is ComplexType) { //TODO - Encapsulate this
-                    parent.complexTypeMap[name] = it
-                }
+            private val memberProperties get() = kClass?.declaredMemberProperties?:emptyList()
+            val elements by lazy {
+                //TODO - Revisit! This is done so properties are generated in the order they were declared.
+                val parameters = kClass!!.primaryConstructor!!.parameters.mapIndexed {
+                        pos, it -> it.name to pos
+                }.toMap()
+                memberProperties.map { Element(namespace, parent, it) }.sortedBy { parameters[it.name] }
             }
-        } else {
-            namespace.elementMap[name] = this
-            type.let { it ->
-                namespace.typeMap[name] = it
-                if (it is ComplexType) { //TODO - Encapsulate this
-                    namespace.complexTypeMap[name] = it
-                }
-            }
+
+            private val nestedClasses get() = kClass?.nestedClasses?:emptyList()
+            val types by lazy { nestedClasses.map { Type(namespace, this, it.createType(), it) } }
+
+            val rawType get() = if (kType.classifier == List::class)
+                kType.arguments[0].type!!
+            else
+                kType
+
+            val typeName get() = with (rawType.asTypeName()) {
+                if (rawType.toString().startsWith("models."))
+                    ClassName(
+                        "generated.model",
+                        rawType.toString()
+                            .replace("models.", "")
+                            .replace("?", "")
+                    )
+                else
+                    rawType.asTypeName()
+            }.copy(nullable = nullable)
+
+            val nullable get() = rawType.isMarkedNullable
+
+            val path: String = if (parent==null)
+                "/${namespace.name}/$name"
+            else
+                "${parent.path}/$name"
+
+            fun dotPath(aspect: String = ""): String = if (parent==null)
+                "${namespace.name}$aspect.$name"
+            else
+                "${parent.dotPath(aspect)}.$name"
+
+            val packageName = namespace.name
         }
     }
 
-    fun complexType(name: String, nullable: Boolean = false, block: ComplexType.() -> Unit): ComplexType {
-        return if (parent != null)
-            parent.complexType(name, block)
-        else
-            namespace.complexType(name, nullable, block)
-    }
-
-    fun asPropertySpec(mutable: Boolean, vararg modifiers: KModifier) = PropertySpec.builder(
-        name,
-        type.typeName
-    ).addModifiers(modifiers.toList() ).mutable(mutable)
-
-}
-
-open class Attribute(val namespace: Namespace, val parent: ComplexType?, val name: String, typeRef: String?) {
-
-    val elements = HashMap<String, Element>()
-
-    val typeRef = typeRef?.let { TypeRef(namespace, it) }
-
-}
-
-interface Type {
-    val namespace: Namespace
-    val parent: ComplexType?
-    val name: String
-    val typeName: TypeName
-    val qualifiedName: String get() = name
-    val packageName: String
-    val nullable: Boolean
-    val path: String
-        get() = if (parent == null) "/${namespace.name}/$name" else "${parent!!.path}/$name"
-}
-
-class TypeRef(
-    override val namespace: Namespace,
-    override val name: String //This may be a local or qualified reference to a type.
-): Type {
-    override val parent: ComplexType? = null
-
-    override val typeName: TypeName
-        get() = let {
-            val indexOfColon = name.indexOf(":")
-            return if (indexOfColon > 0) {
-                try {Manifest.namespaceMap[name.substring(0, indexOfColon)]!!
-                    .typeMap[name.substring(indexOfColon + 1)]!!.typeName} catch(ex: Exception) {
-                    ClassName("", "SomethingWeirdHappend")
-                }
-            } else if (namespace.typeMap.containsKey(name)) {
-                namespace.typeMap[name]!!.typeName
-            } else {
-                println("We are going to blow: ${namespace.name} $name")
-                ClassName("", "")
-            }
-        }
-    override val nullable: Boolean
-        get() = let {
-            val indexOfColon = name.indexOf(":")
-            return if (indexOfColon > 0) {
-                try {
-                    Manifest.namespaceMap[name.substring(0, indexOfColon)]!!
-                        .typeMap[name.substring(indexOfColon + 1)]!!.nullable
-                } catch(ex: Exception) {
-                    false
-                }
-            } else if (namespace.typeMap.containsKey(name)) {
-                namespace.typeMap[name]!!.nullable
-            } else {
-                false
-            }
-        }
-
-    override val packageName: String
-        get() = if (namespace.name == "builtin") "" else namespace.name
-}
-
-open class ComplexType(
-    override val namespace: Namespace,
-    override val parent: ComplexType?,
-    override val name: String,
-    override val nullable: Boolean = false,
-    block: ComplexType.() -> Unit
-): Type {
-    val typeMap = LinkedHashMap<String, Type>()
-    val types get() = typeMap.values
-    val complexTypeMap = LinkedHashMap<String, ComplexType>()
-    val complexTypes = complexTypeMap.values
-    val elementMap = LinkedHashMap<String, Element>()
-    val elements get() = elementMap.values //XXX - looks like not all of the geenerators are using this.
-    override val packageName: String
-        get() = namespace.name //Namespace could use a package attribute and we have generated vs handwritten.
-    init {
-        block()
-        namespace.complexTypeMap[name] = this
-    }
-    fun complexType(name: String, block: ComplexType.() -> Unit): ComplexType {
-        val complexType = ComplexType(namespace, this, name, nullable, block)
-        complexTypeMap[name] = complexType
-        typeMap[name] = complexType
-        return complexType
-    }
-    fun attribute(name: String, typeRef: String? = null) =
-        Attribute(namespace, this, name, typeRef)
-    fun element(name: String, typeRef: String? = null, block: Element.() -> Unit = {}) {
-        Element(namespace, this, name, nullable, typeRef, block)
-    }
-    override val typeName get() = ClassName("", name)
-}
-
-//TODO - We could think of SimpleType as an extension of typeRef with a restriction on the number of children.
-open class SimpleType(
-    override val namespace: Namespace,
-    override val parent: ComplexType?,
-    override val name: String,
-    val kclass: KClass<*>?,
-    override val nullable: Boolean = false,
-    block: SimpleType.() -> Unit
-): Type {
-    init {
-        block()
-        namespace.typeMap[name] = this
-        namespace.simpleTypeMap[name] = this
-    }
-    override val typeName get() = kclass!!.asTypeName().copy(nullable = nullable)
-    override val packageName: String
-        get() = if (namespace.name == "builtin") "" else namespace.name
-    override val qualifiedName: String
-        get() = kclass?.qualifiedName?:name
 }

@@ -21,13 +21,13 @@ object DvdRentalDb {
         source[Table.firstName], source[Table.lastName], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Actor") {
-      val actorId: Column<Int> = integer("actor_id")
+      val actorId: Column<Int> = integer("actorId")
 
-      val firstName: Column<String> = text("first_name")
+      val firstName: Column<String> = text("firstName")
 
-      val lastName: Column<String> = text("last_name")
+      val lastName: Column<String> = text("lastName")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -60,7 +60,7 @@ object DvdRentalDb {
         source[Table.postalCode], source[Table.phone], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Address") {
-      val addressId: Column<Int> = integer("address_id")
+      val addressId: Column<Int> = integer("addressId")
 
       val address: Column<String> = text("address")
 
@@ -68,13 +68,13 @@ object DvdRentalDb {
 
       val district: Column<String?> = text("district").nullable()
 
-      val cityId: Column<Int> = integer("city_id")
+      val cityId: Column<Int> = integer("cityId")
 
-      val postalCode: Column<String?> = text("postal_code").nullable()
+      val postalCode: Column<String?> = text("postalCode").nullable()
 
       val phone: Column<String?> = text("phone").nullable()
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -118,11 +118,11 @@ object DvdRentalDb {
         source[Table.name], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Category") {
-      val categoryId: Column<Int> = integer("category_id")
+      val categoryId: Column<Int> = integer("categoryId")
 
       val name: Column<String> = text("name")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -151,13 +151,13 @@ object DvdRentalDb {
         source[Table.countryId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("City") {
-      val cityId: Column<Int> = integer("city_id")
+      val cityId: Column<Int> = integer("cityId")
 
       val city: Column<String> = text("city")
 
-      val countryId: Column<Int> = integer("country_id")
+      val countryId: Column<Int> = integer("countryId")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -189,11 +189,11 @@ object DvdRentalDb {
         source[Table.country], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Country") {
-      val countryId: Column<Int> = integer("country_id")
+      val countryId: Column<Int> = integer("countryId")
 
       val country: Column<String> = text("country")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -224,23 +224,23 @@ object DvdRentalDb {
         source[Table.lastUpdate], source[Table.active])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Customer") {
-      val customerId: Column<Int> = integer("customer_id")
+      val customerId: Column<Int> = integer("customerId")
 
-      val storeId: Column<Int> = integer("store_id")
+      val storeId: Column<Int> = integer("storeId")
 
-      val firstName: Column<String> = text("first_name")
+      val firstName: Column<String> = text("firstName")
 
-      val lastName: Column<String> = text("last_name")
+      val lastName: Column<String> = text("lastName")
 
       val email: Column<String> = text("email")
 
-      val addressId: Column<Int> = integer("address_id")
+      val addressId: Column<Int> = integer("addressId")
 
       val activebool: Column<Boolean> = bool("activebool")
 
-      val createDate: Column<String> = text("create_date")
+      val createDate: Column<String> = text("createDate")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
 
       val active: Column<Int> = integer("active")
     }
@@ -295,31 +295,31 @@ object DvdRentalDb {
         source[Table.specialFeatures], source[Table.fullText])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Film") {
-      val filmId: Column<Int> = integer("film_id")
+      val filmId: Column<Int> = integer("filmId")
 
       val title: Column<String> = text("title")
 
       val description: Column<String> = text("description")
 
-      val releaseYear: Column<Int> = integer("release_year")
+      val releaseYear: Column<Int> = integer("releaseYear")
 
-      val languageId: Column<Int> = integer("language_id")
+      val languageId: Column<Int> = integer("languageId")
 
-      val rentalDuration: Column<Int> = integer("rental_duration")
+      val rentalDuration: Column<Int> = integer("rentalDuration")
 
-      val rentalRate: Column<Double> = double("rental_rate")
+      val rentalRate: Column<Double> = double("rentalRate")
 
       val length: Column<Int> = integer("length")
 
-      val replacementCost: Column<Double> = double("replacement_cost")
+      val replacementCost: Column<Double> = double("replacementCost")
 
       val rating: Column<String> = text("rating")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
 
-      val specialFeatures: Column<String> = text("special_features")
+      val specialFeatures: Column<String> = text("specialFeatures")
 
-      val fullText: Column<String> = text("fulltext")
+      val fullText: Column<String> = text("fullText")
     }
 
     class Entity(
@@ -378,11 +378,11 @@ object DvdRentalDb {
         source[Table.filmId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("FilmActor") {
-      val actorId: Column<Int> = integer("actor_id")
+      val actorId: Column<Int> = integer("actorId")
 
-      val filmId: Column<Int> = integer("film_id")
+      val filmId: Column<Int> = integer("filmId")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -411,11 +411,11 @@ object DvdRentalDb {
         source[Table.categoryId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("FilmCategory") {
-      val filmId: Column<Int> = integer("film_id")
+      val filmId: Column<Int> = integer("filmId")
 
-      val categoryId: Column<Int> = integer("category_id")
+      val categoryId: Column<Int> = integer("categoryId")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -444,13 +444,13 @@ object DvdRentalDb {
         source[Table.filmId], source[Table.storeId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Inventory") {
-      val inventoryId: Column<Int> = integer("inventory_id")
+      val inventoryId: Column<Int> = integer("inventoryId")
 
-      val filmId: Column<Int> = integer("film_id")
+      val filmId: Column<Int> = integer("filmId")
 
-      val storeId: Column<Int> = integer("store_id")
+      val storeId: Column<Int> = integer("storeId")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -482,11 +482,11 @@ object DvdRentalDb {
         source[Table.name], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Language") {
-      val languageId: Column<Int> = integer("language_id")
+      val languageId: Column<Int> = integer("languageId")
 
       val name: Column<String> = text("name")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -516,17 +516,17 @@ object DvdRentalDb {
         source[Table.amount], source[Table.paymentDate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Payment") {
-      val paymentId: Column<Int> = integer("payment_id")
+      val paymentId: Column<Int> = integer("paymentId")
 
-      val customerId: Column<Int> = integer("customer_id")
+      val customerId: Column<Int> = integer("customerId")
 
-      val staffId: Column<Int> = integer("staff_id")
+      val staffId: Column<Int> = integer("staffId")
 
-      val rentalId: Column<Int> = integer("rental_id")
+      val rentalId: Column<Int> = integer("rentalId")
 
       val amount: Column<Double> = double("amount")
 
-      val paymentDate: Column<String> = text("payment_date")
+      val paymentDate: Column<String> = text("paymentDate")
     }
 
     class Entity(
@@ -565,19 +565,19 @@ object DvdRentalDb {
         source[Table.returnDate], source[Table.staffId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Rental") {
-      val rentalId: Column<Int> = integer("rental_id")
+      val rentalId: Column<Int> = integer("rentalId")
 
-      val rentalDate: Column<String> = text("rental_date")
+      val rentalDate: Column<String> = text("rentalDate")
 
-      val inventoryId: Column<Int> = integer("inventory_id")
+      val inventoryId: Column<Int> = integer("inventoryId")
 
-      val customerId: Column<Int> = integer("customer_id")
+      val customerId: Column<Int> = integer("customerId")
 
-      val returnDate: Column<String> = text("return_date")
+      val returnDate: Column<String> = text("returnDate")
 
-      val staffId: Column<Int> = integer("staff_id")
+      val staffId: Column<Int> = integer("staffId")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(
@@ -620,17 +620,17 @@ object DvdRentalDb {
         source[Table.password], source[Table.lastUpdate], source[Table.picture])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Staff") {
-      val staffId: Column<Int> = integer("staff_id")
+      val staffId: Column<Int> = integer("staffId")
 
-      val firstName: Column<String> = text("first_name")
+      val firstName: Column<String> = text("firstName")
 
-      val lastName: Column<String> = text("last_name")
+      val lastName: Column<String> = text("lastName")
 
-      val addressId: Column<Int> = integer("address_id")
+      val addressId: Column<Int> = integer("addressId")
 
       val email: Column<String> = text("email")
 
-      val storeId: Column<Int> = integer("store_id")
+      val storeId: Column<Int> = integer("storeId")
 
       val active: Column<String> = text("active")
 
@@ -638,7 +638,7 @@ object DvdRentalDb {
 
       val password: Column<String> = text("password")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
 
       val picture: Column<String> = text("picture")
     }
@@ -693,13 +693,13 @@ object DvdRentalDb {
         source[Table.managerStaffId], source[Table.addressId], source[Table.lastUpdate])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("Store") {
-      val storeId: Column<Int> = integer("store_id")
+      val storeId: Column<Int> = integer("storeId")
 
-      val managerStaffId: Column<Int> = integer("manager_staff_id")
+      val managerStaffId: Column<Int> = integer("managerStaffId")
 
-      val addressId: Column<Int> = integer("address_id")
+      val addressId: Column<Int> = integer("addressId")
 
-      val lastUpdate: Column<String> = text("last_update")
+      val lastUpdate: Column<String> = text("lastUpdate")
     }
 
     class Entity(

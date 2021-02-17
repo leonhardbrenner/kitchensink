@@ -1,16 +1,21 @@
 package generators
 
-import com.squareup.kotlinpoet.*
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeSpec
+
 import java.io.File
-import schemanew.Namespace
+import schema.Manifest
 
 object BuilderGenerator: Generator {
 
-    fun generate(namespace: Namespace) {
+    override fun generate(namespace: Manifest.Namespace) {
         val file = FileSpec.builder("generated.model", "${namespace.name}Builder")
             .addType(
                 TypeSpec.interfaceBuilder("${namespace.name}Builder").apply {
-                    namespace.complexTypes.forEach { type ->
+                    namespace.types.forEach { type ->
                         val typeSpec = TypeSpec.classBuilder(type.name)
                             .primaryConstructor(
                                 FunSpec.constructorBuilder().apply {

@@ -3,13 +3,11 @@ package generators
 import com.squareup.kotlinpoet.*
 import java.io.File
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import schemanew.ComplexType
-import schemanew.Element
-import schemanew.Namespace
+import schema.Manifest
 
 object DbGenerator: Generator {
 
-    fun generate(namespace: Namespace) {
+    override fun generate(namespace: Manifest.Namespace) {
         val file = FileSpec.builder("generated.model.db", "${namespace.name}Db")
             .addImport("org.jetbrains.exposed.dao", "IntEntity", "IntEntityClass")
             .addImport("org.jetbrains.exposed.dao.id", "EntityID", "IntIdTable")
@@ -19,7 +17,7 @@ object DbGenerator: Generator {
             .addImport("generated.model", "${namespace.name}Dto")
             .addType(
                 TypeSpec.objectBuilder("${namespace.name}Db").apply {
-                    namespace.complexTypes.forEach { complexType ->
+                    namespace.types.forEach { complexType ->
                         val typeSpec = TypeSpec.objectBuilder(complexType.name)
                             .addType(complexType.table)
                             .addType(complexType.entity)
@@ -39,25 +37,29 @@ object DbGenerator: Generator {
         file.writeTo(writer)
     }
 
-    val Element.propertySpec
-        get() = PropertySpec.builder(
+    val Manifest.Namespace.Element.propertySpec
+        get() = com.squareup.kotlinpoet.PropertySpec.builder(
             name,
             ClassName("org.jetbrains.exposed.sql", "Column")
                 .parameterizedBy(type.typeName)
         )
+            .apply {
+                type.name
+            }
             .initializer("${
-                when (type.qualifiedName) {
-                    "builtin:string" -> "text"
-                    "builtin:int" -> "integer"
-                    "builtin:double" -> "double"
-                    "builtin:boolean" -> "bool"
+                when (type.kType.toString()) {
+                    "kotlin.String" -> "text"
+                    "kotlin.Int" -> "integer"
+                    "kotlin.Double" -> "double"
+                    "kotlin.Long" -> "long"
+                    "kotlin.Boolean" -> "bool"
                     else -> "text"
                 }
             }(\"${dbName}\")${if (type.nullable) ".nullable()" else ""}")
             .build()
 
-    val ComplexType.table
-        get() = TypeSpec.objectBuilder("Table")
+    val Manifest.Namespace.Type.table
+        get() = com.squareup.kotlinpoet.TypeSpec.objectBuilder("Table")
             .superclass(ClassName("org.jetbrains.exposed.dao.id", "IntIdTable"))
             .addSuperclassConstructorParameter("%S", name)
             .apply {
@@ -66,37 +68,37 @@ object DbGenerator: Generator {
                 }
             }.build()
 
-    val ComplexType.create
-        get() = FunSpec.builder("create")
+    val Manifest.Namespace.Type.create
+        get() = com.squareup.kotlinpoet.FunSpec.builder("create")
             .addParameter("source", ClassName("org.jetbrains.exposed.sql", "ResultRow"))
 
             .addCode("return %LDto.%L(%L)",
                 packageName, name, elements.map { "source[Table.${it.name}]" }.joinToString(", "))
             .build()
 
-    val ComplexType.entity
-        get() = TypeSpec.classBuilder("Entity")
+    val Manifest.Namespace.Type.entity
+        get() = com.squareup.kotlinpoet.TypeSpec.classBuilder("Entity")
             .superclass(ClassName("org.jetbrains.exposed.dao", "IntEntity"))
             .addSuperclassConstructorParameter("id")
             .addSuperinterface(ClassName("generated.model.${namespace.name}", name))
             .primaryConstructor(
-                FunSpec.constructorBuilder().apply {
+                com.squareup.kotlinpoet.FunSpec.constructorBuilder().apply {
                     addParameter(
                         "id",
                         ClassName("org.jetbrains.exposed.dao.id", "EntityID")
-                            .parameterizedBy(Int::class.asTypeName())
+                            .parameterizedBy(kotlin.Int::class.asTypeName())
                     ).build()
                 }.build()
             )
             .addType(
-                TypeSpec.companionObjectBuilder()
+                com.squareup.kotlinpoet.TypeSpec.companionObjectBuilder()
                     .superclass(
                         ClassName("org.jetbrains.exposed.dao", "IntEntityClass")
                             .parameterizedBy(ClassName("", "Entity"))
                     )
                     .addSuperclassConstructorParameter("Table")
                     .addFunction(
-                        FunSpec.builder("insert")
+                        com.squareup.kotlinpoet.FunSpec.builder("insert")
                             .addParameter(
                                 ParameterSpec("source", ClassName(packageName, name))
                             )
@@ -109,7 +111,7 @@ object DbGenerator: Generator {
             )
             .apply {
                 elements.forEach { slot ->
-                    val propertySpec = slot.asPropertySpec(true, KModifier.OVERRIDE)
+                    val propertySpec = slot.asPropertySpec(true, com.squareup.kotlinpoet.KModifier.OVERRIDE)
                         .delegate("Table.%L", slot.name)
                         .mutable(true)
                         .build()

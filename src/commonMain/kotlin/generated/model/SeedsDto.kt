@@ -13,9 +13,9 @@ interface SeedsDto {
     override val link: String
   ) : Seeds.BasicSeed {
     companion object {
-      val path: String = "/Seeds/BasicSeed"
+      const val path: String = "/Seeds/BasicSeed"
 
-      fun create(source: Seeds.BasicSeed) = BasicSeed(source.name, source.secondary_name,
+      fun create(source: Seeds.BasicSeed) = SeedsDto.BasicSeed(source.name, source.secondary_name,
           source.description, source.image, source.link)}
   }
 
@@ -29,9 +29,9 @@ interface SeedsDto {
     override val link: String?
   ) : Seeds.DetailedSeed {
     companion object {
-      val path: String = "/Seeds/DetailedSeed"
+      const val path: String = "/Seeds/DetailedSeed"
 
-      fun create(source: Seeds.DetailedSeed) = DetailedSeed(source.name, source.maturity,
+      fun create(source: Seeds.DetailedSeed) = SeedsDto.DetailedSeed(source.name, source.maturity,
           source.secondary_name, source.description, source.image, source.link)}
   }
 
@@ -42,9 +42,10 @@ interface SeedsDto {
     override val link: String
   ) : Seeds.SeedCategory {
     companion object {
-      val path: String = "/Seeds/SeedCategory"
+      const val path: String = "/Seeds/SeedCategory"
 
-      fun create(source: Seeds.SeedCategory) = SeedCategory(source.name, source.image, source.link)}
+      fun create(source: Seeds.SeedCategory) = SeedsDto.SeedCategory(source.name, source.image,
+          source.link)}
   }
 
   @Serializable
@@ -54,8 +55,9 @@ interface SeedsDto {
     override val maturity: String?
   ) : Seeds.SeedFacts {
     companion object {
-      val path: String = "/Seeds/SeedFacts"
+      const val path: String = "/Seeds/SeedFacts"
 
-      fun create(source: Seeds.SeedFacts) = SeedFacts(source.name, source.facts, source.maturity)}
+      fun create(source: Seeds.SeedFacts) = SeedsDto.SeedFacts(source.name, source.facts,
+          source.maturity)}
   }
 }
