@@ -8,14 +8,14 @@ import kotlin.String
 
 interface Flat {
   interface A {
-    val string: String
+    val boolean: Boolean
 
     val int: Int
 
-    val double: Double
-
     val long: Long
 
-    val boolean: Boolean
+    val double: Double
+
+    val string: String
   }
 }

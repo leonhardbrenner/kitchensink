@@ -3,10 +3,10 @@ package models
 //Test case for things like tables, csv, and all other 2D structures
 interface Flat {
     class A(
-        val string: String,
+        val boolean: Boolean,
         val int: Int,
-        val double: Double,
         val long: Long,
-        val boolean: Boolean
+        val double: Double,
+        val string: String
     )
 }

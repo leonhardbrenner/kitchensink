@@ -18,42 +18,42 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object FlatDb {
   object A {
-    fun create(source: ResultRow) = FlatDto.A(source[Table.string], source[Table.int],
-        source[Table.double], source[Table.long], source[Table.boolean])
+    fun create(source: ResultRow) = FlatDto.A(source[Table.boolean], source[Table.int],
+        source[Table.long], source[Table.double], source[Table.string])
     fun fetchAll() = transaction { with (Table) { selectAll().map { create(it) } } }
     object Table : IntIdTable("A") {
-      val string: Column<String> = text("string")
+      val boolean: Column<Boolean> = bool("boolean")
 
       val int: Column<Int> = integer("int")
 
-      val double: Column<Double> = double("double")
-
       val long: Column<Long> = long("long")
 
-      val boolean: Column<Boolean> = bool("boolean")
+      val double: Column<Double> = double("double")
+
+      val string: Column<String> = text("string")
     }
 
     class Entity(
       id: EntityID<Int>
     ) : IntEntity(id), generated.model.Flat.A {
-      override var string: String by Table.string
+      override var boolean: Boolean by Table.boolean
 
       override var int: Int by Table.int
 
-      override var double: Double by Table.double
-
       override var long: Long by Table.long
 
-      override var boolean: Boolean by Table.boolean
+      override var double: Double by Table.double
+
+      override var string: String by Table.string
 
       companion object : IntEntityClass<Entity>(Table) {
         fun insert(source: Flat.A) {
           Entity.new {
-            string = source.string
-            int = source.int
-            double = source.double
-            long = source.long
             boolean = source.boolean
+            int = source.int
+            long = source.long
+            double = source.double
+            string = source.string
           }
         }
       }
