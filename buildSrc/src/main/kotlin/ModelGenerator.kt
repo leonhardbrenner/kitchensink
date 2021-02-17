@@ -11,6 +11,18 @@ import models.dvdRentalsNew
 
 import schema.Manifest.Namespace
 
+//Test case for things like tables, csv, and all other 2D structures
+interface Flat {
+    class A(
+        val string: String,
+        val int: Int,
+        val double: Double,
+        val long: Long,
+        val boolean: Boolean
+    )
+}
+
+//Test case for things like json
 interface Fancy {
     val a: A
     val nullableA: A?
@@ -18,25 +30,25 @@ interface Fancy {
     val listOfNullableA: List<A?>
     val nullableListOfA: List<A>?
     val nullableListOfNullableA: List<A?>?
-    interface A {
-        val b: B
-        val nullableB: B?
-        val listOfB: List<B>
-        val listOfNullableB: List<B?>
-        val nullableListOfB: List<B>?
-        val nullableListOfNullableB: List<B?>?
-        interface B {
-            val c: C
-            val nullableC: C?
-            val listOfC: List<C>
-            val listOfNullableC: List<C?>
-            val nullableListOfC: List<C>?
+    class A(
+        val b: B,
+        val nullableB: B?,
+        val listOfB: List<B>,
+        val listOfNullableB: List<B?>,
+        val nullableListOfB: List<B>?,
+        val nullableListOfNullableB: List<B?>?) {
+        class B(
+            val c: C,
+            val nullableC: C?,
+            val listOfC: List<C>,
+            val listOfNullableC: List<C?>,
+            val nullableListOfC: List<C>?,
             val nullableListOfNullableC: List<C?>?
-        }
+        )
     }
-    interface C {
+    class C(
         val x: Int?
-    }
+    )
 }
 
 open class ModelGenerator : DefaultTask() {
@@ -72,16 +84,25 @@ open class ModelGenerator : DefaultTask() {
 
     @TaskAction
     fun generate() {
+
+        val flat = Namespace(Flat::class)
+        InterfaceGenerator.generate(flat)
+        DtoGenerator.generate(flat)
+        DbGenerator.generate(flat)
+        BuilderGenerator.generate(flat)
+        CsvLoaderGenerator.generate(flat)
+
         val fancy = Namespace(Fancy::class)
-        //output(fancy)
-        //InterfaceGenerator2.generate(fancy)
-        //DtoGenerator2.generate(fancy)
+        InterfaceGenerator.generate(fancy)
+        DtoGenerator.generate(fancy)
+
         listOf(seeds, dvdRentalsNew).forEach { namespace ->
             InterfaceGenerator.generate(namespace)
             DtoGenerator.generate(namespace)
             DbGenerator.generate(namespace)
             BuilderGenerator.generate(namespace)
         }
+
         CsvLoaderGenerator.generate(dvdRentalsNew)
     }
 }

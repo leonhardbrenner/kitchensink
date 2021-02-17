@@ -6,11 +6,11 @@ interface Fancy {
   interface A {
     val b: Fancy.A.B
 
+    val nullableB: Fancy.A.B?
+
     val listOfB: Fancy.A.B
 
     val listOfNullableB: Fancy.A.B?
-
-    val nullableB: Fancy.A.B?
 
     val nullableListOfB: Fancy.A.B
 
@@ -19,11 +19,11 @@ interface Fancy {
     interface B {
       val c: Fancy.C
 
+      val nullableC: Fancy.C?
+
       val listOfC: Fancy.C
 
       val listOfNullableC: Fancy.C?
-
-      val nullableC: Fancy.C?
 
       val nullableListOfC: Fancy.C
 
