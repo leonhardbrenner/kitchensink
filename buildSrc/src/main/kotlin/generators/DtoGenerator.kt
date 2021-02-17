@@ -11,7 +11,8 @@ import schema.Manifest
 import java.io.File
 
 object DtoGenerator: Generator {
-    //TODO: Generate the top level elements
+
+    //TODO: Generate the top level elements as resources.
     override fun generate(namespace: Manifest.Namespace) {
         val file = FileSpec.builder("generated.model", "${namespace.name}Dto")
             .addType(
