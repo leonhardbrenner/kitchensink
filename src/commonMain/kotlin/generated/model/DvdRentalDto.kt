@@ -1,15 +1,18 @@
 package generated.model
 
+import kotlin.Boolean
+import kotlin.Double
+import kotlin.Int
 import kotlin.String
 import kotlinx.serialization.Serializable
 
 interface DvdRentalDto {
   @Serializable
   data class Actor(
-    override val actorId: kotlin.Int,
-    override val firstName: kotlin.String,
-    override val lastName: kotlin.String,
-    override val lastUpdate: kotlin.String
+    override val actorId: Int,
+    override val firstName: String,
+    override val lastName: String,
+    override val lastUpdate: String
   ) : DvdRental.Actor {
     companion object {
       const val path: String = "/DvdRental/Actor"
@@ -20,14 +23,14 @@ interface DvdRentalDto {
 
   @Serializable
   data class Address(
-    override val addressId: kotlin.Int,
-    override val address: kotlin.String,
-    override val address2: kotlin.String?,
-    override val district: kotlin.String?,
-    override val cityId: kotlin.Int,
-    override val postalCode: kotlin.String?,
-    override val phone: kotlin.String?,
-    override val lastUpdate: kotlin.String
+    override val addressId: Int,
+    override val address: String,
+    override val address2: String?,
+    override val district: String?,
+    override val cityId: Int,
+    override val postalCode: String?,
+    override val phone: String?,
+    override val lastUpdate: String
   ) : DvdRental.Address {
     companion object {
       const val path: String = "/DvdRental/Address"
@@ -39,9 +42,9 @@ interface DvdRentalDto {
 
   @Serializable
   data class Category(
-    override val categoryId: kotlin.Int,
-    override val name: kotlin.String,
-    override val lastUpdate: kotlin.String
+    override val categoryId: Int,
+    override val name: String,
+    override val lastUpdate: String
   ) : DvdRental.Category {
     companion object {
       const val path: String = "/DvdRental/Category"
@@ -52,10 +55,10 @@ interface DvdRentalDto {
 
   @Serializable
   data class City(
-    override val cityId: kotlin.Int,
-    override val city: kotlin.String,
-    override val countryId: kotlin.Int,
-    override val lastUpdate: kotlin.String
+    override val cityId: Int,
+    override val city: String,
+    override val countryId: Int,
+    override val lastUpdate: String
   ) : DvdRental.City {
     companion object {
       const val path: String = "/DvdRental/City"
@@ -66,9 +69,9 @@ interface DvdRentalDto {
 
   @Serializable
   data class Country(
-    override val countryId: kotlin.Int,
-    override val country: kotlin.String,
-    override val lastUpdate: kotlin.String
+    override val countryId: Int,
+    override val country: String,
+    override val lastUpdate: String
   ) : DvdRental.Country {
     companion object {
       const val path: String = "/DvdRental/Country"
@@ -79,16 +82,16 @@ interface DvdRentalDto {
 
   @Serializable
   data class Customer(
-    override val customerId: kotlin.Int,
-    override val storeId: kotlin.Int,
-    override val firstName: kotlin.String,
-    override val lastName: kotlin.String,
-    override val email: kotlin.String,
-    override val addressId: kotlin.Int,
-    override val activebool: kotlin.Boolean,
-    override val createDate: kotlin.String,
-    override val lastUpdate: kotlin.String,
-    override val active: kotlin.Int
+    override val customerId: Int,
+    override val storeId: Int,
+    override val firstName: String,
+    override val lastName: String,
+    override val email: String,
+    override val addressId: Int,
+    override val activebool: Boolean,
+    override val createDate: String,
+    override val lastUpdate: String,
+    override val active: Int
   ) : DvdRental.Customer {
     companion object {
       const val path: String = "/DvdRental/Customer"
@@ -100,19 +103,19 @@ interface DvdRentalDto {
 
   @Serializable
   data class Film(
-    override val filmId: kotlin.Int,
-    override val title: kotlin.String,
-    override val description: kotlin.String,
-    override val releaseYear: kotlin.Int,
-    override val languageId: kotlin.Int,
-    override val rentalDuration: kotlin.Int,
-    override val rentalRate: kotlin.Double,
-    override val length: kotlin.Int,
-    override val replacementCost: kotlin.Double,
-    override val rating: kotlin.String,
-    override val lastUpdate: kotlin.String,
-    override val specialFeatures: kotlin.String,
-    override val fullText: kotlin.String
+    override val filmId: Int,
+    override val title: String,
+    override val description: String,
+    override val releaseYear: Int,
+    override val languageId: Int,
+    override val rentalDuration: Int,
+    override val rentalRate: Double,
+    override val length: Int,
+    override val replacementCost: Double,
+    override val rating: String,
+    override val lastUpdate: String,
+    override val specialFeatures: String,
+    override val fullText: String
   ) : DvdRental.Film {
     companion object {
       const val path: String = "/DvdRental/Film"
@@ -125,9 +128,9 @@ interface DvdRentalDto {
 
   @Serializable
   data class FilmActor(
-    override val actorId: kotlin.Int,
-    override val filmId: kotlin.Int,
-    override val lastUpdate: kotlin.String
+    override val actorId: Int,
+    override val filmId: Int,
+    override val lastUpdate: String
   ) : DvdRental.FilmActor {
     companion object {
       const val path: String = "/DvdRental/FilmActor"
@@ -138,9 +141,9 @@ interface DvdRentalDto {
 
   @Serializable
   data class FilmCategory(
-    override val filmId: kotlin.Int,
-    override val categoryId: kotlin.Int,
-    override val lastUpdate: kotlin.String
+    override val filmId: Int,
+    override val categoryId: Int,
+    override val lastUpdate: String
   ) : DvdRental.FilmCategory {
     companion object {
       const val path: String = "/DvdRental/FilmCategory"
@@ -151,10 +154,10 @@ interface DvdRentalDto {
 
   @Serializable
   data class Inventory(
-    override val inventoryId: kotlin.Int,
-    override val filmId: kotlin.Int,
-    override val storeId: kotlin.Int,
-    override val lastUpdate: kotlin.String
+    override val inventoryId: Int,
+    override val filmId: Int,
+    override val storeId: Int,
+    override val lastUpdate: String
   ) : DvdRental.Inventory {
     companion object {
       const val path: String = "/DvdRental/Inventory"
@@ -165,9 +168,9 @@ interface DvdRentalDto {
 
   @Serializable
   data class Language(
-    override val languageId: kotlin.Int,
-    override val name: kotlin.String,
-    override val lastUpdate: kotlin.String
+    override val languageId: Int,
+    override val name: String,
+    override val lastUpdate: String
   ) : DvdRental.Language {
     companion object {
       const val path: String = "/DvdRental/Language"
@@ -178,12 +181,12 @@ interface DvdRentalDto {
 
   @Serializable
   data class Payment(
-    override val paymentId: kotlin.Int,
-    override val customerId: kotlin.Int,
-    override val staffId: kotlin.Int,
-    override val rentalId: kotlin.Int,
-    override val amount: kotlin.Double,
-    override val paymentDate: kotlin.String
+    override val paymentId: Int,
+    override val customerId: Int,
+    override val staffId: Int,
+    override val rentalId: Int,
+    override val amount: Double,
+    override val paymentDate: String
   ) : DvdRental.Payment {
     companion object {
       const val path: String = "/DvdRental/Payment"
@@ -194,13 +197,13 @@ interface DvdRentalDto {
 
   @Serializable
   data class Rental(
-    override val rentalId: kotlin.Int,
-    override val rentalDate: kotlin.String,
-    override val inventoryId: kotlin.Int,
-    override val customerId: kotlin.Int,
-    override val returnDate: kotlin.String,
-    override val staffId: kotlin.Int,
-    override val lastUpdate: kotlin.String
+    override val rentalId: Int,
+    override val rentalDate: String,
+    override val inventoryId: Int,
+    override val customerId: Int,
+    override val returnDate: String,
+    override val staffId: Int,
+    override val lastUpdate: String
   ) : DvdRental.Rental {
     companion object {
       const val path: String = "/DvdRental/Rental"
@@ -212,17 +215,17 @@ interface DvdRentalDto {
 
   @Serializable
   data class Staff(
-    override val staffId: kotlin.Int,
-    override val firstName: kotlin.String,
-    override val lastName: kotlin.String,
-    override val addressId: kotlin.Int,
-    override val email: kotlin.String,
-    override val storeId: kotlin.Int,
-    override val active: kotlin.String,
-    override val username: kotlin.String,
-    override val password: kotlin.String,
-    override val lastUpdate: kotlin.String,
-    override val picture: kotlin.String
+    override val staffId: Int,
+    override val firstName: String,
+    override val lastName: String,
+    override val addressId: Int,
+    override val email: String,
+    override val storeId: Int,
+    override val active: String,
+    override val username: String,
+    override val password: String,
+    override val lastUpdate: String,
+    override val picture: String
   ) : DvdRental.Staff {
     companion object {
       const val path: String = "/DvdRental/Staff"
@@ -234,10 +237,10 @@ interface DvdRentalDto {
 
   @Serializable
   data class Store(
-    override val storeId: kotlin.Int,
-    override val managerStaffId: kotlin.Int,
-    override val addressId: kotlin.Int,
-    override val lastUpdate: kotlin.String
+    override val storeId: Int,
+    override val managerStaffId: Int,
+    override val addressId: Int,
+    override val lastUpdate: String
   ) : DvdRental.Store {
     companion object {
       const val path: String = "/DvdRental/Store"

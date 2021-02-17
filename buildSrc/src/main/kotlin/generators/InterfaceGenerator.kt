@@ -1,6 +1,7 @@
 package generators
 
 import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import java.io.File
@@ -26,12 +27,12 @@ object InterfaceGenerator: Generator {
         TypeSpec.interfaceBuilder(type.name).apply {
             type.elements.forEach { element ->
                 addProperty(
-                    PropertySpec.builder(element.name, element.type.typeName)
-                        .addModifiers(modifiers.toList() )
+                    PropertySpec.builder(element.name, with (element.type) { typeName.copy(nullable = nullable) })
                         .mutable(false)
                         .build()
                 )
             }
+
             type.types.forEach { type ->
                 generateType(type)
             }

@@ -1,5 +1,6 @@
 package generated.model
 
+import kotlin.Int
 import kotlin.String
 import kotlinx.serialization.Serializable
 
@@ -38,7 +39,7 @@ interface FancyDto {
 
   @Serializable
   data class C(
-    override val x: kotlin.Int?
+    override val x: Int?
   ) : Fancy.C {
     companion object {
       const val path: String = "/Fancy/C"

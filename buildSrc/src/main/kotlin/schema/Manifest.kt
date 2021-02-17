@@ -81,11 +81,17 @@ object Manifest {
             else
                 kType
 
-            val typeName get() = rawType.asTypeName()
-
-            val className get() = ClassName("generated.model", rawType.toString()
-                .replace("?", ""))
-                .copy(nullable = nullable)
+            val typeName get() = with (rawType.asTypeName()) {
+                if (rawType.toString().startsWith("models."))
+                    ClassName(
+                        "generated.model",
+                        rawType.toString()
+                            .replace("models.", "")
+                            .replace("?", "")
+                    )
+                else
+                    rawType.asTypeName()
+            }.copy(nullable = nullable)
 
             val nullable get() = rawType.isMarkedNullable
 

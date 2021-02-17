@@ -27,18 +27,19 @@ object DtoGenerator: Generator {
         TypeSpec.classBuilder(type.name)
             .addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
             .addModifiers(KModifier.DATA)
-            .addSuperinterface(ClassName("generated.model", type.dotPath()))
+            .addSuperinterface(type.typeName)
             .primaryConstructor(
                 FunSpec.constructorBuilder().apply {
                     type.elements.forEach { element ->
-                        addParameter(element.name, element.type.className).build()
+                        addParameter(element.name, element.type.typeName)
+                            .build()
                     }
                 }.build()
             )
             .apply {
                 type.elements.forEach { element ->
                     addProperty(
-                        PropertySpec.builder(element.name, element.type.className)
+                        PropertySpec.builder(element.name, element.type.typeName)
                             .addModifiers(listOf(KModifier.OVERRIDE))
                             .mutable(false)
                             .initializer(element.name)
@@ -56,7 +57,7 @@ object DtoGenerator: Generator {
                     )
                     addFunction(
                         FunSpec.builder("create")
-                            .addParameter("source", ClassName("generated.model", type.dotPath()))
+                            .addParameter("source", type.typeName)
                             //Look at CodeBlock.addArgument and you will see L stands for literal
                             .addCode(
                                 "return %T(%L)",

@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 interface SeedsDto {
   @Serializable
   data class BasicSeed(
-    override val name: kotlin.String,
-    override val secondary_name: kotlin.String,
-    override val description: kotlin.String?,
-    override val image: kotlin.String,
-    override val link: kotlin.String
+    override val name: String,
+    override val secondary_name: String,
+    override val description: String?,
+    override val image: String,
+    override val link: String
   ) : Seeds.BasicSeed {
     companion object {
       const val path: String = "/Seeds/BasicSeed"
@@ -21,12 +21,12 @@ interface SeedsDto {
 
   @Serializable
   data class DetailedSeed(
-    override val name: kotlin.String,
-    override val maturity: kotlin.String?,
-    override val secondary_name: kotlin.String?,
-    override val description: kotlin.String?,
-    override val image: kotlin.String?,
-    override val link: kotlin.String?
+    override val name: String,
+    override val maturity: String?,
+    override val secondary_name: String?,
+    override val description: String?,
+    override val image: String?,
+    override val link: String?
   ) : Seeds.DetailedSeed {
     companion object {
       const val path: String = "/Seeds/DetailedSeed"
@@ -37,9 +37,9 @@ interface SeedsDto {
 
   @Serializable
   data class SeedCategory(
-    override val name: kotlin.String,
-    override val image: kotlin.String,
-    override val link: kotlin.String
+    override val name: String,
+    override val image: String,
+    override val link: String
   ) : Seeds.SeedCategory {
     companion object {
       const val path: String = "/Seeds/SeedCategory"
@@ -50,9 +50,9 @@ interface SeedsDto {
 
   @Serializable
   data class SeedFacts(
-    override val name: kotlin.String,
-    override val facts: kotlin.String?,
-    override val maturity: kotlin.String?
+    override val name: String,
+    override val facts: String?,
+    override val maturity: String?
   ) : Seeds.SeedFacts {
     companion object {
       const val path: String = "/Seeds/SeedFacts"
