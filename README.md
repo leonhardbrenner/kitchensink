@@ -30,6 +30,8 @@ Don't worry it's not complicated. I took advantage of the buildSrc directory and
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/buildSrc/src/main/kotlin/ModelGenerator.kt
 
+If you come across this and are interested in what is coming my email is buckysoap@gmail.com actually right now it is lenbrenner@gmail.com just use kitchensink: as your subject prefix.
+
 The original description of the interface is comes from this DSL:
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/buildSrc/src/main/kotlin/schema/Manifest.kt
