@@ -1,10 +1,10 @@
 package generators
 
-import schema.ManifestNew
+import schema.Manifest
 
 interface Generator {
 
-    fun generate(namespace: ManifestNew.Namespace)
+    fun generate(namespace: Manifest.Namespace)
 
     val path
         get() = "/home/lbrenner/projects/kitchensink/src"

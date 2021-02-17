@@ -1,8 +1,15 @@
 import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
-import generators.*
-import models.*
-import schema.ManifestNew.Namespace
+import generators.InterfaceGenerator
+import generators.DtoGenerator
+import generators.DbGenerator
+import generators.BuilderGenerator
+import generators.CsvLoaderGenerator
+
+import models.seeds
+import models.dvdRentalsNew
+
+import schema.Manifest.Namespace
 
 interface Fancy {
     val a: A

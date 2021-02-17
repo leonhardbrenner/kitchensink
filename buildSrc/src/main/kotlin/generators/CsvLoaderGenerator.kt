@@ -2,7 +2,7 @@ package generators
 
 import com.squareup.kotlinpoet.*
 import java.io.File
-import schema.ManifestNew
+import schema.Manifest
 
 /* This is will generate another Dto(data class) for what ever reason @Serializable polutes the data class with:
    seen1 and serializerConstructor:(
@@ -10,7 +10,7 @@ import schema.ManifestNew
 //TODO - try to just the DTO we may need to apply Serializable differently.
 object CsvLoaderGenerator: Generator {
 
-    override fun generate(namespace: ManifestNew.Namespace) {
+    override fun generate(namespace: Manifest.Namespace) {
         val file = FileSpec.builder("generated.model", "${namespace.name}CsvLoader")
             .addType(
                 TypeSpec.interfaceBuilder("${namespace.name}CsvLoader").apply {
@@ -21,10 +21,9 @@ object CsvLoaderGenerator: Generator {
             ).build()
         val writer = File("$path/jvmMain/kotlin")
         file.writeTo(writer)
-        //file.writeTo(System.out)
     }
 
-    fun TypeSpec.Builder.generateType(type: ManifestNew.Namespace.Type): TypeSpec.Builder
+    fun TypeSpec.Builder.generateType(type: Manifest.Namespace.Type): TypeSpec.Builder
     = addType(
         TypeSpec.classBuilder(type.name)
             .addModifiers(KModifier.DATA)

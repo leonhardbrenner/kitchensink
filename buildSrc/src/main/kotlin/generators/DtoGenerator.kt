@@ -1,12 +1,18 @@
 package generators
 
-import com.squareup.kotlinpoet.*
-import schema.ManifestNew
+import com.squareup.kotlinpoet.ClassName
+import com.squareup.kotlinpoet.FileSpec
+import com.squareup.kotlinpoet.FunSpec
+import com.squareup.kotlinpoet.KModifier
+import com.squareup.kotlinpoet.PropertySpec
+import com.squareup.kotlinpoet.TypeSpec
+
+import schema.Manifest
 import java.io.File
 
 object DtoGenerator: Generator {
     //TODO: Generate the top level elements
-    override fun generate(namespace: ManifestNew.Namespace) {
+    override fun generate(namespace: Manifest.Namespace) {
         val file = FileSpec.builder("generated.model", "${namespace.name}Dto")
             .addType(
                 TypeSpec.interfaceBuilder("${namespace.name}Dto").apply {
@@ -15,10 +21,9 @@ object DtoGenerator: Generator {
             ).build()
         val writer = File("$path/commonMain/kotlin")
         file.writeTo(writer)
-        //file.writeTo(System.out)
     }
 
-    fun TypeSpec.Builder.generateType(type: ManifestNew.Namespace.Type): TypeSpec.Builder = addType(
+    fun TypeSpec.Builder.generateType(type: Manifest.Namespace.Type): TypeSpec.Builder = addType(
         TypeSpec.classBuilder(type.name)
             .addAnnotation(ClassName("kotlinx.serialization", "Serializable"))
             .addModifiers(KModifier.DATA)
@@ -33,10 +38,7 @@ object DtoGenerator: Generator {
             .apply {
                 type.elements.forEach { element ->
                     addProperty(
-                        PropertySpec.builder(
-                            element.name,
-                            element.type.className
-                        )
+                        PropertySpec.builder(element.name, element.type.className)
                             .addModifiers(listOf(KModifier.OVERRIDE))
                             .mutable(false)
                             .initializer(element.name)
@@ -46,10 +48,12 @@ object DtoGenerator: Generator {
             }
             .addType(
                 TypeSpec.companionObjectBuilder().apply {
-                    val propertySpec = PropertySpec.builder("path", String::class)
-                        .initializer("\"${type.path}\"")
-                        .build()
-                    addProperty(propertySpec)
+                    addProperty(
+                        PropertySpec.builder("path", String::class)
+                            .addModifiers(listOf(KModifier.CONST))
+                            .initializer("\"${type.path}\"")
+                            .build()
+                    )
                     addFunction(
                         FunSpec.builder("create")
                             .addParameter("source", ClassName("generated.model", type.dotPath()))

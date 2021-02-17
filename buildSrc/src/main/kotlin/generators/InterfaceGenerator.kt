@@ -4,11 +4,11 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import java.io.File
-import schema.ManifestNew
+import schema.Manifest
 
 object InterfaceGenerator: Generator {
 
-    override fun generate(namespace: ManifestNew.Namespace) {
+    override fun generate(namespace: Manifest.Namespace) {
         val typeSpec = TypeSpec.interfaceBuilder("${namespace.name}").apply {
             namespace.types.forEach { type ->
                 generateType(type)
@@ -21,7 +21,7 @@ object InterfaceGenerator: Generator {
         file.writeTo(writer)
     }
 
-    fun TypeSpec.Builder.generateType(type: ManifestNew.Namespace.Type): TypeSpec.Builder
+    fun TypeSpec.Builder.generateType(type: Manifest.Namespace.Type): TypeSpec.Builder
     = addType(
         TypeSpec.interfaceBuilder(type.name).apply {
             type.elements.forEach { element ->

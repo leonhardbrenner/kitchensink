@@ -12,7 +12,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.Actor {
     companion object {
-      val path: String = "/DvdRental/Actor"
+      const val path: String = "/DvdRental/Actor"
 
       fun create(source: DvdRental.Actor) = DvdRentalDto.Actor(source.actorId, source.firstName,
           source.lastName, source.lastUpdate)}
@@ -30,7 +30,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.Address {
     companion object {
-      val path: String = "/DvdRental/Address"
+      const val path: String = "/DvdRental/Address"
 
       fun create(source: DvdRental.Address) = DvdRentalDto.Address(source.addressId, source.address,
           source.address2, source.district, source.cityId, source.postalCode, source.phone,
@@ -44,7 +44,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.Category {
     companion object {
-      val path: String = "/DvdRental/Category"
+      const val path: String = "/DvdRental/Category"
 
       fun create(source: DvdRental.Category) = DvdRentalDto.Category(source.categoryId, source.name,
           source.lastUpdate)}
@@ -58,7 +58,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.City {
     companion object {
-      val path: String = "/DvdRental/City"
+      const val path: String = "/DvdRental/City"
 
       fun create(source: DvdRental.City) = DvdRentalDto.City(source.cityId, source.city,
           source.countryId, source.lastUpdate)}
@@ -71,7 +71,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.Country {
     companion object {
-      val path: String = "/DvdRental/Country"
+      const val path: String = "/DvdRental/Country"
 
       fun create(source: DvdRental.Country) = DvdRentalDto.Country(source.countryId, source.country,
           source.lastUpdate)}
@@ -91,7 +91,7 @@ interface DvdRentalDto {
     override val active: kotlin.Int
   ) : DvdRental.Customer {
     companion object {
-      val path: String = "/DvdRental/Customer"
+      const val path: String = "/DvdRental/Customer"
 
       fun create(source: DvdRental.Customer) = DvdRentalDto.Customer(source.customerId,
           source.storeId, source.firstName, source.lastName, source.email, source.addressId,
@@ -115,7 +115,7 @@ interface DvdRentalDto {
     override val fullText: kotlin.String
   ) : DvdRental.Film {
     companion object {
-      val path: String = "/DvdRental/Film"
+      const val path: String = "/DvdRental/Film"
 
       fun create(source: DvdRental.Film) = DvdRentalDto.Film(source.filmId, source.title,
           source.description, source.releaseYear, source.languageId, source.rentalDuration,
@@ -130,7 +130,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.FilmActor {
     companion object {
-      val path: String = "/DvdRental/FilmActor"
+      const val path: String = "/DvdRental/FilmActor"
 
       fun create(source: DvdRental.FilmActor) = DvdRentalDto.FilmActor(source.actorId,
           source.filmId, source.lastUpdate)}
@@ -143,7 +143,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.FilmCategory {
     companion object {
-      val path: String = "/DvdRental/FilmCategory"
+      const val path: String = "/DvdRental/FilmCategory"
 
       fun create(source: DvdRental.FilmCategory) = DvdRentalDto.FilmCategory(source.filmId,
           source.categoryId, source.lastUpdate)}
@@ -157,7 +157,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.Inventory {
     companion object {
-      val path: String = "/DvdRental/Inventory"
+      const val path: String = "/DvdRental/Inventory"
 
       fun create(source: DvdRental.Inventory) = DvdRentalDto.Inventory(source.inventoryId,
           source.filmId, source.storeId, source.lastUpdate)}
@@ -170,7 +170,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.Language {
     companion object {
-      val path: String = "/DvdRental/Language"
+      const val path: String = "/DvdRental/Language"
 
       fun create(source: DvdRental.Language) = DvdRentalDto.Language(source.languageId, source.name,
           source.lastUpdate)}
@@ -186,7 +186,7 @@ interface DvdRentalDto {
     override val paymentDate: kotlin.String
   ) : DvdRental.Payment {
     companion object {
-      val path: String = "/DvdRental/Payment"
+      const val path: String = "/DvdRental/Payment"
 
       fun create(source: DvdRental.Payment) = DvdRentalDto.Payment(source.paymentId,
           source.customerId, source.staffId, source.rentalId, source.amount, source.paymentDate)}
@@ -203,7 +203,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.Rental {
     companion object {
-      val path: String = "/DvdRental/Rental"
+      const val path: String = "/DvdRental/Rental"
 
       fun create(source: DvdRental.Rental) = DvdRentalDto.Rental(source.rentalId, source.rentalDate,
           source.inventoryId, source.customerId, source.returnDate, source.staffId,
@@ -225,7 +225,7 @@ interface DvdRentalDto {
     override val picture: kotlin.String
   ) : DvdRental.Staff {
     companion object {
-      val path: String = "/DvdRental/Staff"
+      const val path: String = "/DvdRental/Staff"
 
       fun create(source: DvdRental.Staff) = DvdRentalDto.Staff(source.staffId, source.firstName,
           source.lastName, source.addressId, source.email, source.storeId, source.active,
@@ -240,7 +240,7 @@ interface DvdRentalDto {
     override val lastUpdate: kotlin.String
   ) : DvdRental.Store {
     companion object {
-      val path: String = "/DvdRental/Store"
+      const val path: String = "/DvdRental/Store"
 
       fun create(source: DvdRental.Store) = DvdRentalDto.Store(source.storeId,
           source.managerStaffId, source.addressId, source.lastUpdate)}

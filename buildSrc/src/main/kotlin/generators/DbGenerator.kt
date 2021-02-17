@@ -3,11 +3,11 @@ package generators
 import com.squareup.kotlinpoet.*
 import java.io.File
 import com.squareup.kotlinpoet.ParameterizedTypeName.Companion.parameterizedBy
-import schema.ManifestNew
+import schema.Manifest
 
 object DbGenerator: Generator {
 
-    override fun generate(namespace: ManifestNew.Namespace) {
+    override fun generate(namespace: Manifest.Namespace) {
         val file = FileSpec.builder("generated.model.db", "${namespace.name}Db")
             .addImport("org.jetbrains.exposed.dao", "IntEntity", "IntEntityClass")
             .addImport("org.jetbrains.exposed.dao.id", "EntityID", "IntIdTable")
@@ -35,10 +35,9 @@ object DbGenerator: Generator {
             ).build()
         val writer = File("$path/jvmMain/kotlin")
         file.writeTo(writer)
-        //file.writeTo(System.out)
     }
 
-    val ManifestNew.Namespace.Element.propertySpec
+    val Manifest.Namespace.Element.propertySpec
         get() = com.squareup.kotlinpoet.PropertySpec.builder(
             name,
             ClassName("org.jetbrains.exposed.sql", "Column")
@@ -59,7 +58,7 @@ object DbGenerator: Generator {
             }(\"${dbName}\")${if (type.nullable) ".nullable()" else ""}")
             .build()
 
-    val ManifestNew.Namespace.Type.table
+    val Manifest.Namespace.Type.table
         get() = com.squareup.kotlinpoet.TypeSpec.objectBuilder("Table")
             .superclass(ClassName("org.jetbrains.exposed.dao.id", "IntIdTable"))
             .addSuperclassConstructorParameter("%S", name)
@@ -69,7 +68,7 @@ object DbGenerator: Generator {
                 }
             }.build()
 
-    val ManifestNew.Namespace.Type.create
+    val Manifest.Namespace.Type.create
         get() = com.squareup.kotlinpoet.FunSpec.builder("create")
             .addParameter("source", ClassName("org.jetbrains.exposed.sql", "ResultRow"))
 
@@ -77,7 +76,7 @@ object DbGenerator: Generator {
                 packageName, name, elements.map { "source[Table.${it.name}]" }.joinToString(", "))
             .build()
 
-    val ManifestNew.Namespace.Type.entity
+    val Manifest.Namespace.Type.entity
         get() = com.squareup.kotlinpoet.TypeSpec.classBuilder("Entity")
             .superclass(ClassName("org.jetbrains.exposed.dao", "IntEntity"))
             .addSuperclassConstructorParameter("id")

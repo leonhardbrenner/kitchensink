@@ -4,17 +4,17 @@ import com.squareup.kotlinpoet.ClassName
 import com.squareup.kotlinpoet.KModifier
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.asTypeName
+
 import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 import kotlin.reflect.KType
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.declaredMemberProperties
-import kotlin.reflect.full.memberProperties
 import kotlin.reflect.full.primaryConstructor
 
 const val UNBOUNDED = Int.MAX_VALUE
 
-object ManifestNew {
+object Manifest {
 
     val namespaceMap = HashMap<String, Namespace>()
 
@@ -58,7 +58,6 @@ object ManifestNew {
             val kType: KType, val kClass: KClass<*>? = null
         ) {
 
-            //This is because we are generating: Fancy.A.`B?`,
             val name: String get() = if (kClass==null)
                 rawType.toString().split(".").last().replace("?", "")
             else
@@ -67,7 +66,10 @@ object ManifestNew {
 
             private val memberProperties get() = kClass?.declaredMemberProperties?:emptyList()
             val elements by lazy {
-                val parameters = kClass!!.primaryConstructor!!.parameters.mapIndexed { pos, it -> it.name to pos }.toMap()
+                //TODO - Revisit! This is done so properties are generated in the order they were declared.
+                val parameters = kClass!!.primaryConstructor!!.parameters.mapIndexed {
+                        pos, it -> it.name to pos
+                }.toMap()
                 memberProperties.map { Element(namespace, parent, it) }.sortedBy { parameters[it.name] }
             }
 

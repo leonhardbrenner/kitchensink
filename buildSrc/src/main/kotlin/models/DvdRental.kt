@@ -1,6 +1,6 @@
 package models
 
-import schema.ManifestNew
+import schema.Manifest
 
 interface DvdRental {
     //COPY public.actor (actor_id, first_name, last_name, last_update) FROM '$$PATH$$/3057.dat';
@@ -305,4 +305,4 @@ interface DvdRental {
     )
 }
 
-val dvdRentalsNew = ManifestNew.Namespace(DvdRental::class)
+val dvdRentalsNew = Manifest.Namespace(DvdRental::class)

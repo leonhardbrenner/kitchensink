@@ -1,6 +1,6 @@
 package models
 
-import schema.ManifestNew
+import schema.Manifest
 
 interface Seeds {
     class BasicSeed(
@@ -34,4 +34,4 @@ interface Seeds {
     )
 }
 
-val seeds = ManifestNew.Namespace(Seeds::class)
+val seeds = Manifest.Namespace(Seeds::class)
