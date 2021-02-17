@@ -10,6 +10,7 @@ import kotlin.reflect.KType
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.primaryConstructor
 
 const val UNBOUNDED = Int.MAX_VALUE
 
@@ -63,8 +64,12 @@ object ManifestNew {
             else
                 (kClass.simpleName?:"UNKNOWN2").replace("?", "")
 
+
             private val memberProperties get() = kClass?.declaredMemberProperties?:emptyList()
-            val elements by lazy { memberProperties.map { Element(namespace, parent, it) } }
+            val elements by lazy {
+                val parameters = kClass!!.primaryConstructor!!.parameters.mapIndexed { pos, it -> it.name to pos }.toMap()
+                memberProperties.map { Element(namespace, parent, it) }.sortedBy { parameters[it.name] }
+            }
 
             private val nestedClasses get() = kClass?.nestedClasses?:emptyList()
             val types by lazy { nestedClasses.map { Type(namespace, this, it.createType(), it) } }

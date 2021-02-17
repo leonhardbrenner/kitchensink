@@ -12,6 +12,7 @@ import kotlin.reflect.KProperty
 import kotlin.reflect.KType
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.primaryConstructor
 
 const val UNBOUNDED = Int.MAX_VALUE
 
@@ -65,7 +66,10 @@ object ManifestNew {
             else
                 (kClass.simpleName?:"UNKNOWN2").replace("?", "")
 
-            private val memberProperties get() = kClass?.memberProperties?:emptyList()
+            val parameters get() = kClass!!.primaryConstructor!!.parameters.map { it.name }
+
+            private val memberProperties get()
+            = kClass?.memberProperties?:emptyList()
             val elements by lazy { memberProperties.map { Element(namespace, parent, it) } }
 
             private val nestedClasses get() = kClass?.nestedClasses?:emptyList()
@@ -477,6 +481,38 @@ interface Fancy {
     }
 }
 
+interface Seeds {
+    class BasicSeed(
+        val name: String,
+        val secondary_name: String,
+        val description: String?,
+        val image: String,
+        val link: String
+    )
+
+    class SeedCategory(
+        val name: String,
+        val image: String,
+        val link: String
+    )
+
+    class DetailedSeed(
+        val name: String,
+        val maturity: String?,
+        val secondary_name: String?,
+        val description: String?,
+        val image: String?,
+        val link: String?
+    )
+
+    class SeedFacts(
+        val name: String,
+        //TODO - This should be a list
+        val facts: String?,
+        val maturity: String?
+    )
+}
+
 /**
  * Sadly I can't figure out how to debug buildSrc yet. So I made this copy to run in the debugger. Don't use it!!!
  */
@@ -484,6 +520,8 @@ class Playground {
 
     @Test
     fun test() {
+        val seeds = ManifestNew.Namespace(Seeds::class)
+
         val flat = ManifestNew.Namespace(Flat::class)
         //val fancy = ManifestNew.Namespace(Fancy::class)
         InterfaceGenerator2.generate(flat)

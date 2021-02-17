@@ -33,12 +33,10 @@ object DtoGenerator: Generator {
             )
             .apply {
                 type.elements.forEach { element ->
-                    val classname = ClassName("generated.model", element.type.rawType.toString().replace("?", ""))
-                        .copy(nullable = element.type.nullable)
                     addProperty(
                         PropertySpec.builder(
                             element.name,
-                            classname
+                            element.type.className
                         )
                             .addModifiers(listOf(KModifier.OVERRIDE))
                             .mutable(false)
