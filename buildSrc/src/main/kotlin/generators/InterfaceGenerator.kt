@@ -36,6 +36,6 @@ object InterfaceGenerator: Generator {
             type.types.forEach { type ->
                 generateType(type)
             }
-        }.build().apply { println("${type.name} created") }
+        }.build()
     )
 }

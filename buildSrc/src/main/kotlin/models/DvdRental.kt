@@ -304,5 +304,3 @@ interface DvdRental {
 
     )
 }
-
-val dvdRentalsNew = Manifest.Namespace(DvdRental::class)

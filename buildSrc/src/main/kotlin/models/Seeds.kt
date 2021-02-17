@@ -33,5 +33,3 @@ interface Seeds {
         val maturity: String?
     )
 }
-
-val seeds = Manifest.Namespace(Seeds::class)

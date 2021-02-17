@@ -5,12 +5,8 @@ import generators.DtoGenerator
 import generators.DbGenerator
 import generators.BuilderGenerator
 import generators.CsvLoaderGenerator
+import models.*
 
-import models.Fancy
-import models.Flat
-
-import models.seeds
-import models.dvdRentalsNew
 
 import schema.Manifest.Namespace
 
@@ -36,6 +32,8 @@ open class ModelGenerator : DefaultTask() {
         DtoGenerator.generate(fancy)
         //XXX - BuilderGenerator.generate(fancy)
 
+        val seeds = Namespace(Seeds::class)
+        val dvdRentalsNew = Namespace(DvdRental::class)
         listOf(seeds, dvdRentalsNew).forEach { namespace ->
             InterfaceGenerator.generate(namespace)
             DtoGenerator.generate(namespace)
