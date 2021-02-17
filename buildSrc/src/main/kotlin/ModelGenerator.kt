@@ -72,7 +72,7 @@ open class ModelGenerator : DefaultTask() {
         listOf(seeds, dvdRentalsNew).forEach { namespace ->
             InterfaceGenerator.generate(namespace)
             DtoGenerator.generate(namespace)
-            DbGenerator2.generate(namespace)
+            DbGenerator.generate(namespace)
             BuilderGenerator.generate(namespace)
         }
         CsvLoaderGenerator.generate(dvdRentalsNew)

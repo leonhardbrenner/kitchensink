@@ -3,11 +3,10 @@ package generators
 import com.squareup.kotlinpoet.*
 import schema.ManifestNew
 import java.io.File
-import schemanew.Namespace
 
 object DtoGenerator: Generator {
     //TODO: Generate the top level elements
-    fun generate(namespace: ManifestNew.Namespace) {
+    override fun generate(namespace: ManifestNew.Namespace) {
         val file = FileSpec.builder("generated.model", "${namespace.name}Dto")
             .addType(
                 TypeSpec.interfaceBuilder("${namespace.name}Dto").apply {

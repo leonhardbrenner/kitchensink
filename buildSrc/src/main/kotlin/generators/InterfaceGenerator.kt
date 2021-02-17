@@ -4,12 +4,11 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.PropertySpec
 import com.squareup.kotlinpoet.TypeSpec
 import java.io.File
-import schemanew.Namespace
 import schema.ManifestNew
 
 object InterfaceGenerator: Generator {
 
-    fun generate(namespace: ManifestNew.Namespace) {
+    override fun generate(namespace: ManifestNew.Namespace) {
         val typeSpec = TypeSpec.interfaceBuilder("${namespace.name}").apply {
             namespace.types.forEach { type ->
                 generateType(type)
@@ -22,14 +21,12 @@ object InterfaceGenerator: Generator {
         file.writeTo(writer)
     }
 
-    fun TypeSpec.Builder.generateType(type: ManifestNew.Namespace.Type): TypeSpec.Builder = addType(
+    fun TypeSpec.Builder.generateType(type: ManifestNew.Namespace.Type): TypeSpec.Builder
+    = addType(
         TypeSpec.interfaceBuilder(type.name).apply {
             type.elements.forEach { element ->
                 addProperty(
-                    PropertySpec.builder(
-                        element.name,
-                        element.type.typeName
-                    )
+                    PropertySpec.builder(element.name, element.type.typeName)
                         .addModifiers(modifiers.toList() )
                         .mutable(false)
                         .build()

@@ -6,7 +6,7 @@ import schema.ManifestNew
 
 object BuilderGenerator: Generator {
 
-    fun generate(namespace: ManifestNew.Namespace) {
+    override fun generate(namespace: ManifestNew.Namespace) {
         val file = FileSpec.builder("generated.model", "${namespace.name}Builder")
             .addType(
                 TypeSpec.interfaceBuilder("${namespace.name}Builder").apply {
