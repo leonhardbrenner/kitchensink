@@ -77,6 +77,11 @@ https://www.postgresqltutorial.com/postgresql-sample-database
 
 https://github.com/cfnz/muirwik
 
+This is part of a series of blogs coming soon on Medium. If you wish to preview use this link:
+
+https://medium.com/@lenbrenner/the-many-faces-of-interfaces-52b0d116cedd
+
+This is my friend link as I have not published yet. Please don't distribute yet I need to fix a handful of things in the stack.
 
 If you come across this and are interested in contacting me my email is buckysoap@gmail.com actually right now it is lenbrenner@gmail.com just use kitchensink: as your subject prefix. Right now I am in stealth mode but staying public to preserve git history.
 
