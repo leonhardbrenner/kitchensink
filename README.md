@@ -1,6 +1,10 @@
-
 # kitchensink
-This is a template application with some which uses code generation to wire the many aspect of our framework based on a meta model stored in the buildSrc directory. This project is a full web stack and thanks to kotlin adding mobile and native is already taken care. I will wire those back in shortly. Anyway, this project brings a bunch of technicalogies together in one stack. I haven't gotten to it but I will provide articals and references to original authors of those technologies.
+
+This is a template application which uses code generation to wire the many aspect of our framework based on a meta model stored in the buildSrc directory. This project is a full web stack and I will add mobile and native shortly. For right now this is just a backing project to Medium article on interfaces:
+
+https://buckysoap.medium.com/the-many-faces-of-interfaces-part-1-52b0d116cedd
+
+Here is a little roadmap around the code.
 
 This is how I describe my resource objects.
 
@@ -42,7 +46,7 @@ And our simple interface has a simple generator:
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/buildSrc/src/main/kotlin/generators/InterfaceGenerator.kt
 
-the rest of the generators are in the same directory. This is actually a full stack demo with a bunch of neat tricks hence kitchen sink which I will explain in a series of Medium articles. This is part of a Stone soup project to bring goodness to everyone.
+the rest of the generators are in the same directory. This is actually a full stack demo with a bunch of neat tricks hence kitchen sink. I will explain subsequint Medium articles. This is part of The Stone Soup project to bring goodness to everyone.
 
 Getting started:
 
@@ -69,20 +73,14 @@ Basic setup on Ubuntu:
         kitchensink[run] -> Edit Configuration -> DB_URL=jdbc:postgresql://localhost/test;DB_USER=test;DB_PASSWORD=test
         Hit the play button
 
-If everything works as planned you should see:
+If everything works as planned you should see four tabs:
 
-See four tabs. The first provides access access to the DvdRental database which was copied from. The DB was inserted and queried using Exposed. Second is a seed database which works with JSon. I also have a reference to the original starter app copied from JetBrains hands on demos. Finally, I provide a tab which shows that the MaterialUI integration from here works:
+The first provides access to the DvdRental database which was copied from. The DB was inserted and queried using Exposed. Second is a seed database which works with JSon. I also have a reference to the original starter app copied from JetBrains hands on demos. Finally, I provide a tab which shows that the MaterialUI integration from here works:
 
 https://www.postgresqltutorial.com/postgresql-sample-database
 
 https://github.com/cfnz/muirwik
 
-This is part of a series of blogs coming soon on Medium. If you wish to preview use this link:
+If you come across this and are interested in contacting me my email is x@buckysoap.com if you wish to join my slack channel prefix subject with 'Slack request:'.
 
-https://medium.com/@lenbrenner/the-many-faces-of-interfaces-52b0d116cedd
-
-This is my friend link as I have not published yet. Please don't distribute yet I need to fix a handful of things in the stack.
-
-If you come across this and are interested in contacting me my email is buckysoap@gmail.com actually right now it is lenbrenner@gmail.com just use kitchensink: as your subject prefix. Right now I am in stealth mode but staying public to preserve git history.
-
-Feel free to fork. I am maintaining this template for some downstreams projects I will be forking from this. In particular I will be adding columnization for the rewrite of https://github.com/leonhardbrenner/buckysoap and a project to make it easier for small business to access the tools of the Tech world. Wish me luck!
+Feel free to fork. I am maintaining this template for some downstreams projects.
