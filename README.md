@@ -4,11 +4,13 @@ This Kotlin WebStack template is not very exotic but I will add mobile and nativ
 
 https://github.com/leonhardbrenner/stonesoup/blob/main/README.md
 
-For right now this is just a backing project to Medium article:
+It differentiates from StoneSoup by trying to few uses of each technologie. Kind of like an instruction manual to people trying to build things in StoneSoup. This will gradually document each technology in stonesoup which will be limited so the documentation can remain small.
+
+For right now this is just a backing project to a Medium article:
 
 https://buckysoap.medium.com/the-many-faces-of-interfaces-part-1-52b0d116cedd
 
-Here is a little roadmap around the code that expands on what was mentioned in the article.
+Here is a little roadmap around the code that expands on what was mentioned in the article but everything.
 
 This is how I describe my resource objects.
 
