@@ -1,16 +1,20 @@
 # kitchensink
 
-This is a template application which uses code generation to wire the many aspect of our framework based on a meta model stored in the buildSrc directory. This project is a full web stack and I will add mobile and native shortly. For right now this is just a backing project to Medium article on interfaces:
+This Kotlin WebStack template is not very exotic but I will add mobile and native shortly. I am using it in this downstream project:
+
+https://github.com/leonhardbrenner/stonesoup/blob/main/README.md
+
+For right now this is just a backing project to Medium article:
 
 https://buckysoap.medium.com/the-many-faces-of-interfaces-part-1-52b0d116cedd
 
-Here is a little roadmap around the code.
+Here is a little roadmap around the code that expands on what was mentioned in the article.
 
 This is how I describe my resource objects.
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/buildSrc/src/main/kotlin/models/DvdRental.kt
 
-from this code generators write:
+this code generator writes:
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/src/commonMain/kotlin/generated/model/DvdRental.kt
 
