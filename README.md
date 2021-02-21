@@ -89,4 +89,4 @@ https://github.com/cfnz/muirwik
 
 If you come across this and are interested in contacting me my email is x@buckysoap.com if you wish to join my slack channel prefix subject with 'Slack request:'.
 
-Feel free to fork.
+Feel free to fork for any use. It's just bytes.
