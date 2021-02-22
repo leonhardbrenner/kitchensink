@@ -13,39 +13,51 @@ My hope is that these tools will be useful to mirco-farmers, new homesteaders, c
 
 I can be reached at x@buckysoap.com if you wish to join my slack channel prefix subject with 'Slack request:' but don't be offended if I go dark from time to time. I am now going to use my inside voice for a while and move to my private branch till I delete this sentence. I will leave you with this tour.
 
-First off is just a prototype. I have some lofty goals. Some are too lofty to say seriously in public so I will also be working in a private branch from time to time so if you don't see any activity I went inside. It usually means I will realease one of my clever ideas that I was to shy to try in my work life. If you have something you want to contribute to the soup just fork and I can list your downstream project.
-
-I am using it in this downstream project:
-
-https://github.com/leonhardbrenner/stonesoup/blob/main/README.md
-
-It differentiates from StoneSoup by trying to few uses of each technologie. Kind of like an instruction manual to people trying to build things in StoneSoup. This will gradually document each technology in stonesoup which will be limited so the documentation can remain small.
+First off is just a prototype and my audience is not the Tech Industry so I will be aiming to describe things using more primitive term or defining the meaning. I have some lofty goals. Some are too lofty to say seriously in public so I will also be working in a private branch from time to time so if you don't see any activity I went inside. It usually means I will realease one of my clever ideas that I was to shy to try in my work life. If you have something you want to contribute to the soup just fork and I can list your downstream project.
 
 For right now this is just a backing project to a Medium article:
 
 https://buckysoap.medium.com/the-many-faces-of-interfaces-part-1-52b0d116cedd
 
+I am using it in this downstream project:
+
+https://github.com/leonhardbrenner/stonesoup/blob/main/README.md
+
+It differentiates from StoneSoup by trying to show how to use a technologie. Kind of like an instruction manual to people trying to build things in StoneSoup. I will gradually document each technology in stonesoup here. That list will be limited so the documentation can remain small.
+
 Here is a little roadmap around the code that expands on what was mentioned in the article but everything.
 
-This is how I describe my resource objects.
+This is how I describe my resources things that I would send from the server to the client.
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/buildSrc/src/main/kotlin/models/DvdRental.kt
 
-this code generator writes:
+As I work toward completeness I have two benchmarks
+
+Flat is for excercising things like database tables or csv files.
+https://github.com/leonhardbrenner/kitchensink/blob/main/buildSrc/src/main/kotlin/models/Flat.kt
+
+Fancy is for things like typical types which can contain elements of type or elements of list<type>.
+https://github.com/leonhardbrenner/kitchensink/blob/main/buildSrc/src/main/kotlin/models/Fancy.kt
+
+I will be restricting what I allow to be defined in these interfaces which are for building APIs.
+
+I have generators which write interfaces in commonMain these can be used in jvm or js main
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/src/commonMain/kotlin/generated/model/DvdRental.kt
 
-And this a Dto with a factory method that take any implementation of the interface. Notice that all of the values of my resources are read only. Resource objects should be stateless. You can ship them across the wire with a Dto. 
+And this is a Dto with a factory method that takes any implementation of the interface. Notice that all of the values of my resources are read only. You can create instances and ship them across the wire with a Dto.
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/src/commonMain/kotlin/generated/model/DvdRentalDto.kt
 
-Unfortunately, the Dto was sullied by @Serializable and doesn't work with the CsvLoader you want. No worries just make another implementation of the interface.
+Unfortunately, the Dto was sullied by @Serializable and doesn't work with the CsvLoader you want. No worries I just make another implementation of the interface.
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/src/jvmMain/kotlin/generated/model/DvdRentalCsvLoader.kt
 
-Also, it would be nice to be integrated with the db using exposed. Like this:
+I am using exposed which helps make the databases a little easier to work with through type safety. 
 
 https://github.com/leonhardbrenner/kitchensink/blob/main/src/jvmMain/kotlin/generated/model/db/DvdRentalDb.kt
+
+This may all seem complicated if you are coming from a language like Python but I will try to hide most of the guts. I think the benifits of building this project in Kotlin come from IntelliJ community which you should install.
 
 There are more parts that can be generated:
 
