@@ -1,4 +1,14 @@
 # kitchensink
+For right now this is just a backing project to a Medium article:
+
+https://buckysoap.medium.com/the-many-faces-of-interfaces-part-1-52b0d116cedd
+
+I am using it in this downstream project:
+
+https://github.com/leonhardbrenner/stonesoup/blob/main/README.md
+
+It differentiates from StoneSoup by trying to show how to use a technologie. Kind of like an instruction manual to people trying to build things in StoneSoup. I will gradually document each technology in stonesoup here. That list will be limited so the documentation can remain small.
+
 This Kotlin WebStack template is not very exotic but it has the following:
     hikari and exposed setup
     dependency injection via guice. To understand this concept search for the word @Inject in my code
@@ -15,17 +25,7 @@ I can be reached at x@buckysoap.com if you wish to join my slack channel prefix 
 
 First off is just a prototype and my audience is not the Tech Industry so I will be aiming to describe things using more primitive term or defining the meaning. I have some lofty goals. Some are too lofty to say seriously in public so I will also be working in a private branch from time to time so if you don't see any activity I went inside. It usually means I will realease one of my clever ideas that I was to shy to try in my work life. If you have something you want to contribute to the soup just fork and I can list your downstream project.
 
-For right now this is just a backing project to a Medium article:
-
-https://buckysoap.medium.com/the-many-faces-of-interfaces-part-1-52b0d116cedd
-
-I am using it in this downstream project:
-
-https://github.com/leonhardbrenner/stonesoup/blob/main/README.md
-
-It differentiates from StoneSoup by trying to show how to use a technologie. Kind of like an instruction manual to people trying to build things in StoneSoup. I will gradually document each technology in stonesoup here. That list will be limited so the documentation can remain small.
-
-Here is a little roadmap around the code that expands on what was mentioned in the article but everything.
+Here is a little roadmap around the code that expands on what was mentioned in the article.
 
 This is how I describe my resources things that I would send from the server to the client.
 
