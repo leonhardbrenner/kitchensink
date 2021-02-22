@@ -1,6 +1,19 @@
 # kitchensink
+This Kotlin WebStack template is not very exotic but it has the following:
+    hikari and exposed setup
+    dependency injection via guice. To understand this concept search for the word @Inject in my code
+    multiplatform - web only but I will add mobile and native once I come up with a clean way to represent a few simple problems
+    material-ui
+    I kept the original task priority demo from the kotlin hands-on pages which is what this page is forked from
+    on my part I added some code generators they are primitive but I used these patterns before and I believe it leads to clean code.
+    
+The purpose of this stack is to give something back to the community that feeds me. I am working with serveral orginizations that would be served if they had the ability to create there own routines. Thanks to Kotlin, Square and the other contributers I will try to credit. I want to focus on solving a limited set(just two till I delete) of problems and including just enough technology to save state and create displays. I will initially be using these for a farm we are building as community on land donated by the town of Biddeford ME.
 
-This Kotlin WebStack template is not very exotic but I will add mobile and native shortly. I am using it in this downstream project:
+I can be reached at x@buckysoap.com if you wish to join my slack channel prefix subject with 'Slack request:' but don't be offended if I go dark from time to time. I am going to use my inside voice for a while and move to my private branch till I delete this sentence. I will leave you with this tour.
+
+First off this is just a prototype. I have some lofty goals. Some are too lofty to say seriously in public so I will also be working in a private branch from time to time so if you don't see any activity I went inside. It usually means I will realease one of my clever ideas that I was to shy to try in my work life. 
+
+I am using it in this downstream project:
 
 https://github.com/leonhardbrenner/stonesoup/blob/main/README.md
 
@@ -79,14 +92,15 @@ Basic setup on Ubuntu:
         kitchensink[run] -> Edit Configuration -> DB_URL=jdbc:postgresql://localhost/test;DB_USER=test;DB_PASSWORD=test
         Hit the play button
 
-If everything works as planned you should see four tabs:
+I am almost certain this will not work the first time for everyone but if everything does works you should see four tabs:
 
-The first provides access to the DvdRental database which was copied from. The DB was inserted and queried using Exposed. Second is a seed database which works with JSon. I also have a reference to the original starter app copied from JetBrains hands on demos. Finally, I provide a tab which shows that the MaterialUI integration from here works:
+first - has end to end access to the Postgres DvdRental sample database* which I load from csv-files and insert using Exposed.
+second - provides access to some mock data about seeds which was spidered from a local seed company using someone elses spider.
+third - is the task manager form the kotlin hands-on
+fourth - is the example from the muirwik**
 
-https://www.postgresqltutorial.com/postgresql-sample-database
+* https://www.postgresqltutorial.com/postgresql-sample-database
 
-https://github.com/cfnz/muirwik
-
-If you come across this and are interested in contacting me my email is x@buckysoap.com if you wish to join my slack channel prefix subject with 'Slack request:'.
+** https://github.com/cfnz/muirwik
 
 Feel free to fork for any use. It's just bytes.
