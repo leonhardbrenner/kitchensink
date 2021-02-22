@@ -1,4 +1,6 @@
 # kitchensink
+This is a backing project for StoneSoup which is my effort to make building tools using todays technology easier for people in my community. There are many good programmers out there with communities of there own. If we get together maybe we can everyone's day a little easier.
+
 For right now this is just a backing project to a Medium article:
 
 https://buckysoap.medium.com/the-many-faces-of-interfaces-part-1-52b0d116cedd
